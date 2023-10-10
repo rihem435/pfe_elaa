@@ -1,8 +1,8 @@
 import 'package:front/config/account_info_storage.dart';
 
 class AppApi {
-static const String baseUrl = "http://localhost:3000/";
-  //static const String baseUrl = "http://192.168.2.36:3000/";
+//static const String baseUrl = "http://localhost:3000/";
+  static const String baseUrl = "http://192.168.2.36:3000/";
 //static const String baseUrl = "http://192.168.1.11:3000/";
 
   static const String loginUrl = "${baseUrl}auth/signin";
@@ -19,6 +19,7 @@ static const String baseUrl = "http://localhost:3000/";
   static const String createFactureUrl = "${baseUrl}factures/";
 
   static const String getCategoriesUrl = "${baseUrl}categories/";
+  static const String getCategorieByNameUrl = "${baseUrl}categories/getbyname";
 
   static const String createProductsUrl = "${baseUrl}products";
   static const String getProductsUrl = "${baseUrl}products/";

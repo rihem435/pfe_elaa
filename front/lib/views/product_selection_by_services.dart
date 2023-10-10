@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
 import 'package:front/views/product_detail.dart';
@@ -13,6 +14,16 @@ class ProductSelectionByServices extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController = ScrollController();
+    controller.getCategories();
+    controller.getProducts();
+    Future<String> getData() {
+      return Future.delayed(Duration(seconds: 2), () {
+        return "I am data";
+        // throw Exception("Custom Error");
+      });
+    }
+
     //controller.getCategorieById(controller.categorieGetByIdJson!.data!.sId.toString());
     return Scaffold(
       appBar: AppBar(
@@ -47,33 +58,97 @@ class ProductSelectionByServices extends GetView<ProductsController> {
           children: [
             //search bar
             Expanded(flex: 1, child: CustomSearchBar()),
-
             Expanded(
-              flex: 6,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 2 / 2,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20),
-                  itemCount: 20,
-                  itemBuilder: (BuildContext ctx, index) {
-                    return GestureDetector(
-                      child: CustomFavoriteList(
-                        function: () {},
-                        img: 'assets/images/logo2.png',
-                        Descriptiontext:
-                            "lorem ion was thrown: Incorrect use of ParentDataWidgetAnother exception was thrown: Incorrect use of ParentDataWidgetAnother exception was thrown: Incorrect use of ParentDataWidget",
-                        ServiceName: "Catering ",
-                        height: 200,
-                        width: 200,
-                        colorBorder: AppColor.goldColor,
-                        widthBorder: 1,
-                      ),
-                      onTap: () {
-                        Get.to(ProductDetail());
-                      },
-                    );
+              flex: 5,
+              child: FutureBuilder(
+                  future: controller.getProducts(),
+                  builder: (ctx, snapshot) {
+                    // Checking if future is resolved or not
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print("-----------------snapshot$snapshot");
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: AppColor.secondary),
+                      );
+                    } else {
+                      // If we got an error
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Something went wrong !!!',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        );
+
+                        // if we got our data
+                      }
+
+                      if (snapshot.data == null) {
+                        // Extracting data from snapshot object
+                        print(
+                            '-----------------------snapshotdata=======>$snapshot');
+                        return Center(
+                          child: Text(
+                            'There is no service for the moment',
+                            style: TextStyle(color: AppColor.secondary),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Expanded(
+                            flex: 6,
+                            child: GetBuilder<ProductsController>(
+                              builder: (controller) {
+                                return GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 200,
+                                          childAspectRatio: 2 / 2,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount:
+                                      controller.productGetJson!.data!.length,
+                                  itemBuilder: (BuildContext ctx, index) {
+                                    controller.getCategorieById(
+                                        "${controller.productGetJson!.data![index].category}");
+
+                                    return GestureDetector(
+                                      child: CustomFavoriteList(
+                                        function: () {},
+                                        img: 'assets/images/logo2.png',
+                                        Descriptiontext:
+                                            "${controller.productGetJson!.data![index].description}",
+                                        ServiceName: AccountInfoStorage
+                                                .readCategorieName()
+                                            .toString(),
+                                        height: 200,
+                                        width: 200,
+                                        colorBorder: AppColor.goldColor,
+                                        widthBorder: 1,
+                                      ),
+                                      onTap: () {
+                                        print(
+                                            "*-------------------------------------------*get category by id*****************");
+
+                                        controller.getProductById(
+                                            "${controller.productGetJson!.data![index].sId}");
+                                        print(
+                                            "*************get category by id*****************");
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                    print("-----------------snapshot$snapshot");
+                    // Displaying LoadingSpinner to indicate waiting state
+
+                    // Future that needs to be resolved
+                    // inorder to display something on the Canvas
                   }),
             ),
           ],
@@ -82,3 +157,8 @@ class ProductSelectionByServices extends GetView<ProductsController> {
     );
   }
 }
+
+
+
+
+

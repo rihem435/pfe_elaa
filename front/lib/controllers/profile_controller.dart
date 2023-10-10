@@ -17,6 +17,7 @@ import 'package:front/views/vendors/home_view_vendor.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:get/get_connect/http/src/multipart/form_data.dart';
@@ -24,7 +25,6 @@ import 'package:get/get_connect/http/src/multipart/form_data.dart';
 class ProfileColntroller extends GetxController {
   Dio dio1 = Dio();
 
-  UserGetByIdJson? userJson;
   LoginUserJson? loginUserJson;
   UsersAllJson? usersAllJson;
   ApiUserAll? apiUserAll;
@@ -36,15 +36,22 @@ class ProfileColntroller extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController phonenumberController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
   TextEditingController adresseController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController newpasswordcontroller = TextEditingController();
+  TextEditingController oldpasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController itemscontroller = TextEditingController();
   bool passwordsMatch = true;
   bool isVisiblePassword = true;
   bool confirmPassword = true;
+  void viderControllers() {
+    confirmPasswordController.text = '';
+  }
 
-  dio.Dio dio_ = dio.Dio(dio.BaseOptions(
+  dio.Dio dio_ = dio.Dio(
+    dio.BaseOptions(
       baseUrl: AppApi.baseUrl,
       //  receiveDataWhenStatusError: true,
       connectTimeout: Duration(seconds: 6000),
@@ -53,7 +60,9 @@ class ProfileColntroller extends GetxController {
         //'Contentt-Type': 'application/x-www-form-urlencoded',
         //  'Content-Type': 'application/json',
         'Content-Type': 'multipart/form-data',
-      }));
+      },
+    ),
+  );
 
   String InputValidator() {
     print('Validate password');
@@ -138,11 +147,46 @@ class ProfileColntroller extends GetxController {
   File? profilePicFile;
   Future<void> directUpdateImage(File? file) async {
     if (file == null) return;
+
     profilePicFile = file;
+    print(
+        "------------------------------------Image $file------------------------------------");
     update();
   }
 
-  ////////////function login/////////////////
+/* 
+  File? profilePicFile;
+
+  Future<void> directUpdateImage(File? file) async {
+    if (file == null) return;
+
+    // Extract the filename (basename) from the provided file path
+    try {
+      String fileName = basename(file.path);
+
+      // Construct the image URL using the filename
+
+      await file.copy(File('/${AppApi.getImageUser}/$fileName').path);
+      String imageUrl =
+          "${AppApi.getImageUser}${AccountInfoStorage.saveImage(fileName)}";
+
+
+      // Set the profilePicFile to the provided file
+
+      profilePicFile = file;
+      imageUrl = imageUrl;
+      
+      print('Filename: $fileName');
+      print('Image URL: $imageUrl');
+      
+      // Update your UI or state as needed.
+      update();
+    } catch (error) {
+      print('Error saving image or updating: $error');
+    }
+  }
+
+  */ ////////////function login/////////////////
   signIn() {
     print("----------------signin-----------------");
     apiLoginn.postData({
@@ -156,9 +200,11 @@ class ProfileColntroller extends GetxController {
       AccountInfoStorage.saveEmail(loginUserJson!.user!.email.toString());
       AccountInfoStorage.saveName(loginUserJson!.user!.username.toString());
       AccountInfoStorage.saveItems(loginUserJson!.user!.items.toString());
-      AccountInfoStorage.saveImage(loginUserJson!.user!.image);
+      //AccountInfoStorage.saveImage(loginUserJson!.user!.image);
       AccountInfoStorage.saveTokenUser(loginUserJson!.tokens!.accessToken);
 
+      viderControllers();
+      print('password===========================>${passwordController.text}');
       print('success signin');
       if (loginUserJson!.user!.items == "Customer") {
         print('Customer');
@@ -188,35 +234,27 @@ class ProfileColntroller extends GetxController {
     //InputValidator();
     print('*******************signup*********************');
     Map<String, dynamic> data = {
-      //
-      // 'fullname': 'rr',
-
       'username': usernameController.text,
-
       'email': emailController.text,
       'password': passwordController.text,
       'items': AccountInfoStorage.readItems(),
-      //  'city': 'r',
-      //  'adress': '',
-      // 'phone': '',
-//      'image': '1696502272953-Happy Birthday 2023 (1).png',
-      // 'events': '',
     };
     apisignup.postData(data).then((value) {
       print('success');
 
-      userJson = value as UserGetByIdJson?;
-      print('id user==========> ${userJson!.data!.sId}');
-      print('role user==========> ${userJson!.data!.items}');
-      AccountInfoStorage.saveImage(userJson!.data!.image);
+      userGetByIdJson = value as UserGetByIdJson?;
+      print('id user==========> ${userGetByIdJson!.data!.sId}');
+      print('role user==========> ${userGetByIdJson!.data!.items}');
+      //   AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
 
-      print('role image==================> ${AccountInfoStorage.readImage()}');
+      //  print('role image==================> ${AccountInfoStorage.readImage()}');
+      viderControllers();
 
       print('success');
-      if (userJson!.data!.items == "Customer") {
+      if (userGetByIdJson!.data!.items == "Customer") {
         print('Customer');
         Get.to(HomeView());
-      } else if (userJson!.data!.items == "Vendor") {
+      } else if (userGetByIdJson!.data!.items == "Vendor") {
         print('Vendor');
 
         Get.to(HomeViewVendor());
@@ -224,7 +262,7 @@ class ProfileColntroller extends GetxController {
         Get.to(HomeViewAdmin());
       }
     }).onError((error, stackTrace) {
-      print('error login======> $error');
+      print('error signup======> $error');
     });
   }
 
@@ -245,7 +283,7 @@ class ProfileColntroller extends GetxController {
 ////////////function updateinfouser /////////////////
   userUpdate() {
     apiUserById.id = AccountInfoStorage.readId().toString();
-    AccountInfoStorage.readImage().toString();
+    // AccountInfoStorage.readImage().toString();
     dio.FormData data = dio.FormData.fromMap({
       //'items': 'Customer',
       'username': usernameController.text,
@@ -254,11 +292,12 @@ class ProfileColntroller extends GetxController {
       //'city': 'r',
       'adress': adresseController.text,
       'phone': phonenumberController.text,
-      'image': "1696502272953-Happy Birthday 2023 (1).png",
+      'image': imageController.text,
       // 'events': '',
     });
 
     apiUserById.updateData(data).then((value) {
+      // AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
       print("success");
       // Get.defaultDialog(title: "Alert");
       Get.snackbar("", "Success",
@@ -277,7 +316,7 @@ class ProfileColntroller extends GetxController {
 
   updatepasswordUser() {
     dio1.patch(AppApi.updatePasswordUrl,
-        data: {"password": passwordController.text}).then((value) {
+        data: {"password": newpasswordcontroller.text}).then((value) {
       print("success");
       Get.snackbar("", "Success",
           backgroundColor: AppColor.goldColor,

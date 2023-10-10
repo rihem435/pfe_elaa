@@ -1,3 +1,4 @@
+import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/dio_singleton.dart';
 import 'package:front/models/json/abstract_json_resource.dart';
 
@@ -34,6 +35,24 @@ abstract class ApiManager {
     AbstractJsonResource? json;
     return await dioSingleton.dio
         .get(apiUrl(), queryParameters: dataToGet)
+        .then((value) {
+      data = value.data;
+      json = datajson(data);
+      return json;
+    }).onError((error, stackTrace) {
+      print('error  get=========> $error');
+    });
+  }
+
+  Future<AbstractJsonResource?> getDataByName({dataToGet}) async {
+    var data;
+    print('*****************get data****************');
+    Map<String, dynamic> data_ = {
+      "name": AccountInfoStorage.readCategorieName(),
+    };
+    AbstractJsonResource? json;
+    return await dioSingleton.dio
+        .get(apiUrl(), queryParameters: data_)
         .then((value) {
       data = value.data;
       json = datajson(data);

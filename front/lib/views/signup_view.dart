@@ -174,7 +174,7 @@ class SignupView extends GetView<ProfileColntroller> {
                           if (input!.isEmpty) {
                             return 'chek your password';
                           }
-                          if (input.length < 6 ) {
+                          if (input.length < 6) {
                             return 'password must b >6';
                           }
                           return null;

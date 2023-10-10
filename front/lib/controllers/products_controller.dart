@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
 import 'package:front/models/json/categorie_get_by_id_json.dart';
+import 'package:front/models/json/categorie_get_by_name_json.dart';
 import 'package:front/models/json/categories_json.dart';
 import 'package:front/models/json/product_add_json.dart';
 import 'package:front/models/json/product_get_by_id.dart';
 import 'package:front/models/json/product_get_json.dart';
 import 'package:front/models/network/api_categorie_get_by_id.dart';
+import 'package:front/models/network/api_categorie_get_by_name.dart';
 import 'package:front/models/network/api_categories_get.dart';
 import 'package:front/models/network/api_product_add.dart';
 import 'package:front/models/network/api_product_get.dart';
@@ -25,13 +27,17 @@ class ProductsController extends GetxController {
   ApiCategoriesGetById apiCategoriesGetById = ApiCategoriesGetById();
   CategorieJson? categorieJson;
   CategorieGetByIdJson? categorieGetByIdJson;
+  CategorieGetByNameJson? categorieGetByNameJson;
 
   ApiProductsGet apiProductsGet = ApiProductsGet();
   ApiProductGetById apiProductGetById = ApiProductGetById();
   ApiProductAdd apiProductAdd = ApiProductAdd();
+  ApiCategoriesGetByName apiCategoriesGetByName = ApiCategoriesGetByName();
+
   ProductGetJson? productGetJson;
   ProductGetByIdJson? productGetByIdJson;
   ProductAddJson? productAddJson;
+
   dio.Dio dio_ = dio.Dio(dio.BaseOptions(
       baseUrl: AppApi.baseUrl,
       //  receiveDataWhenStatusError: true,
@@ -90,6 +96,22 @@ class ProductsController extends GetxController {
       }
     });
     // update();
+  }
+
+  getCategorieByName() {
+    print('category by name-----------------------');
+    apiCategoriesGetByName.name;
+    return apiCategoriesGetByName.getDataByName().then((value) {
+      categorieGetByNameJson = value as CategorieGetByNameJson?;
+      print(
+          "data categorie by name=================== ${categorieGetByNameJson!.existingCategorie!.name}");
+
+      AccountInfoStorage.saveCatgorieName(
+          categorieGetByNameJson!.existingCategorie!.sId);
+    }).onError((error, stackTrace) {
+      print('error======> $error');
+      return null;
+    });
   }
 
   getCategorieById(String id) {
@@ -157,9 +179,11 @@ class ProductsController extends GetxController {
     return null;
   }
 
+
+///////to do
   getAllProductByUserId() {
-    print("Product by user id ---------------------");
-    /*   apiEventGetByUserId.id = AccountInfoStorage.readId().toString();
+    /* print("Product by user id ---------------------");
+      apiEventGetByUserId.id = AccountInfoStorage.readId().toString();
     return apiEventGetByUserId.getData().then((value) {
       print('value===========> $value');
       eventByUserIdJson = value as EventByUserIdJson?;
@@ -184,8 +208,8 @@ class ProductsController extends GetxController {
       "description": "gold1",
       "price": 300,
       "images": [],
-      "category": "65003a1663b17957f87ce303",
-      "user": "6516a67346a878d8ee68b360",
+      "category": AccountInfoStorage.readCategorieName().toString(),
+      "user": AccountInfoStorage.readId().toString(),
     });
     /*   Map<String, dynamic> data = {
       "nameproduct": "cake1",
@@ -213,27 +237,22 @@ class ProductsController extends GetxController {
       print('error create product ==========> $TypeError');
     });
   }
-  
-    List<File> selectedImages = []; // List of selected image
-    final picker = ImagePicker(); // Instance of Image picker
-    Future getImages() async {
-      final pickedFile = await picker.pickMultiImage(
-          imageQuality: 100, // To set quality of images
-          maxHeight:
-              1000, // To set maxheight of images that you want in your app
-          maxWidth:
-              1000); // To set maxheight of images that you want in your app
-      List<XFile> xfilePick = pickedFile;
 
-      if (xfilePick.isNotEmpty) {
-        for (var i = 0; i < xfilePick.length; i++) {
-          //selectedImages.add(File(xfilePick[i].path));
-        }
-      } else {
-          Get.snackbar('Notification',"Nothing is selected");
+  List<File> selectedImages = []; // List of selected image
+  final picker = ImagePicker(); // Instance of Image picker
+  Future getImages() async {
+    final pickedFile = await picker.pickMultiImage(
+        imageQuality: 100, // To set quality of images
+        maxHeight: 100, // To set maxheight of images that you want in your app
+        maxWidth: 100); // To set maxheight of images that you want in your app
+    List<XFile> xfilePick = pickedFile;
+
+    if (xfilePick.isNotEmpty) {
+      for (var i = 0; i < xfilePick.length; i++) {
+        //selectedImages.add(File(xfilePick[i].path));
       }
+    } else {
+      Get.snackbar('Notification', "Nothing is selected");
     }
-
-
-
+  }
 }

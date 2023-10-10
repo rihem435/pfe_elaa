@@ -5,6 +5,7 @@ import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/login_view.dart';
+import 'package:front/views/vendors/profile_view_vendor.dart';
 import 'package:front/views/vendors/service_details.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_sales_box.dart';
@@ -18,8 +19,6 @@ class HomeViewVendor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-
-   
 
     return Scaffold(
       appBar: AppBar(
@@ -64,11 +63,12 @@ class HomeViewVendor extends StatelessWidget {
                   Icons.person_2_outlined,
                 ),
                 title: Text('Profile'),
-              
-               /* onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileView()));
-                }, */
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfileViewVendor()));
+                },
               ),
               ListTile(
                 leading: Icon(
@@ -76,11 +76,13 @@ class HomeViewVendor extends StatelessWidget {
                 ),
                 title: Text('My Products'),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ServiceDetails()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ServiceDetails()));
                 },
               ),
-            /*  ListTile(
+              /*  ListTile(
                 leading: Icon(
                   Icons.favorite,
                 ),
@@ -163,7 +165,11 @@ class HomeViewVendor extends StatelessWidget {
                   ],
                 ),
 
-                TextButton(onPressed:() {Get.to(ServiceDetails());}, child: Text("viex")),
+                TextButton(
+                    onPressed: () {
+                      Get.to(ServiceDetails());
+                    },
+                    child: Text("viex")),
 
                 // Services Commandes
                 Expanded(

@@ -1,7 +1,6 @@
 import 'package:front/config/app_api.dart';
 import 'package:front/models/json/abstract_json_resource.dart';
 import 'package:front/models/json/categorie_get_by_id_json.dart';
-import 'package:front/models/json/categories_json.dart';
 import 'package:front/models/network/api_manager.dart';
 
 class ApiCategoriesGetById extends ApiManager {

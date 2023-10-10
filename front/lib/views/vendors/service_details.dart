@@ -17,7 +17,14 @@ class ServiceDetails extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-
+    controller.getCategories();
+    controller.getProducts();
+    Future<String> getData() {
+      return Future.delayed(Duration(seconds: 2), () {
+        return "I am data";
+        // throw Exception("Custom Error");
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -58,26 +65,29 @@ class ServiceDetails extends GetView<ProductsController> {
               ),
 
               /// Events
-              Expanded(
+    /*           Expanded(
                 flex: 1,
                 child: ListView.builder(
                     shrinkWrap: true,
                     controller: scrollController,
                     scrollDirection: Axis.vertical,
-                    itemCount: 2,
+                    itemCount: 2, //controller.productGetJson!.data!.length,
                     itemBuilder: (BuildContext context, index) {
                       return CustomProductListV(
                         colorBorder: AppColor.secondary,
-                        productName: "tetesttestst",
-                        description: "testtesttesttesttesttesttesttesttesttesttesttest",
+                        productName:
+                            "${controller.productGetByIdJson!.data!.nameproduct}",
+                        description:
+                            "${controller.productGetByIdJson!.data!.description}",
                         local: "testesttestt",
-                        price: "2",
+                        price: "${controller.productGetByIdJson!.data!.price}",
                         widthBorder: 2,
                         function: () {},
                       );
                     }),
               ),
-   /*            FutureBuilder(
+ */
+                        FutureBuilder(
                   future: controller.getAllProductByUserId(),
                   builder: (ctx, snapshot) {
                     // Checking if future is resolved or not
@@ -105,7 +115,7 @@ class ServiceDetails extends GetView<ProductsController> {
                         print(
                             '-----------------------snapshotdata=======>$snapshot');
                         return Center(
-                          child: Text('no data'),
+                          child: Text('There is no product for the moment. \n Add Product and make the best sells !!', style: TextStyle(color: AppColor.secondary),),
                         );
                       } else {
                         return Expanded(
@@ -114,14 +124,16 @@ class ServiceDetails extends GetView<ProductsController> {
                               shrinkWrap: true,
                               controller: scrollController,
                               scrollDirection: Axis.vertical,
-                              itemCount: 2,
+                              itemCount:
+                                  controller.productGetJson!.data!.length,
                               itemBuilder: (BuildContext context, index) {
                                 return CustomProductListV(
                                   colorBorder: AppColor.secondary,
-                                  description: "test",
-                                  local: "test",
-                                  price: "2",
-                                  productName: "test",
+                                  description:
+                                      "${controller.productGetJson!.data![index].description}",
+                                  local: "tunis",
+                                  price: "${controller.productGetJson!.data![index].price}",
+                                  productName: "${controller.productGetJson!.data![index].nameproduct}",
                                   widthBorder: 2,
                                   function: () {},
                                 );
@@ -130,7 +142,9 @@ class ServiceDetails extends GetView<ProductsController> {
                       }
                     }
                   }),
-    */         ],
+    
+    
+            ],
           ),
         ),
       ),
@@ -171,7 +185,7 @@ class ServiceDetails extends GetView<ProductsController> {
                                 MaterialStateProperty.all(AppColor.secondary)),
                         child: Text('Select Image from Gallery'),
                         onPressed: () {
-                         controller.getImages();
+                          controller.getImages();
                         },
                       ),
                       //categories

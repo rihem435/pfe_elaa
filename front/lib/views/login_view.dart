@@ -7,6 +7,7 @@ import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_button.dart';
 import 'package:front/widgets/custom_button_text.dart';
 import 'package:front/widgets/custom_text.dart';
+import 'package:front/widgets/custom_text_password.dart';
 import 'package:get/get.dart';
 
 import '../config/app_colors.dart';
@@ -156,6 +157,23 @@ class LoginView extends GetView<ProfileColntroller> {
                         );
                       }),
                     ),
+                    // CustomTextPassword(
+                    //   text: "Old password",
+                    //   obscureText: controller.isVisiblePassword,
+                    //   controller: controller.oldpasswordController,
+                    //   validator: (input) {
+                    //     if (input!.length < 6) {
+                    //       print('input must >6');
+                    //       return 'oldpassword must be >6';
+                    //     }
+                    //     if (controller.passwordController.text !=
+                    //         controller.oldpasswordController.text) {
+                    //       print(
+                    //           "Old password do not match ${controller.oldpasswordController.text}");
+                    //       return 'Old password do not match';
+                    //     }
+                    //   },
+                    // ),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.all(10),
@@ -181,14 +199,15 @@ class LoginView extends GetView<ProfileColntroller> {
                       '====================================Function login====================================');
                   if (formKey.currentState!.validate()) {
                     print('validate form++++++++++++++++++++++');
-                    //  controller.authUser(); 
-                    print( 'usernamse=====> ${controller.usernameController.text}');
+                    //  controller.authUser();
+                    print(
+                        'usernamse=====> ${controller.usernameController.text}');
                     controller.signIn();
                   }
 
                   // controller.signInValidator();
                   // controller.signIn();
-                  // //  
+                  // //
                   //  Get.to(HomeView());
                   /*   if (formKey.currentState!.validate()) {
                     print('validate');

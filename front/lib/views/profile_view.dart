@@ -17,6 +17,7 @@ class ProfileView extends GetView<ProfileColntroller> {
   Widget build(BuildContext context) {
     controller.getUserById();
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(
@@ -46,7 +47,6 @@ class ProfileView extends GetView<ProfileColntroller> {
           ],
         ),
       ),
-      resizeToAvoidBottomInset: false,
       body: CustomBackgroungImage(
         fit: BoxFit.cover,
         image: 'assets/images/landpage.jpg',
@@ -55,120 +55,108 @@ class ProfileView extends GetView<ProfileColntroller> {
            crossAxisAlignment: CrossAxisAlignment.start,
          */
           children: [
+            Container(
+              child: Stack(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          //chat Box with Vendors
+                          CircleAvatar(
+                            //radius: 30,
+                            minRadius: 15,
+                            maxRadius: 30,
+                            backgroundColor: AppColor.goldColor,
+                            child: Icon(
+                              Icons.chat,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                          // profile pic
+                          Expanded(
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  minRadius: 50,
+                                  maxRadius: 70,
+                                  child: CustomImageChange(
+                                    function: () {},
+                                  ),
+                                ),
+                                //get name from backend
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Name',
+                                    style: TextStyle(
+                                      color: AppColor.goldColor.withOpacity(1),
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // phone number
+                          CircleAvatar(
+                            minRadius: 15,
+                            maxRadius: 30,
+                            backgroundColor: AppColor.goldColor,
+                            child: Icon(
+                              Icons.call,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Expanded(
-              flex: 0,
               child: Container(
-                child: Stack(
+                child: Column(
                   children: [
                     Expanded(
-                      flex: 0,
-                      child: Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              //chat Box with Vendors
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: AppColor.goldColor,
-                                child: Icon(
-                                  Icons.chat,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              // profile pic
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 70,
-                                      child: CustomImageChange(
-                                        function: () {},
-                                      ),
-                                    ),
-                                    //get name from backend
-                                    Expanded(
-                                      flex: 0,
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Name',
-                                          style: TextStyle(
-                                            color: AppColor.goldColor
-                                                .withOpacity(1),
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // phone number
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: AppColor.goldColor,
-                                child: Icon(
-                                  Icons.call,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      child: CustomInputText(
+                        label: 'User Name',
+                        iconData: Icons.person,
+                        obscureText: false,
+                        controller: controller.usernameController,
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomInputText(
+                        label: 'Email',
+                        iconData: Icons.email,
+                        obscureText: false,
+                        controller: controller.emailController,
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomInputText(
+                        label: 'Phone number',
+                        iconData: Icons.phone,
+                        obscureText: false,
+                        controller: controller.phonenumberController,
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomInputText(
+                        label: 'Adresse',
+                        iconData: Icons.location_city,
+                        obscureText: false,
+                        controller: controller.adresseController,
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: CustomInputText(
-                      label: 'User Name',
-                      iconData: Icons.person,
-                      obscureText: false,
-                      controller: controller.usernameController,
-                    ),
-                  ),
-                  Expanded(
-                    child: CustomInputText(
-                      label: 'Email',
-                      iconData: Icons.email,
-                      obscureText: false,
-                      controller: controller.emailController,
-                    ),
-                  ),
-                  Expanded(
-                    child: CustomInputText(
-                      label: 'Phone number',
-                      iconData: Icons.phone,
-                      obscureText: false,
-                      controller: controller.phonenumberController,
-                    ),
-                  ),
-                  Expanded(
-                    child: CustomInputText(
-                      label: 'Adresse',
-                      iconData: Icons.location_city,
-                      obscureText: false,
-                      controller: controller.adresseController,
-                    ),
-                  ),
-                  Expanded(
-                    child: CustomInputText(
-                      label: 'password',
-                      iconData: Icons.location_city,
-                      obscureText: false,
-                      controller: controller.passwordController,
-                    ),
-                  ),
-                ],
               ),
             ),
             CustomButton(

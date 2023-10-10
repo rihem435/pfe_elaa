@@ -150,11 +150,10 @@ class HomeView extends GetView<ProductsController> {
                   applicationIcon: Icon(
                     Icons.local_play,
                   ),
-                  applicationName: 'My Cool App',
+                  applicationName: 'My Event Mangement App',
                   applicationVersion: '1.0.0',
                   applicationLegalese: '© 2023 Company',
                   aboutBoxChildren: [
-                    ///Content goes here...
                   ],
                 ),
                 SizedBox(
@@ -209,8 +208,8 @@ class HomeView extends GetView<ProductsController> {
                               text: 'View All',
                               icon: Icons.arrow_forward,
                               function: () {
-                                 Get.to(EventListView());
-                               // Get.to(EventListView());
+                                 Get.to(ProductSelectionByServices());
+                              // Get.to(EventListView());
                               },
                             ),
                           ],

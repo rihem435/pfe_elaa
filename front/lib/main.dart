@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
         ),
         //  home: ProductDetail());
-       // home: ServiceChoices());
+     //  home: MyImageWidget());
     home: LoginView());
   }
 

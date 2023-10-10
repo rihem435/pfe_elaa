@@ -1,4 +1,3 @@
-
 import 'package:editable_image/editable_image.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
@@ -27,8 +26,11 @@ class CustomImageChange extends StatelessWidget {
               // Define the source of the image.
               image: controller.profilePicFile != null
                   ? Image.file(controller.profilePicFile!, fit: BoxFit.cover)
-                  : Image.network("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}")
-                 ,
+                  : Image.network(
+                      controller.profilePicFile != null
+                          ? "${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"
+                          : "https://media.istockphoto.com/id/1300845620/fr/vectoriel/appartement-dic%C3%B4ne-dutilisateur-isol%C3%A9-sur-le-fond-blanc-symbole-utilisateur.jpg?s=612x612&w=0&k=20&c=BVOfS7mmvy2lnfBPghkN__k8OMsg7Nlykpgjn0YOHj0=",
+                    ),
 
               // Define the size of EditableImage.
               // size: 100,
