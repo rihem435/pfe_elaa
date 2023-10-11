@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
@@ -19,12 +17,7 @@ class ServiceDetails extends GetView<ProductsController> {
     ScrollController scrollController = ScrollController();
     controller.getCategories();
     controller.getProducts();
-    Future<String> getData() {
-      return Future.delayed(Duration(seconds: 2), () {
-        return "I am data";
-        // throw Exception("Custom Error");
-      });
-    }
+   
 
     return Scaffold(
       appBar: AppBar(
@@ -65,29 +58,29 @@ class ServiceDetails extends GetView<ProductsController> {
               ),
 
               /// Events
-    /*           Expanded(
+              /*           Expanded(
                 flex: 1,
                 child: ListView.builder(
                     shrinkWrap: true,
                     controller: scrollController,
                     scrollDirection: Axis.vertical,
-                    itemCount: 2, //controller.productGetJson!.data!.length,
+                    itemCount: controller.productsByUserIdJson!.data!.length,
                     itemBuilder: (BuildContext context, index) {
                       return CustomProductListV(
                         colorBorder: AppColor.secondary,
                         productName:
-                            "${controller.productGetByIdJson!.data!.nameproduct}",
+                            "${controller.productsByUserIdJson!.data![index].nameproduct}",
                         description:
-                            "${controller.productGetByIdJson!.data!.description}",
+                            "${controller.productsByUserIdJson!.data![index].description}",
                         local: "testesttestt",
-                        price: "${controller.productGetByIdJson!.data!.price}",
+                        price: "${controller.productsByUserIdJson!.data![index].price}",
                         widthBorder: 2,
                         function: () {},
                       );
                     }),
               ),
  */
-                        FutureBuilder(
+              FutureBuilder(
                   future: controller.getAllProductByUserId(),
                   builder: (ctx, snapshot) {
                     // Checking if future is resolved or not
@@ -115,35 +108,39 @@ class ServiceDetails extends GetView<ProductsController> {
                         print(
                             '-----------------------snapshotdata=======>$snapshot');
                         return Center(
-                          child: Text('There is no product for the moment. \n Add Product and make the best sells !!', style: TextStyle(color: AppColor.secondary),),
+                          child: Text(
+                            'There is no product for the moment. \n Add Product and make the best sells !!',
+                            style: TextStyle(color: AppColor.secondary),
+                          ),
                         );
                       } else {
                         return Expanded(
                           flex: 1,
                           child: ListView.builder(
-                              shrinkWrap: true,
-                              controller: scrollController,
-                              scrollDirection: Axis.vertical,
-                              itemCount:
-                                  controller.productGetJson!.data!.length,
-                              itemBuilder: (BuildContext context, index) {
-                                return CustomProductListV(
-                                  colorBorder: AppColor.secondary,
-                                  description:
-                                      "${controller.productGetJson!.data![index].description}",
-                                  local: "tunis",
-                                  price: "${controller.productGetJson!.data![index].price}",
-                                  productName: "${controller.productGetJson!.data![index].nameproduct}",
-                                  widthBorder: 2,
-                                  function: () {},
-                                );
-                              }),
+                            shrinkWrap: true,
+                            controller: scrollController,
+                            scrollDirection: Axis.vertical,
+                            itemCount:
+                                controller.productsByUserIdJson!.data!.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return CustomProductListV(
+                                colorBorder: AppColor.secondary,
+                                productName:
+                                    "${controller.productsByUserIdJson!.data![index].nameproduct}",
+                                description:
+                                    "${controller.productsByUserIdJson!.data![index].description}",
+                                local: "testesttestt",
+                                price:
+                                    "${controller.productsByUserIdJson!.data![index].price}",
+                                widthBorder: 2,
+                                function: () {},
+                              );
+                            },
+                          ),
                         );
                       }
                     }
                   }),
-    
-    
             ],
           ),
         ),
@@ -203,7 +200,7 @@ class ServiceDetails extends GetView<ProductsController> {
                       print(
                           "========================== product creation ======");
                       controller.createProduct();
-
+                      Get.to(ServiceDetails());
                       Navigator.of(context).pop();
                     },
                   ),

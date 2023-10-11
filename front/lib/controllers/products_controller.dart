@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
 import 'package:front/models/json/categorie_get_by_id_json.dart';
 import 'package:front/models/json/categorie_get_by_name_json.dart';
 import 'package:front/models/json/categories_json.dart';
 import 'package:front/models/json/product_add_json.dart';
+import 'package:front/models/json/product_by_user_is_json.dart';
 import 'package:front/models/json/product_get_by_id.dart';
 import 'package:front/models/json/product_get_json.dart';
 import 'package:front/models/network/api_categorie_get_by_id.dart';
@@ -14,13 +15,11 @@ import 'package:front/models/network/api_categories_get.dart';
 import 'package:front/models/network/api_product_add.dart';
 import 'package:front/models/network/api_product_get.dart';
 import 'package:front/models/network/api_product_get_by_id.dart';
+import 'package:front/models/network/api_products_get_by_user_id.dart';
 import 'package:front/views/product_detail.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/multipart/form_data.dart';
 
 class ProductsController extends GetxController {
   ApiCategoriesGet apiCategoriesGet = ApiCategoriesGet();
@@ -33,10 +32,15 @@ class ProductsController extends GetxController {
   ApiProductGetById apiProductGetById = ApiProductGetById();
   ApiProductAdd apiProductAdd = ApiProductAdd();
   ApiCategoriesGetByName apiCategoriesGetByName = ApiCategoriesGetByName();
+  ApiProductsGetByUserId apiProductsGetByUserId = ApiProductsGetByUserId();
 
+  ProductsByUserIdJson? productsByUserIdJson;
   ProductGetJson? productGetJson;
   ProductGetByIdJson? productGetByIdJson;
   ProductAddJson? productAddJson;
+
+
+
 
   dio.Dio dio_ = dio.Dio(dio.BaseOptions(
       baseUrl: AppApi.baseUrl,
@@ -179,24 +183,24 @@ class ProductsController extends GetxController {
     return null;
   }
 
-
 ///////to do
   getAllProductByUserId() {
-    /* print("Product by user id ---------------------");
-      apiEventGetByUserId.id = AccountInfoStorage.readId().toString();
-    return apiEventGetByUserId.getData().then((value) {
+    print("Product by user id ---------------------");
+    apiProductsGetByUserId.id = AccountInfoStorage.readId().toString();
+    return apiProductsGetByUserId.getData().then((value) {
       print('value===========> $value');
-      eventByUserIdJson = value as EventByUserIdJson?;
+      //////////the value is null
+      productsByUserIdJson = value as ProductsByUserIdJson?;
       print(
-          "Events by user id =============== ${eventByUserIdJson!.data![0].user}");
-      if (eventByUserIdJson!.data != null) {
-        return eventByUserIdJson;
+          "Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+      if (productsByUserIdJson!.data != null) {
+        return productsByUserIdJson;
       }
       return null;
     }).onError((error, stackTrace) {
       print('error======> $error');
       return null;
-    }); */
+    });
   }
 
   createProduct() {

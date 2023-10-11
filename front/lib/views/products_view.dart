@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
-import 'package:front/views/home_view_customer.dart';
 import 'package:front/views/product_selection_by_services.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_button.dart';
-import 'package:front/widgets/custom_button_text.dart';
-import 'package:front/widgets/custom_favorite_list.dart';
-import 'package:front/widgets/custom_search_bar.dart';
 import 'package:front/widgets/custom_text.dart';
 import 'package:front/widgets/custum_image_resize.dart';
 import 'package:get/get.dart';
@@ -17,7 +13,7 @@ class ProductsView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
+    // ScrollController scrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(

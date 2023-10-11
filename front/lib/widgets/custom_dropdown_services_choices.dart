@@ -27,28 +27,16 @@ class _CustomDropdownServicesState extends State<CustomDropdownServices> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           isExpanded: true,
-          hint: const Row(
-            children: [
-              Icon(
-                Icons.list,
-                size: 16,
-                color: Colors.yellow,
+          hint: Expanded(
+            child: Text(
+              'Select categorie',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              SizedBox(
-                width: 4,
-              ),
-              Expanded(
-                child: Text(
-                  'Select categorie',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.yellow,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           items: items
               .map((String item) => DropdownMenuItem<String>(
@@ -75,23 +63,21 @@ class _CustomDropdownServicesState extends State<CustomDropdownServices> {
           },
           buttonStyleData: ButtonStyleData(
             height: 50,
-            width: 160,
+            width: 600,
             padding: const EdgeInsets.only(left: 14, right: 14),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: Colors.black26,
-              ),
-              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(4),
+              color: AppColor.secondary,
             ),
             elevation: 2,
           ),
+          
           iconStyleData: const IconStyleData(
             icon: Icon(
               Icons.arrow_forward_ios_outlined,
             ),
             iconSize: 14,
-            iconEnabledColor: Colors.yellow,
+            iconEnabledColor: AppColor.goldColor,
             iconDisabledColor: Colors.grey,
           ),
           dropdownStyleData: DropdownStyleData(
@@ -99,11 +85,11 @@ class _CustomDropdownServicesState extends State<CustomDropdownServices> {
             width: 200,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              color: Colors.redAccent,
+              color:AppColor.secondary,
             ),
-            offset: const Offset(-20, 0),
+            offset:  Offset(30, 0),
             scrollbarTheme: ScrollbarThemeData(
-              radius: const Radius.circular(40),
+              radius:  Radius.circular(40),
               thickness: MaterialStateProperty.all<double>(6),
               thumbVisibility: MaterialStateProperty.all<bool>(true),
             ),

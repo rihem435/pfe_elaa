@@ -32,40 +32,44 @@ class ProductGetJson extends AbstractJsonResource {
 class Data {
   String? sId;
   String? nameproduct;
+  String? description;
   int? price;
   List<String>? images;
   String? category;
+  String? user;
   int? iV;
-  String? description;
 
   Data(
       {this.sId,
       this.nameproduct,
+      this.description,
       this.price,
       this.images,
       this.category,
-      this.iV,
-      this.description});
+      this.user,
+      this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     nameproduct = json['nameproduct'];
+    description = json['description'];
     price = json['price'];
     images = json['images'].cast<String>();
     category = json['category'];
+    user = json['user'];
     iV = json['__v'];
-    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.sId;
     data['nameproduct'] = this.nameproduct;
+    data['description'] = this.description;
     data['price'] = this.price;
     data['images'] = this.images;
     data['category'] = this.category;
+    data['user'] = this.user;
     data['__v'] = this.iV;
-    data['description'] = this.description;
     return data;
   }
 }

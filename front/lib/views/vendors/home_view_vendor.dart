@@ -1,10 +1,10 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/login_view.dart';
+import 'package:front/views/vendors/pending_demande.dart';
 import 'package:front/views/vendors/profile_view_vendor.dart';
 import 'package:front/views/vendors/service_details.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
@@ -182,7 +182,7 @@ class HomeViewVendor extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             text: 'List demanded services'),
                       ),
-                      //   SizedBox(height: 10),
+                      //  barre de titre 
                       Expanded(
                         child: Row(children: [
                           SizedBox(width: 10),
@@ -228,7 +228,8 @@ class HomeViewVendor extends StatelessWidget {
                       shrinkWrap: true,
                       controller: scrollController,
                       scrollDirection: Axis.vertical,
-                      itemCount: 20,
+                      ///// get the last 8 demande
+                      itemCount: 8,
                       itemBuilder: (BuildContext context, index) {
                         return CustumSalesServices(
                           text1: 'Product Name',
@@ -236,7 +237,7 @@ class HomeViewVendor extends StatelessWidget {
                           price: "200",
                           text: "check",
                           function: () {
-                            Get.to(ServiceDetails());
+                            Get.to(PendingDemande());
                           },
                         );
                       }),

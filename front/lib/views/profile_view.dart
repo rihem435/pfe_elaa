@@ -17,7 +17,7 @@ class ProfileView extends GetView<ProfileColntroller> {
   Widget build(BuildContext context) {
     controller.getUserById();
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(

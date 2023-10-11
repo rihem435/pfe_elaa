@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
-import 'package:front/views/product_detail.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_favorite_list.dart';
 import 'package:front/widgets/custom_search_bar.dart';
@@ -14,7 +13,7 @@ class ProductSelectionByServices extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
+    // ScrollController scrollController = ScrollController();
     controller.getCategories();
     controller.getProducts();
     Future<String> getData() {
@@ -144,7 +143,7 @@ class ProductSelectionByServices extends GetView<ProductsController> {
                         );
                       }
                     }
-                    print("-----------------snapshot$snapshot");
+                    // print("-----------------snapshot$snapshot");
                     // Displaying LoadingSpinner to indicate waiting state
 
                     // Future that needs to be resolved

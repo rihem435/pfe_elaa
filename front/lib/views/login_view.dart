@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/src/models/login_data.dart';
-import 'package:front/controllers/event_contorller.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/signup_view.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_button.dart';
 import 'package:front/widgets/custom_button_text.dart';
 import 'package:front/widgets/custom_text.dart';
-import 'package:front/widgets/custom_text_password.dart';
 import 'package:get/get.dart';
 
 import '../config/app_colors.dart';

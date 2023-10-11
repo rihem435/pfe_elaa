@@ -3,7 +3,7 @@ import 'package:front/config/account_info_storage.dart';
 class AppApi {
 //static const String baseUrl = "http://localhost:3000/";
   static const String baseUrl = "http://192.168.2.36:3000/";
-//static const String baseUrl = "http://192.168.1.11:3000/";
+//  static const String baseUrl = "http://192.168.1.11:3000/";
 
   static const String loginUrl = "${baseUrl}auth/signin";
   static const String signupUrl = "${baseUrl}users/";
@@ -23,6 +23,13 @@ class AppApi {
 
   static const String createProductsUrl = "${baseUrl}products";
   static const String getProductsUrl = "${baseUrl}products/";
+  static const String getProductsByUserUrl = "${baseUrl}products/user";
+
+  static const String createGuestUrl = "${baseUrl}guests/";
+  static const String getGuestsUrl = "${baseUrl}guests/";
+  static const String getGuestsByUserIdUrl = "${baseUrl}guests/user";
+
+
 /* 
   String baseUrlCloudinary =
       'https://API Key:872948247576765 _Rl01bDk9GpGQnjqM_YSsLNT2bQ@api.cloudinary.com/v1_1/elaa/resources/image';

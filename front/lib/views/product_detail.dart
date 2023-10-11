@@ -8,7 +8,6 @@ import 'package:front/widgets/custom_box_description_detail.dart';
 import 'package:front/widgets/custom_box_detail.dart';
 import 'package:front/widgets/custom_text.dart';
 import 'package:get/get.dart';
-import 'package:front/config/app_api.dart';
 
 final List<String> imgList = [
 //"${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"

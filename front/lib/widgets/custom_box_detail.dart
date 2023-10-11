@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
-import 'package:front/views/favorite_view.dart';
-import 'package:front/views/home_view_customer.dart';
 import 'package:front/widgets/custom_text.dart';
-import 'package:get/get.dart';
+
 
 class CustomBoxDetail extends StatelessWidget {
   final Function? function;

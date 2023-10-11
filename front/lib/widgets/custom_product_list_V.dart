@@ -1,13 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
-import 'package:front/controllers/event_contorller.dart';
-import 'package:front/views/vendors/test_View.dart';
-import 'package:front/widgets/custom_text.dart';
+import 'package:front/controllers/products_controller.dart';
 import 'package:get/get.dart';
-import 'package:flutter_image_stack/flutter_image_stack.dart';
 
-class CustomProductListV extends GetView<EventController> {
+class CustomProductListV extends GetView<ProductsController> {
   final String? productName, categorie;
   final String? description, local, price;
   final Function? function;
@@ -28,7 +25,7 @@ class CustomProductListV extends GetView<EventController> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
+    // ScrollController scrollController = ScrollController();
 
     return Padding(
       padding: EdgeInsets.fromLTRB(2, 5, 2, 5),
@@ -55,7 +52,7 @@ class CustomProductListV extends GetView<EventController> {
               children: [
                 //product title
                 AutoSizeText(
-                  'Product $productName',
+                  '$productName',
                   overflow: TextOverflow.ellipsis,
                   presetFontSizes: [18, 12],
                   maxLines: 1,
@@ -65,7 +62,7 @@ class CustomProductListV extends GetView<EventController> {
                   ),
                 ),
                 AutoSizeText(
-                  'Description $description',
+                  '$description',
                   presetFontSizes: [18, 12],
                   maxLines: 2,
                   style: TextStyle(
@@ -75,8 +72,8 @@ class CustomProductListV extends GetView<EventController> {
                 ),
                 //local
                 AutoSizeText(
-                  'Local $local',
-                  presetFontSizes: [ 12, 10],
+                  '$local',
+                  presetFontSizes: [12, 10],
                   maxLines: 2,
                   style: TextStyle(
                     fontSize: 18,
@@ -85,7 +82,7 @@ class CustomProductListV extends GetView<EventController> {
                 ),
                 //budget
                 AutoSizeText(
-                  'Price $price',
+                  '$price',
                   presetFontSizes: [12, 10],
                   maxLines: 2,
                   style: TextStyle(
@@ -94,33 +91,15 @@ class CustomProductListV extends GetView<EventController> {
                   ),
                 ),
                 AutoSizeText(
-                  'Categorie $categorie',
-                  presetFontSizes: [ 12, 10],
+                  '$categorie',
+                  presetFontSizes: [12, 10],
                   maxLines: 2,
                   style: TextStyle(
                     fontSize: 18,
                     color: AppColor.secondary,
                   ),
                 ),
-                //     CustomText(text: "Pack of services:"),
-                // services data which are related to each event
-                /*     TextButton(
-                  onPressed: () {
-                   // Get.to(TestView());
-                  },
-                  child: FlutterImageStack(
-                    showTotalCount: true,
-                    ////// get services data /////////
-                    imageList: _images,
-                    totalCount: _images.length,
-                    itemRadius: 40,
-                    itemCount: 5,
-                    itemBorderWidth: 1,
-                    itemBorderColor: AppColor.secondary,
-                    backgroundColor: AppColor.secondary,
-                  ),
-                ),
-             */
+
                 SizedBox(height: 10),
               ],
             ),
@@ -130,14 +109,3 @@ class CustomProductListV extends GetView<EventController> {
     );
   }
 }
-/* 
-List<String> _images = [
-  'https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
-  'https://images.unsplash.com/photo-1612594305265-86300a9a5b5b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-  'https://images.unsplash.com/photo-1612626256634-991e6e977fc1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1712&q=80',
-  'https://images.unsplash.com/photo-1593642702749-b7d2a804fbcf?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80'
-      'https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80',
-  'https://images.unsplash.com/photo-1612594305265-86300a9a5b5b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-  'https://images.unsplash.com/photo-1612626256634-991e6e977fc1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1712&q=80',
-  'https://images.unsplash.com/photo-1593642702749-b7d2a804fbcf?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80'
-]; */

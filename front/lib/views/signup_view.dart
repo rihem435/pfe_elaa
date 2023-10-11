@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/login_view.dart';
-import 'package:front/views/service_choices.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_button.dart';
 import 'package:front/widgets/custom_button_text.dart';
@@ -196,6 +195,7 @@ class SignupView extends GetView<ProfileColntroller> {
                               print("pass do not match");
                               return 'pass do not match';
                             }
+                            return null;
                           },
                           function: () {
                             controller.showConfirmPassword();

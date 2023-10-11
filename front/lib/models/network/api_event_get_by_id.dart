@@ -4,9 +4,9 @@ import 'package:front/models/json/event_by_id_json.dart';
 import 'package:front/models/network/api_manager.dart';
 
 class ApiEventGetById extends ApiManager {
-  @override
-  String id = '';
+    String id = '';
 
+  @override
   String apiUrl() {
     return AppApi.getEventUrl + id;
   }

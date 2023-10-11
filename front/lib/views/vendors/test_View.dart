@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
@@ -6,84 +5,71 @@ import 'package:front/config/app_api.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-
-class MyImageWidget extends StatefulWidget {
+class TestView extends StatefulWidget{
   @override
-  _MyImageWidgetState createState() => _MyImageWidgetState();
+_TestViewState createState() => _TestViewState();
 }
 
-class _MyImageWidgetState extends State<MyImageWidget> {
-  ProfileColntroller controller = ProfileColntroller();
-  File? profilePicFile;
-  String imageUrl = '';
-//   Function to select an image using image_picker
-  Future<File?> pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery); // You can also use ImageSource.camera to capture a photo
+class _TestViewState extends State<TestView> {
+  List<Person> persons= [];
 
-    if (pickedFile == null) {
-      // User canceled image selection
-      return null;
-    }
-
-    return File(pickedFile.path);
-  }
-
-  // Your directUpdateImage function
-  Future<void> directUpdateImage(File? file) async {
-    if (file == null) return;
-
-    try {
-      // Extract the filename (basename) from the provided file path
-      String fileName = basename(file.path);
-
-      // Save the file using its basename
-      await file.copy(File('${AppApi.getImageUser}$fileName').path);
-
-      // Construct the image URL using the filename
-      String newImageUrl =
-          "${AppApi.getImageUser}${AccountInfoStorage.saveImage(fileName)}";
-
-      setState(() {
-        profilePicFile = file;
-        imageUrl = newImageUrl;
-      },);
-
-      print('Filename: $fileName');
-      print('Image URL: $imageUrl');
-
-      
-      
-    } catch (error) {
-      print('Error saving image or updating: $error');
-    }
+  @override
+  void initState() {
+    //adding item to list, you can add using json from network
+    persons.add(Person(id:"1", name:"Hari Prasad Chaudhary", phone:"9812122233", address:"Kathmandu, Nepal"));
+    persons.add(Person(id:"2", name:"Krishna Karki", phone:"9812122244", address:"Pokhara, Nepal"));
+    persons.add(Person(id:"3", name:"Ujjwal Joshi", phone:"98121224444", address:"Bangalore, India"));
+    persons.add(Person(id:"4", name:"Samir Hussain Khan", phone:"9812122255", address:"Karachi, Pakistan"));
+    
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Display the image or a placeholder
-        profilePicFile != null ? Image.file(profilePicFile!) : Placeholder(),
-
-        // Display the image URL or a message
-        Text(
-            imageUrl.isNotEmpty ? 'Image URL: $imageUrl' : 'No image selected'),
-
-        // Button to trigger image update
-        ElevatedButton(
-          onPressed: () async {
-            // Call your directUpdateImage function here
-            // Replace with your image selection logic
-            File? newImage = await pickImage();
-            if (newImage != null) {
-              await directUpdateImage(newImage);
-            }
-          
-          },
-          child: Text('Select and Update Image'),
-        ),
-      ],
-    );
+    return Scaffold(
+          appBar: AppBar(
+              title:Text("Add And Delete List"),
+              backgroundColor: Colors.redAccent,
+          ),
+          body: SingleChildScrollView( 
+            child: Container( 
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: persons.map((personone){
+                      return Container(
+                          child: Card(
+                            child:ListTile( 
+                              title: Text(personone.name),
+                              subtitle: Text(personone.phone + "\n" + personone.address),
+                              trailing: ElevatedButton( 
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.redAccent
+                                  ),
+                                  child: Icon(Icons.delete),
+                                  onPressed: (){
+                                    //delete action for this button
+                                      persons.removeWhere((element){
+                                            return element.id == personone.id;
+                                      }); //go through the loop and match content to delete from list
+                                      setState(() {
+                                        //refresh UI after deleting element from list
+                                      });   
+                                  },
+                                ),
+                             ),
+                          ),
+                          
+                      );
+                  }).toList(),
+                ),
+            ),
+          ) 
+        
+      );
   }
+}
+
+class Person{ //modal class for Person object
+   String id, name, phone, address;
+   Person({required this.id, required this.name, required this.phone, required this.address});
 }

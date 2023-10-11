@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
@@ -136,7 +135,7 @@ class _SettingViewState extends State<SettingView> {
                                           validator: (input) {
                                             if (input!.isEmpty ) {
                                               print('input is empty');
-                                              return '${controller.oldpasswordController.text}';
+                                              return controller.oldpasswordController.text;
                                             }
                                             if (controller
                                                     .passwordController.text !=
@@ -146,6 +145,7 @@ class _SettingViewState extends State<SettingView> {
                                                   "Old password do not match ${controller.oldpasswordController.text}");
                                               return 'Old password do not match';
                                             }
+                                            return null;
                                           },
                                         
                                       ),
@@ -199,6 +199,7 @@ class _SettingViewState extends State<SettingView> {
                                               print("pass do not match");
                                               return 'pass do not match';
                                             }
+                                            return null;
                                           },
                                           function: () {
                                             controller.showConfirmPassword();

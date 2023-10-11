@@ -116,14 +116,13 @@ class AccountInfoStorage {
     return SecureStorage.readSecureData(keyprodcutDescription);
   }
 
- static saveProductLocal(String? productLocal) {
-    SecureStorage.writeSecureData(
-        key: keyproductLocal, value: productLocal!);
+  static saveProductLocal(String? productLocal) {
+    SecureStorage.writeSecureData(key: keyproductLocal, value: productLocal!);
   }
 
   static String? readProductLocal() {
     return SecureStorage.readSecureData(keyproductLocal);
-  } 
+  }
 
   static saveCatgorieName(String? categorieName) {
     SecureStorage.writeSecureData(key: keycategorieName, value: categorieName!);
@@ -148,5 +147,55 @@ class AccountInfoStorage {
 
   static String? readCategorieProducts() {
     return SecureStorage.readSecureData(keycategorieProduct);
+  }
+
+  static saveEventId(String? eventId) {
+    SecureStorage.writeSecureData(key: keyeventId, value: eventId!);
+  }
+
+  static String? readEventId() {
+    return SecureStorage.readSecureData(keyeventId);
+  }
+
+  static saveEventDescription(String? eventDescription) {
+    SecureStorage.writeSecureData(
+        key: keyeventDescription, value: eventDescription!);
+  }
+
+  static String? readEventDescription() {
+    return SecureStorage.readSecureData(keyeventDescription);
+  }
+
+  static saveEventTitle(String? eventTitle) {
+    SecureStorage.writeSecureData(key: keyeventTitle, value: eventTitle!);
+  }
+
+  static String? readEventTitle() {
+    return SecureStorage.readSecureData(keyeventId);
+  }
+
+  static saveEventDatedebut(String? eventDatedebut) {
+    SecureStorage.writeSecureData(
+        key: keyeventDatedebut, value: eventDatedebut!);
+  }
+
+  static String? readEventDatedebut() {
+    return SecureStorage.readSecureData(keyeventDatedebut);
+  }
+
+  static saveEventDatefin(String? eventDatefin) {
+    SecureStorage.writeSecureData(key: keyeventDatefin, value: eventDatefin!);
+  }
+
+  static String? readEventDatefin() {
+    return SecureStorage.readSecureData(keyeventDatefin);
+  }
+
+  static saveEventLocation(String? eventLocation) {
+    SecureStorage.writeSecureData(key: keyeventLocation, value: eventLocation!);
+  }
+
+  static String? readEventLocation() {
+    return SecureStorage.readSecureData(keyeventLocation);
   }
 }

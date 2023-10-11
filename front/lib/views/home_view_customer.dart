@@ -90,9 +90,9 @@ class HomeView extends GetView<ProductsController> {
                   accountEmail: Text(AccountInfoStorage.readEmail().toString()),
                   currentAccountPicture: CircleAvatar(
                     //get uesr photo from backend
-                    /* backgroundImage:NetworkImage(  "${AppApi.getImageUser}${controller.profilePicFile!}",
-                      ) , */
-                    backgroundImage: NetworkImage("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"),
+                    backgroundImage:NetworkImage("https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=",
+                      ) ,
+                   // backgroundImage: NetworkImage("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"),
                     maxRadius: 25,
                   ),
                   decoration: BoxDecoration(color: AppColor.goldColor),
@@ -329,7 +329,7 @@ class HomeView extends GetView<ProductsController> {
                             );
                           }
                         }
-                        print("-----------------snapshot$snapshot");
+                        // print("-----------------snapshot$snapshot");
                         // Displaying LoadingSpinner to indicate waiting state
 
                         // Future that needs to be resolved

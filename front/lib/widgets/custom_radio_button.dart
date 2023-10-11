@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
-import 'package:front/views/service_choices.dart';
 import 'package:front/widgets/custom_text.dart';
-import 'package:get/get.dart';
 
 class CustomRadiobutton extends StatefulWidget {
   const CustomRadiobutton({super.key, this.controller});

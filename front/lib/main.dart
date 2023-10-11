@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:front/config/bindings.dart';
 import 'package:front/views/event_list_view.dart';
 import 'package:front/views/login_view.dart';
@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
         ),
         //  home: ProductDetail());
-     //  home: MyImageWidget());
-    home: LoginView());
+        //  home: MyImageWidget());
+    //    home: TestView());
+     home: LoginView());
   }
-
 }
-  
+
 class LandPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

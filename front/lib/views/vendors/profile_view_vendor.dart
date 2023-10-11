@@ -195,7 +195,7 @@ class ProfileViewVendor extends GetView<ProfileColntroller> {
                   },
                 );
 
-                //  controller.updatepasswordUser();
+         
               },
             ),
           ],

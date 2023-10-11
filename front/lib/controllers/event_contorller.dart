@@ -31,6 +31,11 @@ class EventController extends GetxController {
   TextEditingController locationController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
 
+  void viderControllers() {
+    dateDebutController.text = '';
+    dateFinController.text = '';
+  }
+
   @override
   void onInit() {
     getEvents();
@@ -64,9 +69,9 @@ class EventController extends GetxController {
     return apiEventGetByUserId.getData().then((value) {
       print('value===========> $value');
       eventByUserIdJson = value as EventByUserIdJson?;
-      print(
-          "Events by user id =============== ${eventByUserIdJson!.data![0].user}");
-      if (eventByUserIdJson!.data != null) {
+      print("Events message =============== ${eventByUserIdJson!.message}");
+      if (eventByUserIdJson!.data!.isNotEmpty) {
+        print('events==========================> ${eventByUserIdJson!.data!.length}');
         return eventByUserIdJson;
       }
       return null;
@@ -128,6 +133,9 @@ class EventController extends GetxController {
         dateDebutController.text = firstDate.toString();
         dateFinController.text = secondDate.toString();
 
+        AccountInfoStorage.saveEventDatedebut(dateDebutController.text);
+        AccountInfoStorage.saveEventDatefin(dateFinController.text);
+
         print(firstDate);
         print(secondDate);
       },
@@ -161,11 +169,10 @@ class EventController extends GetxController {
       eventJson = value as EventJson?;
       getEvents();
       print('event created=======> ${eventJson!.data!.sId}');
-       update();
+      update();
     }).onError((error, stackTrace) {
       print('error create event ==========> $error');
     });
-   
   }
 
   final formData = FormData({

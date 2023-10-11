@@ -3,7 +3,6 @@ import 'package:front/config/app_colors.dart';
 import 'package:front/views/product_detail.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_favorite_list.dart';
-import 'package:front/widgets/custom_search_bar.dart';
 import 'package:front/widgets/custom_text.dart';
 import 'package:get/get.dart';
 

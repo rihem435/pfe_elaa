@@ -94,7 +94,10 @@ class EventListView extends GetView<EventController> {
                       print(
                           '-----------------------snapshotdata=======>$snapshot');
                       return Center(
-                        child: Text('no data'),
+                        child: Text(
+                          'no data',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       );
                     } else {
                       return Expanded(
@@ -163,15 +166,25 @@ class EventListView extends GetView<EventController> {
                     label: "Budget:",
                   ),
                   //Dates begin and last
-                  SizedBox(
-                    width: 600,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        controller.openRangeDatePicker(context);
-                      },
-                      child: Text('Pick event first and end date'),
-                    ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(AppColor.secondary)),
+                    child: Text('Pick event first and end date'),
+                    onPressed: () {
+                      controller.openRangeDatePicker(context);
+                    },
                   ),
+                  Row(
+                    children: [
+                      Text(
+                        "Date debut: ${AccountInfoStorage.readEventDatedebut()}",
+                        style: TextStyle(color: AppColor.blackColor),
+                      ),
+                      //  Text("Date fin: ${AccountInfoStorage.readEventDatefin()}", style: TextStyle(color: AppColor.blackColor), ),
+                    ],
+                  ),
+
                   SizedBox(
                     height: 20,
                   ),
