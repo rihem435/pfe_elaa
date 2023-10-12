@@ -1,7 +1,7 @@
 
 import 'package:front/config/app_api.dart';
 import 'package:front/models/json/abstract_json_resource.dart';
-import 'package:front/models/json/guest_json.dart';
+import 'package:front/models/json/guest_all_json.dart';
 import 'package:front/models/network/api_manager.dart';
 
 class ApiGuestsGet extends ApiManager {

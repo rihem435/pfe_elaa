@@ -11,7 +11,7 @@ class CustomBoxDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 600,
-      height: 60,
+      height: 70,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -34,16 +34,16 @@ class CustomBoxDetail extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(
-                    Icons.add_shopping_cart_rounded,
+                    Icons.bookmark_add,
                     color: AppColor.goldColor,
                     size: 30,
                   ),
                   onPressed: () {},
                 ),
                 CustomText(
-                  fontSize: 8,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  text: "Add to cart",
+                  text: "Add to Event",
                   textAlign: TextAlign.center,
                 )
               ],
@@ -60,9 +60,9 @@ class CustomBoxDetail extends StatelessWidget {
                   onPressed: () {},
                 ),
                 CustomText(
-                  fontSize: 8,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
-                  text: "Massage",
+                  text: "Massage Vendor",
                   textAlign: TextAlign.center,
                 )
               ],
@@ -80,7 +80,7 @@ class CustomBoxDetail extends StatelessWidget {
                   },
                 ),
                 CustomText(
-                  fontSize: 8,
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
                   text: "Favorite",
                   textAlign: TextAlign.center,

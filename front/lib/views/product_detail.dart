@@ -63,50 +63,63 @@ class ProductDetail extends GetView<ProductsController> {
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight,
                 ),
-                child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    //scroll images
-                    CarouselSlider(
-                      items: imageSliders,
-                      options: CarouselOptions(
-                        autoPlay: true,
-                        aspectRatio: 2.0,
-                        enlargeCenterPage: true,
-                      ),
-                    ),
-
-                    // text ProductName && price && barre message+buy+fav
-                    Column(
-                      children: [
-                        GetBuilder<ProductsController>(
-                          //key: index,
-                          builder: (
-                            controller,
-                          ) {
-                            return CustomText(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w400,
-                              text:
-                                  "Product name ${AccountInfoStorage.readProductName().toString()}",
-                              textAlign: TextAlign.center,
-                            );
-                          },
+                child: Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //scroll images
+                      CarouselSlider(
+                        items: imageSliders,
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
                         ),
-                        CustomText(
-                          fontSize: 22,
+                      ),
+                
+                      // text ProductName && price && barre message+buy+fav
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: GetBuilder<ProductsController>(
+                            //key: index,
+                            builder: (
+                              controller,
+                            ) {
+                              return CustomText(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w400,
+                                text:
+                                    " ${AccountInfoStorage.readProductName().toString()}",
+                                textAlign: TextAlign.center,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      
+                      Center(
+                        child: CustomText(
+                          fontSize: 28,
                           fontWeight: FontWeight.w400,
                           text:
-                              "Price ${AccountInfoStorage.readProductPrice().toString()}",
+                              " ${AccountInfoStorage.readProductPrice().toString()} DT",
                           textAlign: TextAlign.center,
                         ),
-                        CustomBoxDetail(),
-                      ],
-                    ),
-
-                    //text for details
-                    CustomBoxDescriptionDetail(),
-                  ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomBoxDetail(),
+                      ),
+                
+                      //text for details
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CustomBoxDescriptionDetail(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

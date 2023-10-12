@@ -46,6 +46,8 @@ class ProfileColntroller extends GetxController {
   bool passwordsMatch = true;
   bool isVisiblePassword = true;
   bool confirmPassword = true;
+
+  
   void viderControllers() {
     confirmPasswordController.text = '';
   }

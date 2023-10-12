@@ -17,7 +17,6 @@ class ServiceDetails extends GetView<ProductsController> {
     ScrollController scrollController = ScrollController();
     controller.getCategories();
     controller.getProducts();
-   
 
     return Scaffold(
       appBar: AppBar(
@@ -162,16 +161,19 @@ class ServiceDetails extends GetView<ProductsController> {
                     children: <Widget>[
                       //product title
                       CustomInputText(
+                        controller: controller.productNameController,
                         obscureText: false,
                         label: "Product Name:",
                       ),
                       //description
                       CustomInputText(
+                        controller:  controller.productDescriptionController,
                         obscureText: false,
                         label: "Description:",
                       ),
                       //location dropdownlist
                       CustomInputText(
+                        controller: controller.productPriceController,
                         obscureText: false,
                         label: "Price:",
                       ),
@@ -200,8 +202,9 @@ class ServiceDetails extends GetView<ProductsController> {
                       print(
                           "========================== product creation ======");
                       controller.createProduct();
-                      Get.to(ServiceDetails());
                       Navigator.of(context).pop();
+
+//                      Get.to(ServiceDetails());
                     },
                   ),
                 ],

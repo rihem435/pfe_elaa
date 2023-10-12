@@ -1,21 +1,16 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class GuestGetAllJson extends AbstractJsonResource {
+class GuestJson extends AbstractJsonResource {
   String? message;
   int? status;
-  List<Data>? data;
+  Data? data;
 
-  GuestGetAllJson({this.message, this.status, this.data});
+  GuestJson({this.message, this.status, this.data});
 
-  GuestGetAllJson.fromJson(Map<String, dynamic> json) {
+  GuestJson.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     status = json['status'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,44 +18,44 @@ class GuestGetAllJson extends AbstractJsonResource {
     data['message'] = this.message;
     data['status'] = this.status;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class Data {
-  String? sId;
   String? name;
   int? phonenumber;
   bool? invited;
-  String? user;
+  String? events;
+  String? sId;
   int? iV;
 
   Data(
-      {this.sId,
-      this.name,
+      {this.name,
       this.phonenumber,
       this.invited,
-      this.user,
+      this.events,
+      this.sId,
       this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
     name = json['name'];
     phonenumber = json['phonenumber'];
     invited = json['invited'];
-    user = json['user'];
+    events = json['events'];
+    sId = json['_id'];
     iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
     data['name'] = this.name;
     data['phonenumber'] = this.phonenumber;
     data['invited'] = this.invited;
-    data['user'] = this.user;
+    data['events'] = this.events;
+    data['_id'] = this.sId;
     data['__v'] = this.iV;
     return data;
   }

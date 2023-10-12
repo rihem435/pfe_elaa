@@ -32,126 +32,139 @@ class CustomEventList extends GetView<EventController> {
     //   ScrollController scrollController = ScrollController();
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(2, 5, 2, 5),
+      padding: EdgeInsets.fromLTRB(2, 15, 2, 15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(24)),
           border: Border.all(color: colorBorder!, width: widthBorder!),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //event title
-            AutoSizeText(
-              'Event Name: $eventName',
-              presetFontSizes: [24, 18, 12],
-              maxLines: 2,
-              style: TextStyle(
-                fontSize: 20,
-                color: AppColor.goldColor,
-              ),
-            ),
-            //date debut && date fin
-            Row(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
+                //event title
+                AutoSizeText(
+                  'Event Name: $eventName',
+                  presetFontSizes: [24, 18, 12],
+                  maxLines: 2,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppColor.goldColor,
+                  ),
+                ),
+                //date debut && date fin
+                Row(
                   children: [
-                    AutoSizeText(controller.formattedate("$datedeb"),
-                        presetFontSizes: [18, 12, 10],
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 18, color: AppColor.blackColor)),
-                    AutoSizeText(controller.formattedate("$datefin"),
-                        presetFontSizes: [18, 12, 10],
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 18, color: AppColor.blackColor)),
-                    //local
-                    AutoSizeText(
-                      'Loactaion: $local',
-                      presetFontSizes: [12, 10],
-                      maxLines: 2,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
+                    Expanded(
+                      child: Column(
+                        children: [
+                          AutoSizeText(controller.formattedate("$datedeb"),
+                              presetFontSizes: [18, 12, 10],
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 18, color: AppColor.blackColor)),
+                          AutoSizeText(controller.formattedate("$datefin"),
+                              presetFontSizes: [18, 12, 10],
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 18, color: AppColor.blackColor)),
+                          //local
+                          AutoSizeText(
+                            'Loactaion: $local',
+                            presetFontSizes: [12, 10],
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          //budget
+                          AutoSizeText(
+                            'Budget: $budget',
+                            presetFontSizes: [18, 12, 10],
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: AppColor.secondary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    //budget
-                    AutoSizeText(
-                      'Budget: $budget',
-                      presetFontSizes: [18, 12, 10],
-                      maxLines: 2,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppColor.secondary,
+
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CustomText(text: "Pack of services:"),
+                          // services data which are related to each event
+                          TextButton(
+                            onPressed: () {
+                              // Get.to(TestView());
+                            },
+                            child: FlutterImageStack(
+                              showTotalCount: true,
+                              ////// get services data /////////
+                              imageList: _images,
+                              totalCount: 10,
+                              itemRadius: 40,
+                              itemCount: 1,
+                              itemBorderWidth: 1,
+                              itemBorderColor: AppColor.secondary,
+                              backgroundColor: AppColor.secondary,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
                       ),
                     ),
+
+                    Expanded(
+                      child: Column(
+                        children: [
+                          CustomText(text: "Guest List:"),
+                          TextButton(
+                            onPressed: () {
+                              Get.to(GuestList());
+                            },
+                            child: FlutterImageStack(
+                              showTotalCount: true,
+                              ////// get Gusts data /////////
+                              imageList: _imagesGuest,
+                              totalCount: 10,
+                              itemRadius: 40,
+                              itemCount: 1,
+                              itemBorderWidth: 1,
+                              itemBorderColor: AppColor.secondary,
+                              backgroundColor: AppColor.secondary,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    )
+                    ////////////Column to guest lists
                   ],
                 ),
-/* 
-                Column(
-                  children: [
-                    CustomText(text: "Pack of services:"),
-                    // services data which are related to each event
-                    TextButton(
-                      onPressed: () {
-                        // Get.to(TestView());
-                      },
-                      child: FlutterImageStack(
-                        showTotalCount: true,
-                        ////// get services data /////////
-                        imageList: _images,
-                        totalCount: _images.length,
-                        itemRadius: 40,
-                        itemCount: 1,
-                        itemBorderWidth: 1,
-                        itemBorderColor: AppColor.secondary,
-                        backgroundColor: AppColor.secondary,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-
-
-                Column(
-                  children: [
-                    CustomText(text: "Guest List:"),
-                    TextButton(
-                      onPressed: () {
-                        //Get.to(GuestList());
-                      },
-                      child: FlutterImageStack(
-                        showTotalCount: true,
-                        ////// get Gusts data /////////
-                        imageList: _images,
-                        totalCount: _images.length,
-                        itemRadius: 40,
-                        itemCount: 1,
-                        itemBorderWidth: 1,
-                        itemBorderColor: AppColor.secondary,
-                        backgroundColor: AppColor.secondary,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                )
-              */   ////////////Column to guest lists
+                /////// guest list
+                ///
               ],
             ),
-            /////// guest list
-            ///
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
+/////
 List<String> _images = [
-  'https://images.unsplash.com/photo-1612626256634-991e6e977fc1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1712&q=80',
+  'https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80',
 ];
-
+List<String> _imagesGuest = [
+  'https://images.unsplash.com/photo-1632067694887-097be1c5c5d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+];
 /* import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';

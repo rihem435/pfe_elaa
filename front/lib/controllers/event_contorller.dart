@@ -4,10 +4,19 @@ import 'package:front/models/json/event_by_id_json.dart';
 import 'package:front/models/json/event_by_user_id_json.dart';
 import 'package:front/models/json/event_get_json.dart';
 import 'package:front/models/json/event_json.dart';
+import 'package:front/models/json/guest_all_json.dart';
+import 'package:front/models/json/guest_by_event_id_json.dart';
+import 'package:front/models/json/guest_by_user_id_json.dart';
+import 'package:front/models/json/guest_json.dart';
 import 'package:front/models/network/api_event_create.dart';
 import 'package:front/models/network/api_event_get.dart';
 import 'package:front/models/network/api_event_get_by_id.dart';
 import 'package:front/models/network/api_events_get_by_user_id.dart';
+import 'package:front/models/network/api_guest_add.dart';
+import 'package:front/models/network/api_guest_get.dart';
+import 'package:front/models/network/api_guest_get_by_event_id.dart';
+import 'package:front/models/network/api_guest_get_by_user_id.dart';
+import 'package:front/views/event_list_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -20,16 +29,32 @@ class EventController extends GetxController {
   ApiEventGetById apiEventGetById = ApiEventGetById();
   ApiEventCreate apiEventCreate = ApiEventCreate();
   ApiEventGetByUserId apiEventGetByUserId = ApiEventGetByUserId();
+
+  ApiGuestsGetByUserId apiGuestsGetByUserId = ApiGuestsGetByUserId();
+  ApiGuestsGetByEventId apiGuestsGetByEventId = ApiGuestsGetByEventId();
+  ApiGuestCreate apiGuestCreate = ApiGuestCreate();
+  ApiGuestsGet apiGuestsGet = ApiGuestsGet();
+
   EventJson? eventJson;
   EventGetJson? eventGetJson;
   EventByIdJson? eventByIdJson;
   EventByUserIdJson? eventByUserIdJson;
+
+  GuestByEventIdJson? guestByEventIdJson;
+  GuestByUserIdJson? guestByUserIdJson;
+  GuestGetAllJson? guestGetAllJson;
+  GuestJson? guestJson;
+
   TextEditingController eventTitleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dateDebutController = TextEditingController();
   TextEditingController dateFinController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController budgetController = TextEditingController();
+
+  TextEditingController guestNameConroller = TextEditingController();
+  TextEditingController guestPhonenumberConroller = TextEditingController();
+  TextEditingController guestInvitedConroller = TextEditingController();
 
   void viderControllers() {
     dateDebutController.text = '';
@@ -71,7 +96,8 @@ class EventController extends GetxController {
       eventByUserIdJson = value as EventByUserIdJson?;
       print("Events message =============== ${eventByUserIdJson!.message}");
       if (eventByUserIdJson!.data!.isNotEmpty) {
-        print('events==========================> ${eventByUserIdJson!.data!.length}');
+        print(
+            'events==========================> ${eventByUserIdJson!.data!.length}');
         return eventByUserIdJson;
       }
       return null;
@@ -132,12 +158,9 @@ class EventController extends GetxController {
 
         dateDebutController.text = firstDate.toString();
         dateFinController.text = secondDate.toString();
-
-        AccountInfoStorage.saveEventDatedebut(dateDebutController.text);
-        AccountInfoStorage.saveEventDatefin(dateFinController.text);
-
         print(firstDate);
         print(secondDate);
+        //return Text("${formattedate("$firstDate")}${formattedate("$firstDate")}");
       },
       bottomPickerTheme: BottomPickerTheme.plumPlate,
       buttonSingleColor: AppColor.goldColor,
@@ -167,8 +190,12 @@ class EventController extends GetxController {
     apiEventCreate.postData(data).then((value) {
       print('success+++++++++++++++> $value');
       eventJson = value as EventJson?;
+      AccountInfoStorage.saveEventId(eventJson!.data!.sId.toString());
+
       getEvents();
       print('event created=======> ${eventJson!.data!.sId}');
+
+      Get.to(EventListView());
       update();
     }).onError((error, stackTrace) {
       print('error create event ==========> $error');
@@ -179,4 +206,79 @@ class EventController extends GetxController {
     'name': 'dio',
     'date': DateTime.now().toIso8601String(),
   });
+
+//////////////////////Guest list
+  ///
+  createGuests() {
+    print('************************create guest***********************');
+
+    Map<String, dynamic> data = {
+      "name": guestNameConroller.text,
+      "phonenumber": guestPhonenumberConroller.text.toString(),
+      "invited": true,
+      "events": AccountInfoStorage.readEventId(),
+    };
+
+    print("guest data =============== $data");
+    apiGuestCreate.postData(data).then((value) {
+      print('success+++++++++++++++> $value');
+      guestJson = value as GuestJson?;
+      getEvents();
+      print('Guest created=======> ${guestJson!.data!.sId}');
+      // getGuests();
+      update();
+    }).onError((error, stackTrace) {
+      print('error create event ==========> $error');
+    });
+  }
+
+  getAllGuestsByEventId() {
+    print("Guest by Event id ---------------------");
+    apiGuestsGetByEventId.id = AccountInfoStorage.readEventId().toString();
+    return apiGuestsGetByEventId.getData().then((value) {
+      print(
+          "id evnet by Event id ================ ${guestByEventIdJson!.data![0].events}");
+      print(
+          'Guest by Event id ==========================> ${guestByEventIdJson!.data!.length}');
+
+      print('value by Event id ===========> $value');
+      guestByEventIdJson = value as GuestByEventIdJson?;
+      print("Guest message =============== ${guestByEventIdJson!.data}");
+      if (guestByEventIdJson!.data != null) {
+        return guestByEventIdJson;
+      }
+      return null;
+      /* if (guestByEventIdJson!.data!.isNotEmpty) {
+        print(
+            'Guest==========================> ${guestByEventIdJson!.data!.length}');
+        return guestByEventIdJson;
+      }
+
+      return guestByEventIdJson; */
+    }).onError((error, stackTrace) {
+      print('error======> $error');
+      return null;
+    });
+  }
+
+  getGuests() {
+    return apiGuestsGet.getData().then((value) {
+      print(
+          "====================================================================================================================================================================================success get Guests");
+      guestGetAllJson = value as GuestGetAllJson?;
+      print(
+          "get event guest message ================= ${guestGetAllJson!.message}");
+      print(
+          'Guest==========================> ${guestGetAllJson!.data!.length}');
+
+      print("data Guests ======================= ${guestGetAllJson!.status}");
+      if (guestGetAllJson!.data != null) {
+        return guestGetAllJson;
+      }
+      return null;
+    }).onError((error, stackTrace) {
+      print("error ==== $error");
+      return guestGetAllJson;
+    });
+  }
 }

@@ -2,7 +2,7 @@ import 'package:front/config/account_info_storage.dart';
 
 class AppApi {
 //static const String baseUrl = "http://localhost:3000/";
-  static const String baseUrl = "http://192.168.2.36:3000/";
+static const String baseUrl = "http://192.168.2.36:3000/";
 //  static const String baseUrl = "http://192.168.1.11:3000/";
 
   static const String loginUrl = "${baseUrl}auth/signin";
@@ -25,10 +25,10 @@ class AppApi {
   static const String getProductsUrl = "${baseUrl}products/";
   static const String getProductsByUserUrl = "${baseUrl}products/user";
 
-  static const String createGuestUrl = "${baseUrl}guests/";
+  static const String createGuestUrl = "${baseUrl}guests";
   static const String getGuestsUrl = "${baseUrl}guests/";
   static const String getGuestsByUserIdUrl = "${baseUrl}guests/user";
-
+  static const String getGuestsByEventIdUrl = "${baseUrl}guests/event/";
 
 /* 
   String baseUrlCloudinary =

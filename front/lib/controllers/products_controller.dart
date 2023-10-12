@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
 import 'package:front/models/json/categorie_get_by_id_json.dart';
@@ -39,19 +40,24 @@ class ProductsController extends GetxController {
   ProductGetByIdJson? productGetByIdJson;
   ProductAddJson? productAddJson;
 
+  TextEditingController productNameController =TextEditingController();
+    TextEditingController productDescriptionController =TextEditingController();
+    TextEditingController productPriceController =TextEditingController();
 
 
+  dio.Dio dio_ = dio.Dio(
+    dio.BaseOptions(
+        baseUrl: AppApi.baseUrl,
+        //  receiveDataWhenStatusError: true,
+        connectTimeout: Duration(seconds: 6000),
+        receiveTimeout: Duration(seconds: 6000),
+        headers: <String, String>{
+          //'Contentt-Type': 'application/x-www-form-urlencoded',
+          //  'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        }),
+  );
 
-  dio.Dio dio_ = dio.Dio(dio.BaseOptions(
-      baseUrl: AppApi.baseUrl,
-      //  receiveDataWhenStatusError: true,
-      connectTimeout: Duration(seconds: 6000),
-      receiveTimeout: Duration(seconds: 6000),
-      headers: <String, String>{
-        //'Contentt-Type': 'application/x-www-form-urlencoded',
-        //  'Content-Type': 'application/json',
-        'Content-Type': 'multipart/form-data',
-      }));
   @override
   void onInit() {
     getCategories();
@@ -63,7 +69,7 @@ class ProductsController extends GetxController {
   }
 
   getCategories() {
-    apiCategoriesGet.getData().then((value) {
+   return  apiCategoriesGet.getData().then((value) {
       print("success get categories");
       categorieJson = value as CategorieJson;
       if (categorieJson!.data != null) {
@@ -205,12 +211,10 @@ class ProductsController extends GetxController {
 
   createProduct() {
     print('************************create product***********************');
-    //  print("testtttttttttttttt${productAddJson!.status}");
-//    AccountInfoStorage.readCategorieId();
     dio.FormData formData1 = dio.FormData.fromMap({
-      "nameproduct": "cake1",
-      "description": "gold1",
-      "price": 300,
+      "nameproduct": productNameController.text,
+      "description": productDescriptionController.text,
+      "price": productPriceController.text.toString(),
       "images": [],
       "category": AccountInfoStorage.readCategorieName().toString(),
       "user": AccountInfoStorage.readId().toString(),
@@ -233,6 +237,7 @@ class ProductsController extends GetxController {
 
     dio_.post(AppApi.createProductsUrl, data: formData1).then((value) {
       print('success+++++++++++++++> $value');
+      getProducts();
       // productAddJson = value as ProductAddJson?;
       //  print('name==================> ${AccountInfoStorage.readProductName()}');
 

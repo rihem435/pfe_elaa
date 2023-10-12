@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
@@ -65,16 +66,25 @@ class ProfileView extends GetView<ProfileColntroller> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           //chat Box with Vendors
-                          CircleAvatar(
-                            //radius: 30,
-                            minRadius: 15,
-                            maxRadius: 30,
-                            backgroundColor: AppColor.goldColor,
-                            child: Icon(
-                              Icons.chat,
-                              size: 30,
-                              color: Colors.white,
-                            ),
+                          Column(
+                            children: [
+                              CircleAvatar(
+                                //radius: 30,
+                                minRadius: 15,
+                                maxRadius: 30,
+                                backgroundColor: AppColor.goldColor,
+                                child: Icon(
+                                  Icons.chat,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              CustomText(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                text: "Message Box",
+                              ),
+                            ],
                           ),
                           // profile pic
                           Expanded(
@@ -91,7 +101,7 @@ class ProfileView extends GetView<ProfileColntroller> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    'Name',
+                                    AccountInfoStorage.readName().toString(),
                                     style: TextStyle(
                                       color: AppColor.goldColor.withOpacity(1),
                                       fontSize: 25,
@@ -102,15 +112,24 @@ class ProfileView extends GetView<ProfileColntroller> {
                             ),
                           ),
                           // phone number
-                          CircleAvatar(
-                            minRadius: 15,
-                            maxRadius: 30,
-                            backgroundColor: AppColor.goldColor,
-                            child: Icon(
-                              Icons.call,
-                              size: 30,
-                              color: Colors.white,
-                            ),
+                          Column(
+                            children: [
+                              CircleAvatar(
+                                minRadius: 15,
+                                maxRadius: 30,
+                                backgroundColor: AppColor.goldColor,
+                                child: Icon(
+                                  Icons.call,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              CustomText(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                                text: "Phonebook",
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -119,72 +138,64 @@ class ProfileView extends GetView<ProfileColntroller> {
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
+            Container(
+              child: Expanded(
                 child: Column(
                   children: [
-                    Expanded(
-                      child: CustomInputText(
-                        label: 'User Name',
-                        iconData: Icons.person,
-                        obscureText: false,
-                        controller: controller.usernameController,
-                      ),
+                    CustomInputText(
+                      label: 'User Name',
+                      iconData: Icons.person,
+                      obscureText: false,
+                      controller: controller.usernameController,
                     ),
-                    Expanded(
-                      child: CustomInputText(
-                        label: 'Email',
-                        iconData: Icons.email,
-                        obscureText: false,
-                        controller: controller.emailController,
-                      ),
+                    CustomInputText(
+                      label: 'Email',
+                      iconData: Icons.email,
+                      obscureText: false,
+                      controller: controller.emailController,
                     ),
-                    Expanded(
-                      child: CustomInputText(
-                        label: 'Phone number',
-                        iconData: Icons.phone,
-                        obscureText: false,
-                        controller: controller.phonenumberController,
-                      ),
+                    CustomInputText(
+                      label: 'Phone number',
+                      iconData: Icons.phone,
+                      obscureText: false,
+                      controller: controller.phonenumberController,
                     ),
-                    Expanded(
-                      child: CustomInputText(
-                        label: 'Adresse',
-                        iconData: Icons.location_city,
-                        obscureText: false,
-                        controller: controller.adresseController,
-                      ),
+                    CustomInputText(
+                      label: 'Adresse',
+                      iconData: Icons.location_city,
+                      obscureText: false,
+                      controller: controller.adresseController,
+                    ),
+                    CustomButton(
+                      text: 'Update',
+                      width: 100,
+                      height: 40,
+                      function: () {
+                        //controller.userUpdate();
+                        print("alert dialog");
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Confirme changes"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    controller.userUpdate();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        //  controller.updatepasswordUser();
+                      },
                     ),
                   ],
                 ),
               ),
-            ),
-            CustomButton(
-              text: 'Update',
-              width: 100,
-              height: 40,
-              function: () {
-                // controller.userUpdate();
-                print("alert dialog");
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text("Confirme changes"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            controller.userUpdate();
-                          },
-                          child: Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-
-                //  controller.updatepasswordUser();
-              },
             ),
           ],
         ),

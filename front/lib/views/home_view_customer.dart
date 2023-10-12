@@ -21,14 +21,14 @@ class HomeView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-    controller.getCategories();
+    /* controller.getCategories();
     controller.getProducts();
     Future<String> getData() {
       return Future.delayed(Duration(seconds: 2), () {
         return "I am data";
         // throw Exception("Custom Error");
       });
-    }
+    } */
 
     // controller.getNameCategory();
     return Scaffold(
@@ -41,6 +41,7 @@ class HomeView extends GetView<ProductsController> {
               ),
               onPressed: () {
                 //code to execute when this button is pressed
+                Get.to(ProductSelectionByServices());
               }),
           backgroundColor: Colors.white, //your color
           surfaceTintColor: Colors.white,
@@ -53,7 +54,7 @@ class HomeView extends GetView<ProductsController> {
                 flex: 0,
                 child: CustomText(
                   fontSize: 16,
-                  text: 'Hello ${AccountInfoStorage.readName().toString()}' ,
+                  text: 'Hello ${AccountInfoStorage.readName().toString()}',
                 ),
               ),
               Expanded(
@@ -80,99 +81,112 @@ class HomeView extends GetView<ProductsController> {
           width: MediaQuery.of(context).size.width * 0.5, //<-- SEE HERE
           child: Drawer(
             backgroundColor: AppColor.goldColor.withOpacity(0.9),
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
+            child: Expanded(
+              child: ListView(
+                // Important: Remove any padding from the ListView.
+                padding: EdgeInsets.zero,
 
-              children: [
-                UserAccountsDrawerHeader(
-                  accountName: Text(AccountInfoStorage.readName().toString()),
-                  accountEmail: Text(AccountInfoStorage.readEmail().toString()),
-                  currentAccountPicture: CircleAvatar(
-                    //get uesr photo from backend
-                    backgroundImage:NetworkImage("https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=",
-                      ) ,
-                   // backgroundImage: NetworkImage("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"),
-                    maxRadius: 25,
-                  ),
-                  decoration: BoxDecoration(color: AppColor.goldColor),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.person_2_outlined,
-                  ),
-                  title: Text('Profile'),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ProfileView()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.event_note_outlined,
-                  ),
-                  title: Text('My events'),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EventListView()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.favorite,
-                  ),
-                  title: Text('Favorite list'),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FavoriteView()));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                  ),
-                  title: Text('Settings'),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SettingView()));
-                  },
-                ),
-                AboutListTile(
-                  // <-- SEE HERE
-                  icon: Icon(
-                    Icons.info,
-                  ),
-                  child: Text('About app'),
-                  applicationIcon: Icon(
-                    Icons.local_play,
-                  ),
-                  applicationName: 'My Event Mangement App',
-                  applicationVersion: '1.0.0',
-                  applicationLegalese: '© 2023 Company',
-                  aboutBoxChildren: [
-                  ],
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                GetBuilder<ProfileColntroller>(builder: (c) {
-                  return ListTile(
-                    leading: Icon(
-                      Icons.logout_outlined,
+                children: [
+                  UserAccountsDrawerHeader(
+                    accountName: Text(AccountInfoStorage.readName().toString()),
+                    accountEmail:
+                        Text(AccountInfoStorage.readEmail().toString()),
+                    currentAccountPicture: CircleAvatar(
+                      //get uesr photo from backend
+                      backgroundImage: NetworkImage(
+                        "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=",
+                      ),
+                      // backgroundImage: NetworkImage("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"),
+                      maxRadius: 25,
                     ),
-                    title: Text('Log out'),
+                    decoration: BoxDecoration(color: AppColor.goldColor),
+                  ),
+                  //profile
+                  ListTile(
+                    leading: Icon(
+                      Icons.person_2_outlined,
+                    ),
+                    title: Text('Profile'),
                     onTap: () {
-                      print('********************logout*************');
-                      c.logOut();
-                      Get.to(LoginView());
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileView()));
                     },
-                  );
-                })
-              ],
+                  ),
+                  //event
+                  ListTile(
+                    leading: Icon(
+                      Icons.event_note_outlined,
+                    ),
+                    title: Text('My events'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EventListView()));
+                    },
+                  ),
+
+                  ///fav list
+                  ListTile(
+                    leading: Icon(
+                      Icons.favorite,
+                    ),
+                    title: Text('Favorite list'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FavoriteView()));
+                    },
+                  ),
+                  //setting
+                  ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                    ),
+                    title: Text('Settings'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingView()));
+                    },
+                  ),
+                  AboutListTile(
+                    // <-- SEE HERE
+                    icon: Icon(
+                      Icons.info,
+                    ),
+                    child: Text('About app'),
+                    applicationIcon: Icon(
+                      Icons.local_play,
+                    ),
+                    applicationName: 'My Event Mangement App',
+                    applicationVersion: '1.0.0',
+                    applicationLegalese: '© 2023 Company',
+                    aboutBoxChildren: [],
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  //logout
+                  GetBuilder<ProfileColntroller>(builder: (c) {
+                    return ListTile(
+                      leading: Icon(
+                        Icons.logout_outlined,
+                      ),
+                      title: Text('Log out'),
+                      onTap: () {
+                        print('********************logout*************');
+                        c.logOut();
+                        Get.to(LoginView());
+                      },
+                    );
+                  })
+                ],
+              ),
             ),
           ),
         ),
@@ -194,7 +208,7 @@ class HomeView extends GetView<ProductsController> {
                         child: CustomText(
                           textAlign: TextAlign.justify,
                           text: 'Services',
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w400,
                           //textAlign: TextAlign.left,
                         ),
@@ -202,42 +216,146 @@ class HomeView extends GetView<ProductsController> {
                       //view all
                       Expanded(
                         flex: 1,
-                        child: Row(
-                          children: [
-                            CustomButtonText(
-                              text: 'View All',
-                              icon: Icons.arrow_forward,
-                              function: () {
-                                 Get.to(ProductSelectionByServices());
-                              // Get.to(EventListView());
-                              },
-                            ),
-                          ],
+                        child: CustomButtonText(
+                          text: 'View All',
+                          icon: Icons.arrow_forward,
+                          function: () {
+                            Get.to(ProductSelectionByServices());
+                            // Get.to(EventListView());
+                          },
                         ),
                       )
                     ],
                   ),
                 ),
                 //list service names
-                Expanded(
-                  flex: 1,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.categorieJson!.data!.length,
-                      itemBuilder: (BuildContext context, index) {
-                        return CustomChechbox(
-                          function: () {},
-                          text:
-                              '${controller.categorieJson!.data![index].name}',
-                          /*  height: 30,
-                            width: 150, */
-                          colorBorder: AppColor.goldColor,
-                          widthBorder: 1,
+
+                /*           FutureBuilder(
+                  future: controller.getProducts(),
+                  builder: (ctx, snapshot) {
+                    // Checking if future is resolved or not
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print("-----------------snapshot$snapshot");
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: AppColor.secondary),
+                      );
+                    } else {
+                      // If we got an error
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Something went wrong !!!',
+                            style: TextStyle(fontSize: 18),
+                          ),
                         );
-                      }),
+
+                        // if we got our data
+                      }
+
+                      if (snapshot.data == null) {
+                        // Extracting data from snapshot object
+                        print(
+                            '-----------------------snapshotdata=======>$snapshot');
+                        return Center(
+                          child: Text(
+                            'There is no availble services for the moment',
+                            style: TextStyle(color: AppColor.secondary),
+                          ),
+                        );
+                      } else {
+                        print(
+                            'categories length============> ${controller.categorieJson!.data!.length}');
+                        print('categories============> ${snapshot.data}');
+                        return Center(
+                          child: Expanded(
+                            flex: 5,
+                            child: GetBuilder<ProductsController>(
+                              builder: (controller) {
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: scrollController,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      controller.categorieJson!.data!.length,
+                                  itemBuilder: (BuildContext context, index) {
+                                    return CustomChechbox(
+                                      function: () {},
+                                      text:
+                                          '${controller.categorieJson!.data![index].name}',
+                                      colorBorder: AppColor.goldColor,
+                                      widthBorder: 1,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
                 ),
+       */
+
+                FutureBuilder(
+                    future: controller.getCategories(),
+                    builder: (ctx, snapshot) {
+                      // Checking if future is resolved or not
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        print("-----------------snapshot$snapshot");
+                        return Center(
+                          child: CircularProgressIndicator(
+                              color: AppColor.secondary),
+                        );
+                      } else {
+                        // If we got an error
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Something went wrong !!!',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          );
+
+                          // if we got our data
+                        }
+
+                        if (snapshot.data == null) {
+                          // Extracting data from snapshot object
+                          print(
+                              '-----------------------snapshotdata=======>$snapshot');
+                          return Center(
+                            child: Text(
+                              'There is no availble services for the moment',
+                              style: TextStyle(color: AppColor.secondary),
+                            ),
+                          );
+                        } else {
+                          print(
+                              'categories length============> ${controller.categorieJson!.data!.length}');
+                          print('categories============> ${snapshot.data}');
+                          return Expanded(
+                            flex: 1,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                controller: scrollController,
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    controller.categorieJson!.data!.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  return CustomChechbox(
+                                    function: () {},
+                                    text:
+                                        '${controller.categorieJson!.data![index].name}',
+                                    colorBorder: AppColor.goldColor,
+                                    widthBorder: 1,
+                                  );
+                                }),
+                          );
+                        }
+                      }
+                    }),
                 //list products
                 Expanded(
                   flex: 5,
@@ -270,7 +388,10 @@ class HomeView extends GetView<ProductsController> {
                             print(
                                 '-----------------------snapshotdata=======>$snapshot');
                             return Center(
-                              child: Text('There is no service for the moment', style: TextStyle(color: AppColor.secondary),),
+                              child: Text(
+                                'There is no service for the moment',
+                                style: TextStyle(color: AppColor.secondary),
+                              ),
                             );
                           } else {
                             return Center(
@@ -299,10 +420,6 @@ class HomeView extends GetView<ProductsController> {
                                             ServiceName: AccountInfoStorage
                                                     .readCategorieName()
                                                 .toString(),
-                                            //  " ${controller.getCategorieById("${AccountInfoStorage.readCategorieName()}")}",
-                                            //" ${AccountInfoStorage.readCategorieName()}",
-                                            //"zzz${controller.getCategorieById("${controller.productGetJson!.data![index].category}")}",
-                                            //"${controller.productGetJson!.data![index].nameproduct}",
                                             Descriptiontext:
                                                 "${controller.productGetJson!.data![index].price}",
                                             height: 200,
@@ -391,43 +508,33 @@ class HomeView extends GetView<ProductsController> {
                 // Top vendors
                 Expanded(
                   flex: 1,
-                  child: Column(
+                  child: Row(
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: CustomText(
-                                textAlign: TextAlign.justify,
-                                text: 'Top Vendors',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w400,
-                                //textAlign: TextAlign.left,
-                              ),
-                            ),
-                            //view all
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                children: [
-                                  CustomButtonText(
-                                    text: 'View All',
-                                    icon: Icons.arrow_forward,
-                                    function: () {
-                                      //  Get.to();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                        child: CustomText(
+                          textAlign: TextAlign.justify,
+                          text: 'Top Vendors',
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          //textAlign: TextAlign.left,
                         ),
                       ),
+                      //view all
+                      Expanded(
+                        flex: 1,
+                        child: CustomButtonText(
+                          text: 'View All',
+                          icon: Icons.arrow_forward,
+                          function: () {
+                            //  Get.to();
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
+                ////vendor profile data
                 Expanded(
                   flex: 5,
                   child: ListView.builder(

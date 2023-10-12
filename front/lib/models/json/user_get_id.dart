@@ -1,6 +1,6 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class UserGetByIdJson extends AbstractJsonResource{
+class UserGetByIdJson extends AbstractJsonResource {
   String? message;
   int? status;
   Data? data;
@@ -33,13 +33,12 @@ class Data {
   String? city;
   String? adress;
   int? phone;
-  String? image;
   List<String>? events;
   List<String>? products;
+  List<String>? guests;
   String? createdAt;
   String? updatedAt;
   int? iV;
-  String? refreshToken;
 
   Data(
       {this.sId,
@@ -50,13 +49,12 @@ class Data {
       this.city,
       this.adress,
       this.phone,
-      this.image,
       this.events,
       this.products,
+      this.guests,
       this.createdAt,
       this.updatedAt,
-      this.iV,
-      this.refreshToken});
+      this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -67,13 +65,12 @@ class Data {
     city = json['city'];
     adress = json['adress'];
     phone = json['phone'];
-    image = json['image'];
-    events = json['events'].cast<String>();
+    products = json['events'].cast<String>();
     products = json['products'].cast<String>();
+    guests = json['guests'].cast<String>();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,13 +83,12 @@ class Data {
     data['city'] = this.city;
     data['adress'] = this.adress;
     data['phone'] = this.phone;
-    data['image'] = this.image;
     data['events'] = this.events;
     data['products'] = this.products;
+    data['guests'] = this.guests;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
-    data['refreshToken'] = this.refreshToken;
     return data;
   }
 }

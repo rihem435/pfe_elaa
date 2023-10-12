@@ -119,98 +119,110 @@ class SignupView extends GetView<ProfileColntroller> {
                 key: formKey,
                 child: Column(
                   children: [
-                    CustomInputText(
-                      controller: controller.usernameController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Required";
-                        } else if (value.length < 6) {
-                          return "User Name should be atleast 6 characters";
-                        } else if (value.length > 15) {
-                          return "User Name should not be greater than 15 characters";
-                        } else
-                          return null;
-                      },
-                      label: 'User Name',
-                      iconData: Icons.person,
-                      obscureText: false,
-                    ),
-
-                    GetBuilder<ProfileColntroller>(
-                      builder: (controller) {
-                        return CustomInputText(
-                          controller: controller.emailController,
-                          label: 'Email',
-                          iconData: Icons.email,
-                          obscureText: false,
-                          validator: (input) {
-                            if (input!.isEmpty) {
-                              return "Required";
-                            }
-                            if (!EmailValidator.validate(input)) {
-                              return 'Please enter a valid email address';
-                            }
+                    Expanded(
+                      child: CustomInputText(
+                        controller: controller.usernameController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Required";
+                          } else if (value.length < 6) {
+                            return "User Name should be atleast 6 characters";
+                          } else if (value.length > 15) {
+                            return "User Name should not be greater than 15 characters";
+                          } else
                             return null;
-                          },
-                        );
-                      },
+                        },
+                        label: 'User Name',
+                        iconData: Icons.person,
+                        obscureText: false,
+                      ),
                     ),
-                    GetBuilder<ProfileColntroller>(builder: (controller) {
-                      return CustomInputText(
-                        controller: controller.passwordController,
-                        label: 'Password',
-                        iconData: controller.isVisiblePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        obscureText: controller.isVisiblePassword,
-                        function: () {
-                          print("${controller.passwordController}");
 
-                          print('********click password*********');
-                          controller.showPassword();
+                    Expanded(
+                      child: GetBuilder<ProfileColntroller>(
+                        builder: (controller) {
+                          return CustomInputText(
+                            controller: controller.emailController,
+                            label: 'Email',
+                            iconData: Icons.email,
+                            obscureText: false,
+                            validator: (input) {
+                              if (input!.isEmpty) {
+                                return "Required";
+                              }
+                              if (!EmailValidator.validate(input)) {
+                                return 'Please enter a valid email address';
+                              }
+                              return null;
+                            },
+                          );
                         },
-                        validator: (input) {
-                          if (input!.isEmpty) {
-                            return 'chek your password';
-                          }
-                          if (input.length < 6) {
-                            return 'password must b >6';
-                          }
-                          return null;
-                        },
-                      );
-                    }),
-                    GetBuilder<ProfileColntroller>(
-                      builder: (controller) {
+                      ),
+                    ),
+                    
+                    Expanded(
+                      child: GetBuilder<ProfileColntroller>(builder: (controller) {
                         return CustomInputText(
-                          controller: controller.confirmPasswordController,
-                          label: 'Confirm Password',
-                          iconData: controller.confirmPassword
+                          controller: controller.passwordController,
+                          label: 'Password',
+                          iconData: controller.isVisiblePassword
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          obscureText: controller.confirmPassword,
+                          obscureText: controller.isVisiblePassword,
+                          function: () {
+                            print("${controller.passwordController}");
+                    
+                            print('********click password*********');
+                            controller.showPassword();
+                          },
                           validator: (input) {
-                            if (controller.confirmPasswordController.text !=
-                                controller.passwordController.text) {
-                              print("pass do not match");
-                              return 'pass do not match';
+                            if (input!.isEmpty) {
+                              return 'chek your password';
+                            }
+                            if (input.length < 6) {
+                              return 'password must b >6';
                             }
                             return null;
                           },
-                          function: () {
-                            controller.showConfirmPassword();
-                          },
                         );
-                      },
+                      }),
+                    ),
+
+                    Expanded(
+                      child: GetBuilder<ProfileColntroller>(
+                        builder: (controller) {
+                          return CustomInputText(
+                            controller: controller.confirmPasswordController,
+                            label: 'Confirm Password',
+                            iconData: controller.confirmPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            obscureText: controller.confirmPassword,
+                            validator: (input) {
+                              if (controller.confirmPasswordController.text !=
+                                  controller.passwordController.text) {
+                                print("pass do not match");
+                                return 'pass do not match';
+                              }
+                              return null;
+                            },
+                            function: () {
+                              controller.showConfirmPassword();
+                            },
+                          );
+                        },
+                      ),
                     ),
 
                     //Roles item selection radio button
-                    GetBuilder<ProfileColntroller>(
-                      builder: (controller) {
-                        return CustomRadiobutton(
-                          controller: controller.itemscontroller,
-                        );
-                      },
+                    Expanded(
+                      child: GetBuilder<ProfileColntroller>(
+                        builder: (controller) {
+                          return CustomRadiobutton(
+                            controller: controller.itemscontroller,
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -232,6 +244,8 @@ class SignupView extends GetView<ProfileColntroller> {
                 // }
               },
             ), //footer
+      
+      
             Expanded(
               flex: 1,
               child: Column(

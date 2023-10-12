@@ -25,10 +25,9 @@ class CustomInputText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+    return Padding(
+      padding:  EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: Expanded(
         child: TextFormField(
           controller: controller,
           decoration: InputDecoration(

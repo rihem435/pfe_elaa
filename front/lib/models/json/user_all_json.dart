@@ -1,7 +1,7 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
 class UsersAllJson extends AbstractJsonResource{
-  String? message;
+    String? message;
   int? status;
   List<Data>? data;
 
@@ -30,6 +30,7 @@ class UsersAllJson extends AbstractJsonResource{
 }
 
 class Data {
+  List<String>? guests;
   String? sId;
   String? items;
   String? username;
@@ -41,14 +42,13 @@ class Data {
   int? iV;
   String? refreshToken;
   List<String>? products;
-  String? fullname;
   String? city;
   String? adress;
   int? phone;
-  String? image;
 
   Data(
-      {this.sId,
+      {this.guests,
+      this.sId,
       this.items,
       this.username,
       this.email,
@@ -59,13 +59,12 @@ class Data {
       this.iV,
       this.refreshToken,
       this.products,
-      this.fullname,
       this.city,
       this.adress,
-      this.phone,
-      this.image});
+      this.phone});
 
   Data.fromJson(Map<String, dynamic> json) {
+    guests = json['guests'].cast<String>();
     sId = json['_id'];
     items = json['items'];
     username = json['username'];
@@ -77,15 +76,14 @@ class Data {
     iV = json['__v'];
     refreshToken = json['refreshToken'];
     products = json['products'].cast<String>();
-    fullname = json['fullname'];
     city = json['city'];
     adress = json['adress'];
     phone = json['phone'];
-    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['guests'] = this.guests;
     data['_id'] = this.sId;
     data['items'] = this.items;
     data['username'] = this.username;
@@ -97,11 +95,9 @@ class Data {
     data['__v'] = this.iV;
     data['refreshToken'] = this.refreshToken;
     data['products'] = this.products;
-    data['fullname'] = this.fullname;
     data['city'] = this.city;
     data['adress'] = this.adress;
     data['phone'] = this.phone;
-    data['image'] = this.image;
     return data;
   }
 }

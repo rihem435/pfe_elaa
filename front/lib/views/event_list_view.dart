@@ -47,6 +47,8 @@ class EventListView extends GetView<EventController> {
           ],
         ),
       ),
+     
+     
       body: CustomBackgroungImage(
         fit: BoxFit.cover,
         image: 'assets/images/landpage.jpg',
@@ -95,7 +97,7 @@ class EventListView extends GetView<EventController> {
                           '-----------------------snapshotdata=======>$snapshot');
                       return Center(
                         child: Text(
-                          'no data',
+                          'Create you first event. Make it memorable with our services',
                           style: TextStyle(color: Colors.black),
                         ),
                       );
@@ -173,18 +175,9 @@ class EventListView extends GetView<EventController> {
                     child: Text('Pick event first and end date'),
                     onPressed: () {
                       controller.openRangeDatePicker(context);
+                      Text(" ${controller.dateDebutController.text}");
                     },
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Date debut: ${AccountInfoStorage.readEventDatedebut()}",
-                        style: TextStyle(color: AppColor.blackColor),
-                      ),
-                      //  Text("Date fin: ${AccountInfoStorage.readEventDatefin()}", style: TextStyle(color: AppColor.blackColor), ),
-                    ],
-                  ),
-
                   SizedBox(
                     height: 20,
                   ),
@@ -202,10 +195,10 @@ class EventListView extends GetView<EventController> {
                       style: TextStyle(color: AppColor.secondary, fontSize: 20),
                     ),
                     onPressed: () {
-//                  controller.createEvent();
-
                       controller.createEvent();
                       Get.to(EventListView());
+                      Navigator.of(context).pop();
+
                     },
                   );
                 },
