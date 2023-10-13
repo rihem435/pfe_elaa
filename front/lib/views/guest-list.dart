@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/event_contorller.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
@@ -15,7 +16,7 @@ class GuestList extends GetView<EventController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-    controller.getAllGuestsByEventId();
+    //controller.getAllGuestsByEventId();
     // controller.getGuests();
     return Scaffold(
       appBar: AppBar(
@@ -51,15 +52,35 @@ class GuestList extends GetView<EventController> {
         widget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            FutureBuilder(
+
+
+
+             ListView.builder(
+                        shrinkWrap: true,
+                        controller: scrollController,
+                          scrollDirection: Axis.vertical,
+                        itemCount: controller.guestByEventIdJson!.data!.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return Column(
+                            children: [
+                              CustomText(
+                                  text:"test"),// AccountInfoStorage.readGuestName().toString()),
+                              CustomText(
+                                  text:
+                                     "test"),// AccountInfoStorage.readGuestPhonenumber().toString()),
+                            ],
+                          );
+                        },
+                      ),
+      /*       FutureBuilder(
               future: controller.getAllGuestsByEventId(),
               builder: (ctx, snapshot) {
                 // Checking if future is resolved or not
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   print("-----------------snapshot$snapshot");
                   return Center(
-                      child:
-                          CircularProgressIndicator(color: AppColor.secondary));
+                    child: CircularProgressIndicator(color: AppColor.secondary),
+                  );
                 } else {
                   // If we got an error
                   if (snapshot.hasError) {
@@ -72,24 +93,35 @@ class GuestList extends GetView<EventController> {
 
                     // if we got our data
                   }
+
                   if (snapshot.data == null) {
                     // Extracting data from snapshot object
                     print(
                         '-----------------------snapshotdata=======>$snapshot');
                     return Center(
                       child: Text(
-                        'Invite Guests and make sure to make memorible mimories with your beloved!',
-                        style: TextStyle(
-                          color: AppColor.goldColor,
-                        ),
+                        'Guest',
+                        style: TextStyle(color: Colors.black),
                       ),
                     );
                   } else {
-                    return Center(
-                      child: GetBuilder<EventController>(
-                        builder: (controller) {
-                          return Text(
-                              "${controller.guestByEventIdJson!.data![0].events}");
+                    return Expanded(
+                      flex: 1,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        controller: scrollController,
+                          scrollDirection: Axis.vertical,
+                        itemCount: controller.guestByEventIdJson!.data!.length,
+                        itemBuilder: (BuildContext context, index) {
+                          return Column(
+                            children: [
+                              CustomText(
+                                  text:"test"),// AccountInfoStorage.readGuestName().toString()),
+                              CustomText(
+                                  text:
+                                     "test"),// AccountInfoStorage.readGuestPhonenumber().toString()),
+                            ],
+                          );
                         },
                       ),
                     );
@@ -97,63 +129,7 @@ class GuestList extends GetView<EventController> {
                 }
               },
             ),
-            /*           controller.getAllGuestsByEventId(),
-            Text("${controller.guestByEventIdJson!.data![0].events}"),
-       */ /*         FutureBuilder(
-                future: controller.getGuests(),
-                builder: (ctx, snapshot) {
-                  // Checking if future is resolved or not
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    print("-----------------snapshot$snapshot");
-                    return Center(
-                        child: CircularProgressIndicator(
-                            color: AppColor.secondary));
-                  } else {
-                    // If we got an error
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          '${snapshot.error} occurred',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      );
-
-                      // if we got our data
-                    }
-                    if (snapshot.data == null) {
-                      // Extracting data from snapshot object
-                      print(
-                          '-----------------------snapshotdata=======>$snapshot');
-                      return Center(
-                        child: Text(
-                          'Create you first event. Make it memorable with our services',
-                          style: TextStyle(
-                            color: AppColor.goldColor,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Center(
-                          child: GetBuilder<EventController>(
-                              builder: (controller) {
-                            return ListView.builder(
-                                shrinkWrap: true,
-                                controller: scrollController,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: controller.guestGetAllJson!.data!.length,
-                                itemBuilder: (BuildContext context, index) {
-                                 // controller.getAllGuestsByEventId();
-                                  return Text(
-                                        'test',//'${controller.guestByEventIdJson!.data![index].name}',
-                                   
-                                  );
-                                });
-                          }));
-                    }
-                  }
-                }),
-     */
-          ],
+       */    ],
         ),
       ),
 
@@ -162,7 +138,7 @@ class GuestList extends GetView<EventController> {
         backgroundColor: AppColor.secondary,
         foregroundColor: Colors.white,
         // icon: Icon(Icons.add_outlined),
-        label: Text('New guest'),
+        label: Text('New Guest'),
         onPressed: () {
           Get.dialog(AlertDialog(
             title:
@@ -184,6 +160,11 @@ class GuestList extends GetView<EventController> {
                     label: "Phone Number:",
                   ),
                   //True or false boolean for the invitaion
+                  /* CustomInputText(
+                    controller: controller.guestInvitedConroller,
+                    obscureText: false,
+                    label: "",
+                  ), */
                 ],
               ),
             ),
@@ -211,18 +192,19 @@ class GuestList extends GetView<EventController> {
   }
 }
 /* ListView.builder(
-                itemCount: controller.guestByUserIdJson!.data!.length,
+                itemCount: controller.guestByEventIdJson!.data!.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: CustomText(
-                        text: controller.guestByUserIdJson!.data![index].name
+                        text: controller.guestByEventIdJson!.data![index].name
                             .toString()),
                     subtitle: CustomText(
                         text: controller
-                            .guestByUserIdJson!.data![index].phonenumber
+                            .guestByEventIdJson!.data![index].phonenumber
                             .toString()),
                   );
                 },
-              ), */
+              ), 
+              */
 
 

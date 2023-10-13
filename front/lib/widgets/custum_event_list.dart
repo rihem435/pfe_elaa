@@ -13,6 +13,7 @@ class CustomEventList extends GetView<EventController> {
   final Function? function;
   final double? widthBorder;
   final Color? colorBorder;
+  final Widget? getlistguest;
 
   CustomEventList({
     Key? key,
@@ -25,6 +26,7 @@ class CustomEventList extends GetView<EventController> {
     this.description,
     this.local,
     this.budget,
+    this.getlistguest,
   }) : super(key: key);
 
   @override
@@ -120,31 +122,81 @@ class CustomEventList extends GetView<EventController> {
                       ),
                     ),
 
-                    Expanded(
-                      child: Column(
-                        children: [
-                          CustomText(text: "Guest List:"),
-                          TextButton(
-                            onPressed: () {
-                              Get.to(GuestList());
-                            },
-                            child: FlutterImageStack(
-                              showTotalCount: true,
-                              ////// get Gusts data /////////
-                              imageList: _imagesGuest,
-                              totalCount: 10,
-                              itemRadius: 40,
-                              itemCount: 1,
-                              itemBorderWidth: 1,
-                              itemBorderColor: AppColor.secondary,
-                              backgroundColor: AppColor.secondary,
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    )
-                    ////////////Column to guest lists
+                  
+                                ////////////////////////////////////////////////////////////
+                    ///problem that it only get one event by id
+                    FutureBuilder(
+                      future: controller.getAllGuestsByEventId(),
+                      builder: (ctx, snapshot) {
+                        print(
+                            'snapshot==============================>$snapshot');
+                        // Checking if future is resolved or not
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          print("-----------------snapshot$snapshot");
+                          return Center(
+                            child: CircularProgressIndicator(
+                                color: AppColor.secondary),
+                          );
+                        } else {
+                          print     (                'snapshot==============================>$snapshot');
+                    
+                          // If we got an error
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                '${snapshot.error} occurred',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            );
+                    
+                            // if we got our data
+                          }
+                    
+                          if (snapshot.data == null) {
+                            // Extracting data from snapshot object
+                            print(
+                                '-----------------------snapshotdata=======>$snapshot');
+                            return Center(
+                              child: Text(
+                                'no data',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                CustomText(text: "Guest List:"),
+                                GetBuilder<EventController>(
+                                    builder: (controller) {
+                                  return ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: 1,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return TextButton(
+                                            onPressed: () {
+                                              controller
+                                                  .getAllGuestsByEventId()
+                                                  .toString();
+                                              Get.to(GuestList());
+                                            },
+                                            child: Text(
+                                              controller.guestByEventIdJson!
+                                                  .data!.length
+                                                  .toString(),
+                                        ));
+                                      });
+                                }),
+                                SizedBox(height: 10),
+                              ],
+                            );
+                          }
+                        }
+                      },
+                    ), ////////////Column to guest lists
                   ],
                 ),
                 /////// guest list

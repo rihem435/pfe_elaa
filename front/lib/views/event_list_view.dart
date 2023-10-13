@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/event_contorller.dart';
+import 'package:front/views/guest-list.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_dropdown_list.dart';
 import 'package:front/widgets/custom_text.dart';
@@ -15,8 +16,8 @@ class EventListView extends GetView<EventController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-
-    // controller.getEvents();
+    //controller.getAllEventByUserId();
+    //  controller.getEventById(AccountInfoStorage.saveEventId(controller.eventByIdJson!.data!.sId.toString()));
     //controller.createEvent();
     //controller.formattedate("${controller.eventsJson!.message}");
     return Scaffold(
@@ -47,8 +48,7 @@ class EventListView extends GetView<EventController> {
           ],
         ),
       ),
-     
-     
+
       body: CustomBackgroungImage(
         fit: BoxFit.cover,
         image: 'assets/images/landpage.jpg',
@@ -104,29 +104,86 @@ class EventListView extends GetView<EventController> {
                     } else {
                       return Expanded(
                         flex: 1,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            controller: scrollController,
-                            scrollDirection: Axis.vertical,
-                            itemCount:
-                                controller.eventByUserIdJson!.data!.length,
-                            itemBuilder: (BuildContext context, index) {
-                              return CustomEventList(
-                                eventName:
-                                    "${controller.eventByUserIdJson!.data![index].titleevent}",
-                                datedeb:
-                                    "${controller.eventByUserIdJson!.data![index].dateDebut}",
-                                datefin:
-                                    "${controller.eventByUserIdJson!.data![index].dateFin}",
-                                local:
-                                    "${controller.eventByUserIdJson!.data![index].local}",
-                                budget:
-                                    "${controller.eventByUserIdJson!.data![index].budget}",
-                                colorBorder: AppColor.goldColor,
-                                widthBorder: 1,
-                                function: () {},
-                              );
-                            }),
+                        child: GetBuilder<EventController>(
+                          builder: (controller) {
+                            return ListView.builder(
+                                shrinkWrap: true,
+                                controller: scrollController,
+                                scrollDirection: Axis.vertical,
+                                itemCount:
+                                    controller.eventByUserIdJson!.data!.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  AccountInfoStorage.saveEventId(controller
+                                      .eventByUserIdJson!.data![index].sId
+                                      .toString());
+
+                                  return GestureDetector(
+                                      child: CustomEventList(
+                                        eventName:
+                                            "${controller.eventByUserIdJson!.data![index].titleevent}",
+                                        datedeb:
+                                            "${controller.eventByUserIdJson!.data![index].dateDebut}",
+                                        datefin:
+                                            "${controller.eventByUserIdJson!.data![index].dateFin}",
+                                        local:
+                                            "${controller.eventByUserIdJson!.data![index].local}",
+                                        budget:
+                                            "${controller.eventByUserIdJson!.data![index].budget}",
+                                        /*                  getlistguest: Expanded(
+                                        child: Column(
+                                          children: [
+                                            CustomText(text: "Guest List:"),
+                                            GetBuilder<EventController>(
+                                                builder: (controller) {
+                                              return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemCount: 1,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return TextButton(
+                                                        onPressed: () {
+                                                          controller.getEventById(
+                                                              controller
+                                                                  .eventByIdJson!
+                                                                  .data!
+                                                                  .sId
+                                                                  .toString());
+                                                          Get.to(GuestList());
+                                                        },
+                                                        child: Text(
+                                                          controller
+                                                              .guestByEventIdJson!
+                                                              .data!
+                                                              .length
+                                                              .toString(),
+                                                        ));
+                                                  });
+                                            }),
+                                            SizedBox(height: 10),
+                                          ],
+                                        ),
+                                      ),
+                                            */
+                                        colorBorder: AppColor.goldColor,
+                                        widthBorder: 1,
+                                        function: () {},
+                                      ),
+                                      onTap: () {
+                                        print(
+                                            "////////////////////////////////////////event by id to get guest user////////////////////////////////////////");
+
+                                        controller.getEventById(
+                                            "${AccountInfoStorage.readEventId()}");
+
+                                        Get.to(GuestList());
+                                      });
+                                });
+                          },
+                        ),
                       );
                     }
                   }
@@ -198,7 +255,6 @@ class EventListView extends GetView<EventController> {
                       controller.createEvent();
                       Get.to(EventListView());
                       Navigator.of(context).pop();
-
                     },
                   );
                 },

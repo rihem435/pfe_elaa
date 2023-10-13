@@ -17,6 +17,7 @@ import 'package:front/models/network/api_guest_get.dart';
 import 'package:front/models/network/api_guest_get_by_event_id.dart';
 import 'package:front/models/network/api_guest_get_by_user_id.dart';
 import 'package:front/views/event_list_view.dart';
+import 'package:front/views/guest-list.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -95,7 +96,7 @@ class EventController extends GetxController {
       print('value===========> $value');
       eventByUserIdJson = value as EventByUserIdJson?;
       print("Events message =============== ${eventByUserIdJson!.message}");
-      if (eventByUserIdJson!.data!.isNotEmpty) {
+      if (eventByUserIdJson!.data != null) {
         print(
             'events==========================> ${eventByUserIdJson!.data!.length}');
         return eventByUserIdJson;
@@ -107,17 +108,31 @@ class EventController extends GetxController {
     });
   }
 
-  String? getEventById(String id) {
-    print('category by id-----------------------');
+  getEventById(String id) {
+    print('Event by id-----------------------');
     apiEventGetById.id = id;
     apiEventGetById.getData().then((value) {
       eventByIdJson = value as EventByIdJson?;
       print(
-          "data event by id=================== ${eventByIdJson!.data!.dateDebut}");
-      return "${eventByIdJson!.data!.dateDebut}";
+          "data event by id=================== ${eventByIdJson!.data!.sId.toString()}");
+      AccountInfoStorage.saveEventId(eventByIdJson!.data!.sId.toString());
+      // AccountInfoStorage.readEventId().toString();
+      AccountInfoStorage.saveEventDatedebut(
+          eventByIdJson!.data!.dateDebut.toString());
+      AccountInfoStorage.saveEventDatefin(
+          eventByIdJson!.data!.dateFin.toString());
+      AccountInfoStorage.saveEventDescription(
+          eventByIdJson!.data!.description.toString());
+      AccountInfoStorage.saveEventLocation(
+          eventByIdJson!.data!.local.toString());
+      AccountInfoStorage.saveEventTitle(
+          eventByIdJson!.data!.titleevent.toString());
+//AccountInfoStorage.saveGuestEvent(eventByIdJson!.data!.guests.toString()).toString();
+      //return "${eventByIdJson!.data!.dateDebut}";
+      Get.to(GuestList());
     }).onError((error, stackTrace) {
       print('error======> $error');
-      return "error";
+      // return "error";
     });
     //  return null;
 
@@ -225,7 +240,7 @@ class EventController extends GetxController {
       guestJson = value as GuestJson?;
       getEvents();
       print('Guest created=======> ${guestJson!.data!.sId}');
-      // getGuests();
+      getGuests();
       update();
     }).onError((error, stackTrace) {
       print('error create event ==========> $error');
@@ -236,25 +251,19 @@ class EventController extends GetxController {
     print("Guest by Event id ---------------------");
     apiGuestsGetByEventId.id = AccountInfoStorage.readEventId().toString();
     return apiGuestsGetByEventId.getData().then((value) {
-      print(
-          "id evnet by Event id ================ ${guestByEventIdJson!.data![0].events}");
-      print(
-          'Guest by Event id ==========================> ${guestByEventIdJson!.data!.length}');
-
-      print('value by Event id ===========> $value');
+      print('value===========> $value');
       guestByEventIdJson = value as GuestByEventIdJson?;
-      print("Guest message =============== ${guestByEventIdJson!.data}");
-      if (guestByEventIdJson!.data != null) {
-        return guestByEventIdJson;
-      }
-      return null;
-      /* if (guestByEventIdJson!.data!.isNotEmpty) {
+      print("Guest message =============== ${guestByEventIdJson!.message}");
+      if (guestByEventIdJson!.data!.isNotEmpty) {
         print(
             'Guest==========================> ${guestByEventIdJson!.data!.length}');
         return guestByEventIdJson;
       }
 
-      return guestByEventIdJson; */
+      if (guestByEventIdJson!.data != null) {
+        return guestByEventIdJson;
+      }
+      return null;
     }).onError((error, stackTrace) {
       print('error======> $error');
       return null;
@@ -262,14 +271,10 @@ class EventController extends GetxController {
   }
 
   getGuests() {
+    print("get guest");
     return apiGuestsGet.getData().then((value) {
-      print(
-          "====================================================================================================================================================================================success get Guests");
+      print("=================================success get Guests");
       guestGetAllJson = value as GuestGetAllJson?;
-      print(
-          "get event guest message ================= ${guestGetAllJson!.message}");
-      print(
-          'Guest==========================> ${guestGetAllJson!.data!.length}');
 
       print("data Guests ======================= ${guestGetAllJson!.status}");
       if (guestGetAllJson!.data != null) {

@@ -7,6 +7,7 @@ import 'package:front/widgets/custom_button.dart';
 import 'package:front/widgets/custom_image_change.dart';
 import 'package:front/widgets/custom_input_text.dart';
 import 'package:front/widgets/custom_text.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
@@ -18,7 +19,7 @@ class ProfileView extends GetView<ProfileColntroller> {
   Widget build(BuildContext context) {
     controller.getUserById();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: IconButton(
             icon: Icon(
@@ -48,156 +49,165 @@ class ProfileView extends GetView<ProfileColntroller> {
           ],
         ),
       ),
-      body: CustomBackgroungImage(
-        fit: BoxFit.cover,
-        image: 'assets/images/landpage.jpg',
-        widget: Column(
-          /*    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           crossAxisAlignment: CrossAxisAlignment.start,
-         */
-          children: [
-            Container(
-              child: Stack(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          //chat Box with Vendors
-                          Column(
-                            children: [
-                              CircleAvatar(
-                                //radius: 30,
-                                minRadius: 15,
-                                maxRadius: 30,
-                                backgroundColor: AppColor.goldColor,
-                                child: Icon(
-                                  Icons.chat,
-                                  size: 30,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              CustomText(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                                text: "Message Box",
-                              ),
-                            ],
-                          ),
-                          // profile pic
-                          Expanded(
-                            child: Column(
+      body: SingleChildScrollView(
+        controller: ScrollController(),
+        child: CustomBackgroungImage(
+          fit: BoxFit.cover,
+          image: 'assets/images/landpage.jpg',
+          widget: Column(
+            /*    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             crossAxisAlignment: CrossAxisAlignment.start,
+           */
+            children: [
+              Container(
+                child: Stack(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            //chat Box with Vendors
+                            Column(
                               children: [
                                 CircleAvatar(
-                                  minRadius: 50,
-                                  maxRadius: 70,
-                                  child: CustomImageChange(
-                                    function: () {},
+                                  //radius: 30,
+                                  minRadius: 15,
+                                  maxRadius: 30,
+                                  backgroundColor: AppColor.goldColor,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.chat,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                     // Get.to()
+                                    },
                                   ),
                                 ),
-                                //get name from backend
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    AccountInfoStorage.readName().toString(),
-                                    style: TextStyle(
-                                      color: AppColor.goldColor.withOpacity(1),
-                                      fontSize: 25,
-                                    ),
-                                  ),
+                                CustomText(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  text: "Message Box",
                                 ),
                               ],
                             ),
-                          ),
-                          // phone number
-                          Column(
-                            children: [
-                              CircleAvatar(
-                                minRadius: 15,
-                                maxRadius: 30,
-                                backgroundColor: AppColor.goldColor,
-                                child: Icon(
-                                  Icons.call,
-                                  size: 30,
-                                  color: Colors.white,
+                            // profile pic
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    minRadius: 50,
+                                    maxRadius: 70,
+                                    child: CustomImageChange(
+                                      function: () {},
+                                    ),
+                                  ),
+                                  //get name from backend
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      AccountInfoStorage.readName().toString(),
+                                      style: TextStyle(
+                                        color:
+                                            AppColor.goldColor.withOpacity(1),
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // phone number
+                            Column(
+                              children: [
+                                CircleAvatar(
+                                  minRadius: 15,
+                                  maxRadius: 30,
+                                  backgroundColor: AppColor.goldColor,
+                                  child: Icon(
+                                    Icons.call,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              CustomText(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                                text: "Phonebook",
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: Expanded(
-                child: Column(
-                  children: [
-                    CustomInputText(
-                      label: 'User Name',
-                      iconData: Icons.person,
-                      obscureText: false,
-                      controller: controller.usernameController,
-                    ),
-                    CustomInputText(
-                      label: 'Email',
-                      iconData: Icons.email,
-                      obscureText: false,
-                      controller: controller.emailController,
-                    ),
-                    CustomInputText(
-                      label: 'Phone number',
-                      iconData: Icons.phone,
-                      obscureText: false,
-                      controller: controller.phonenumberController,
-                    ),
-                    CustomInputText(
-                      label: 'Adresse',
-                      iconData: Icons.location_city,
-                      obscureText: false,
-                      controller: controller.adresseController,
-                    ),
-                    CustomButton(
-                      text: 'Update',
-                      width: 100,
-                      height: 40,
-                      function: () {
-                        //controller.userUpdate();
-                        print("alert dialog");
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text("Confirme changes"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    controller.userUpdate();
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
+                                CustomText(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                  text: "Phonebook",
                                 ),
                               ],
-                            );
-                          },
-                        );
-                        //  controller.updatepasswordUser();
-                      },
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Container(
+                child: Expanded(
+                  child: Column(
+                    children: [
+                      CustomInputText(
+                        label: 'User Name',
+                        iconData: Icons.person,
+                        obscureText: false,
+                        controller: controller.usernameController,
+                      ),
+                      CustomInputText(
+                        label: 'Email',
+                        iconData: Icons.email,
+                        obscureText: false,
+                        controller: controller.emailController,
+                      ),
+                      CustomInputText(
+                        label: 'Phone number',
+                        iconData: Icons.phone,
+                        obscureText: false,
+                        controller: controller.phonenumberController,
+                      ),
+                      CustomInputText(
+                        label: 'Adresse',
+                        iconData: Icons.location_city,
+                        obscureText: false,
+                        controller: controller.adresseController,
+                      ),
+                      CustomButton(
+                        text: 'Update',
+                        width: 100,
+                        height: 40,
+                        function: () {
+                          //controller.userUpdate();
+                          print("alert dialog");
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Confirme changes"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      controller.userUpdate();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          //  controller.updatepasswordUser();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

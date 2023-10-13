@@ -220,8 +220,8 @@ class HomeView extends GetView<ProductsController> {
                           text: 'View All',
                           icon: Icons.arrow_forward,
                           function: () {
-                            Get.to(ProductSelectionByServices());
-                            // Get.to(EventListView());
+                           // Get.to(ProductSelectionByServices());
+                             Get.to(EventListView());
                           },
                         ),
                       )
@@ -320,7 +320,6 @@ class HomeView extends GetView<ProductsController> {
 
                           // if we got our data
                         }
-
                         if (snapshot.data == null) {
                           // Extracting data from snapshot object
                           print(

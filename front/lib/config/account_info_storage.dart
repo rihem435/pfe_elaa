@@ -27,6 +27,11 @@ class AccountInfoStorage {
   static const keyeventDatefin = "eventDatefin";
   static const keyeventLocation = "eventLocation";
 
+  static const keyguestId = "guestId";
+  static const keyguestName = "guestName";
+  static const keyguestPhonenumber = "guestPhonenumber";
+  static const keyguestEvent = "guestEvent";
+
   static saveTokenUser(String? tokenUser) {
     SecureStorage.writeSecureData(key: keyTokenUser, value: tokenUser!);
   }
@@ -197,5 +202,36 @@ class AccountInfoStorage {
 
   static String? readEventLocation() {
     return SecureStorage.readSecureData(keyeventLocation);
+  }
+
+static saveGuestId(String? guestId) {
+    SecureStorage.writeSecureData(key: keyguestId, value: guestId!);
+  }
+
+  static String? readGuestId() {
+    return SecureStorage.readSecureData(keyguestId);
+  }
+
+  static saveGuestName(String? guestName) {
+    SecureStorage.writeSecureData(key: keyguestName, value: guestName!);
+  }
+
+  static String? readGuestName() {
+    return SecureStorage.readSecureData(keyguestName);
+  }
+static saveGuestPhonenumber(String? guestPhonenumber) {
+    SecureStorage.writeSecureData(key: keyguestPhonenumber, value: guestPhonenumber!);
+  }
+
+  static String? readGuestPhonenumber() {
+    return SecureStorage.readSecureData(keyguestPhonenumber);
+  }
+
+  static saveGuestEvent(String? guestEvent) {
+    SecureStorage.writeSecureData(key: keyguestEvent, value: guestEvent!);
+  }
+
+  static String? readGuestEvent() {
+    return SecureStorage.readSecureData(keyguestEvent);
   }
 }
