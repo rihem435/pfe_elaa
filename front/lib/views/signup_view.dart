@@ -75,6 +75,9 @@ class SignupView extends GetView<ProfileColntroller> {
                         fontsize: 18,
                         fontsizeweight: FontWeight.bold,
                         function: () {
+                          
+                            controller.usernameController.clear();
+                            controller.passwordController.clear();
                           Get.to(LoginView());
                         },
                       ),

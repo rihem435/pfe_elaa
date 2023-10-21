@@ -1,16 +1,18 @@
 import 'package:front/config/account_info_storage.dart';
 
 class AppApi {
-//static const String baseUrl = "http://localhost:3000/";
-static const String baseUrl = "http://192.168.2.36:3000/";
-  //static const String baseUrl = "http://192.168.1.11:3000/";
+    static const String baseUrl = "http://$ip/";
+
+ // static const String ip = "192.168.2.36:3000";
+  //static const String ip = "localhost:3000";
+ static const String ip = "192.168.1.11:3000";
 
   static const String loginUrl = "${baseUrl}auth/signin";
   static const String signupUrl = "${baseUrl}users/";
   static const String getUserByIdUrl = "${baseUrl}users/";
   static String updatePasswordUrl =
       "${baseUrl}auth/updatepassword/${AccountInfoStorage.readId().toString()}";
-  static const String getImageUser = "${baseUrl}file/users/";
+  //static const String getImageUser = "${baseUrl}file/users/";
 
   static const String getEventByUserUrl = "${baseUrl}events/user/";
   static const String createEventUrl = "${baseUrl}events/";
@@ -30,7 +32,9 @@ static const String baseUrl = "http://192.168.2.36:3000/";
   static const String getGuestsByUserIdUrl = "${baseUrl}guests/user";
   static const String getGuestsByEventIdUrl = "${baseUrl}guests/event/";
 
-/* 
+  static const String Logout = "${baseUrl}auth/logout";
+
+  /* 
   String baseUrlCloudinary =
       'https://API Key:872948247576765 _Rl01bDk9GpGQnjqM_YSsLNT2bQ@api.cloudinary.com/v1_1/elaa/resources/image';
  */

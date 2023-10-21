@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/app_colors.dart';
+import 'package:front/controllers/profile_controller.dart';
+import 'package:front/models/json/login_user_json.dart';
+import 'package:front/views/test/ChatScreen.dart';
 import 'package:front/widgets/custom_text.dart';
-
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 class CustomBoxDetail extends StatelessWidget {
-  final Function? function;
-  const CustomBoxDetail({Key? key, this.function}) : super(key: key);
+  final Function? function, issavedfunction;
+  final Icon? icon;
+  const CustomBoxDetail(
+      {Key? key, this.function, this.icon, this.issavedfunction})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ProfileColntroller profileColntroller = ProfileColntroller();
+
     return Container(
       width: 600,
       height: 70,
@@ -57,7 +66,9 @@ class CustomBoxDetail extends StatelessWidget {
                     color: AppColor.goldColor,
                     size: 30,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(ChatScreen());
+                  },
                 ),
                 CustomText(
                   fontSize: 10,
@@ -71,13 +82,13 @@ class CustomBoxDetail extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  icon: Icon(
-                    Icons.favorite_border_rounded,
-                    color: AppColor.goldColor,
-                    size: 30,
-                  ),
                   onPressed: () {
+                    print('******************favorite******************');
+                    issavedfunction!();
+                    // saveProductIdInUserId
+                    //Get.to(FavoriteView());
                   },
+                  icon: icon!,
                 ),
                 CustomText(
                   fontSize: 10,

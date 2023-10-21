@@ -20,7 +20,6 @@ class LoginView extends GetView<ProfileColntroller> {
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         controller: ScrollController(),
-
         child: CustomBackgroungImage(
           fit: BoxFit.cover,
           image: 'assets/images/landpage.jpg',
@@ -91,6 +90,8 @@ class LoginView extends GetView<ProfileColntroller> {
                           fontsize: 18,
                           fontsizeweight: FontWeight.bold,
                           function: () {
+                            controller.usernameController.clear();
+                            controller.passwordController.clear();
                             Get.to(SignupView());
                             // Navigator.push(
                             //     context,
@@ -200,11 +201,11 @@ class LoginView extends GetView<ProfileColntroller> {
                     if (formKey.currentState!.validate()) {
                       print('validate form++++++++++++++++++++++');
                       //  controller.authUser();
-                      print(
-                          'usernamse=====> ${controller.usernameController.text}');
+                      // print(
+                          // 'usernamse=====> ${controller.usernameController.text}');
                       controller.signIn();
                     }
-      
+
                     // controller.signInValidator();
                     // controller.signIn();
                     // //

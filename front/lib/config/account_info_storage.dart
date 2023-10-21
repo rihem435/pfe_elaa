@@ -8,6 +8,7 @@ class AccountInfoStorage {
   static const keyemail = "email";
   static const keyitems = "items";
   static const Keyimage = "image";
+  static const KeyPassword = "password";
 
   static const keyproductId = "productId";
   static const keyprodcutName = "prodcutName";
@@ -78,6 +79,14 @@ class AccountInfoStorage {
 
   static String? readImage() {
     return SecureStorage.readSecureData(Keyimage);
+  }
+
+  static savePassword(String? password) {
+    SecureStorage.writeSecureData(key: KeyPassword, value: password!);
+  }
+
+  static String? readPassword() {
+    return SecureStorage.readSecureData(KeyPassword);
   }
 
   static saveProductId(String? productId) {
@@ -204,7 +213,7 @@ class AccountInfoStorage {
     return SecureStorage.readSecureData(keyeventLocation);
   }
 
-static saveGuestId(String? guestId) {
+  static saveGuestId(String? guestId) {
     SecureStorage.writeSecureData(key: keyguestId, value: guestId!);
   }
 
@@ -219,8 +228,10 @@ static saveGuestId(String? guestId) {
   static String? readGuestName() {
     return SecureStorage.readSecureData(keyguestName);
   }
-static saveGuestPhonenumber(String? guestPhonenumber) {
-    SecureStorage.writeSecureData(key: keyguestPhonenumber, value: guestPhonenumber!);
+
+  static saveGuestPhonenumber(String? guestPhonenumber) {
+    SecureStorage.writeSecureData(
+        key: keyguestPhonenumber, value: guestPhonenumber!);
   }
 
   static String? readGuestPhonenumber() {

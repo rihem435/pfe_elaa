@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
+import 'package:front/widgets/components/custom_miltiple_image.dart';
+import 'package:front/widgets/components/image_cloudinary.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_dropdown_services_choices.dart';
 import 'package:front/widgets/custom_input_text.dart';
 import 'package:front/widgets/custom_product_list_V.dart';
 import 'package:front/widgets/custom_text.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+
 
 class ServiceDetails extends GetView<ProductsController> {
   const ServiceDetails({Key? key}) : super(key: key);
@@ -15,6 +19,7 @@ class ServiceDetails extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
+    ImageCloudinary imageCloudinary = ImageCloudinary();
     controller.getCategories();
     controller.getProducts();
 
@@ -80,7 +85,7 @@ class ServiceDetails extends GetView<ProductsController> {
               ),
  */
               FutureBuilder(
-                  future: controller.getAllProductByUserId(),
+                  future: controller.getProducts(),
                   builder: (ctx, snapshot) {
                     // Checking if future is resolved or not
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -167,7 +172,7 @@ class ServiceDetails extends GetView<ProductsController> {
                       ),
                       //description
                       CustomInputText(
-                        controller:  controller.productDescriptionController,
+                        controller: controller.productDescriptionController,
                         obscureText: false,
                         label: "Description:",
                       ),
@@ -178,15 +183,28 @@ class ServiceDetails extends GetView<ProductsController> {
                         label: "Price:",
                       ),
                       //Add images
-                      ElevatedButton(
+
+                     //CustomMiltipleImage(),
+                     
+                      /*  ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(AppColor.secondary)),
                         child: Text('Select Image from Gallery'),
-                        onPressed: () {
-                          controller.getImages();
+                        onFocusChange: (value) {
+                          controller.profilePicFile != null
+                              ? Image.file(controller.profilePicFile!,
+                                  fit: BoxFit.cover)
+                              : Image.network(
+                                  controller.profilePicFile != null
+                                      ? "${AccountInfoStorage.readImage().toString()}"
+                                      : "https://media.istockphoto.com/id/1300845620/fr/vectoriel/appartement-dic%C3%B4ne-dutilisateur-isol%C3%A9-sur-le-fond-blanc-symbole-utilisateur.jpg?s=612x612&w=0&k=20&c=BVOfS7mmvy2lnfBPghkN__k8OMsg7Nlykpgjn0YOHj0=",
+                                );
                         },
-                      ),
+                        onPressed: () {
+                          controller.selectImages;
+                        },
+                      ), */
                       //categories
                       CustomDropdownServices(),
                     ],

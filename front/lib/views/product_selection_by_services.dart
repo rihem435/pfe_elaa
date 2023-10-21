@@ -14,14 +14,6 @@ class ProductSelectionByServices extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     // ScrollController scrollController = ScrollController();
-    controller.getCategories();
-    controller.getProducts();
-    Future<String> getData() {
-      return Future.delayed(Duration(seconds: 2), () {
-        return "I am data";
-        // throw Exception("Custom Error");
-      });
-    }
 
     //controller.getCategorieById(controller.categorieGetByIdJson!.data!.sId.toString());
     return Scaffold(
@@ -58,7 +50,7 @@ class ProductSelectionByServices extends GetView<ProductsController> {
             //search bar
             Expanded(flex: 1, child: CustomSearchBar()),
             Expanded(
-              flex: 5,
+              flex: 8,
               child: FutureBuilder(
                   future: controller.getProducts(),
                   builder: (ctx, snapshot) {
@@ -129,8 +121,7 @@ class ProductSelectionByServices extends GetView<ProductsController> {
                                         print(
                                             "*-------------------------------------------*get category by id*****************");
 
-                                        controller.getProductById(
-                                            "${controller.productGetJson!.data![index].sId}");
+                                        controller.getProductById();
                                         print(
                                             "*************get category by id*****************");
                                       },
@@ -156,8 +147,3 @@ class ProductSelectionByServices extends GetView<ProductsController> {
     );
   }
 }
-
-
-
-
-

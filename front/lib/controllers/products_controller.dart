@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
@@ -18,9 +17,10 @@ import 'package:front/models/network/api_product_get.dart';
 import 'package:front/models/network/api_product_get_by_id.dart';
 import 'package:front/models/network/api_products_get_by_user_id.dart';
 import 'package:front/views/product_detail.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:front/widgets/components/image_cloudinary.dart';
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductsController extends GetxController {
   ApiCategoriesGet apiCategoriesGet = ApiCategoriesGet();
@@ -40,10 +40,11 @@ class ProductsController extends GetxController {
   ProductGetByIdJson? productGetByIdJson;
   ProductAddJson? productAddJson;
 
-  TextEditingController productNameController =TextEditingController();
-    TextEditingController productDescriptionController =TextEditingController();
-    TextEditingController productPriceController =TextEditingController();
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController productDescriptionController = TextEditingController();
+  TextEditingController productPriceController = TextEditingController();
 
+  List<String> imgList = [];
 
   dio.Dio dio_ = dio.Dio(
     dio.BaseOptions(
@@ -69,7 +70,7 @@ class ProductsController extends GetxController {
   }
 
   getCategories() {
-   return  apiCategoriesGet.getData().then((value) {
+    return apiCategoriesGet.getData().then((value) {
       print("success get categories");
       categorieJson = value as CategorieJson;
       if (categorieJson!.data != null) {
@@ -164,11 +165,12 @@ class ProductsController extends GetxController {
       print("errorr ====== $error");
       return productGetJson!;
     });
+    update();
   }
 
-  getProductById(String id) {
+  getProductById() {
     print("product by id ");
-    apiProductGetById.id = id;
+    apiProductGetById.id = AccountInfoStorage.readProductId().toString();
     apiProductGetById.getData().then((value) {
       productGetByIdJson = value as ProductGetByIdJson?;
       print(
@@ -182,16 +184,30 @@ class ProductsController extends GetxController {
       AccountInfoStorage.saveProductImage(
           productGetByIdJson!.data!.images.toString());
 
+      print(
+          "lenght image list=====${productGetByIdJson!.data!.images!.length}");
+
+      /* if (imgList!.isNotEmpty) {
+        for (int i = 0; i < productGetJson!.data![i].images!.length; i++) {
+          print(imgList![i].nameproduct);
+          if (FavoriteProducts![i].favorite == true) {
+            listFavProd.add(FavoriteProducts![i].sId.toString());
+            print("list$listFavProd");
+          }
+        }
+      } */
       Get.to(ProductDetail());
     }).onError((error, stackTrace) {
       print("error product by id ==== $error");
     });
+    update();
     return null;
   }
 
 ///////to do
   getAllProductByUserId() {
     print("Product by user id ---------------------");
+    print("object${productsByUserIdJson!.data!.length}");
     apiProductsGetByUserId.id = AccountInfoStorage.readId().toString();
     return apiProductsGetByUserId.getData().then((value) {
       print('value===========> $value');
@@ -215,7 +231,7 @@ class ProductsController extends GetxController {
       "nameproduct": productNameController.text,
       "description": productDescriptionController.text,
       "price": productPriceController.text.toString(),
-      "images": [],
+      //"images": [],
       "category": AccountInfoStorage.readCategorieName().toString(),
       "user": AccountInfoStorage.readId().toString(),
     });
@@ -247,21 +263,48 @@ class ProductsController extends GetxController {
     });
   }
 
-  List<File> selectedImages = []; // List of selected image
-  final picker = ImagePicker(); // Instance of Image picker
-  Future getImages() async {
-    final pickedFile = await picker.pickMultiImage(
-        imageQuality: 100, // To set quality of images
-        maxHeight: 100, // To set maxheight of images that you want in your app
-        maxWidth: 100); // To set maxheight of images that you want in your app
-    List<XFile> xfilePick = pickedFile;
+  ImageCloudinary imageCloudinary = ImageCloudinary();
+  File? profilePicFile;
+  Future<void> directUpdateImage(File? file) async {
+    if (file == null) return;
 
-    if (xfilePick.isNotEmpty) {
-      for (var i = 0; i < xfilePick.length; i++) {
-        //selectedImages.add(File(xfilePick[i].path));
-      }
-    } else {
-      Get.snackbar('Notification', "Nothing is selected");
+    profilePicFile = file;
+    print(
+        "------------------------------------Image $file------------------------------------");
+    imageCloudinary.uploadToCloudinary(file);
+
+    update();
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
+  List<XFile>? imageFileList = [];
+  // List<File> selectedImages = []; // List of selected image
+
+  Future<void> selectImages() async {
+    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages!.isNotEmpty) {
+      imageFileList!.addAll(selectedImages);
     }
+    // imageCloudinary.uploadToCloudinary(imageFileList as File?);
+    print("Image List Length:" + imageFileList!.length.toString());
+  }
+
+  updateProductByIdFav(bool favorited) {
+    print("update prod by id fav   ${favorited}");
+    apiProductGetById.id = AccountInfoStorage.readProductId().toString();
+    apiProductGetById.updateData({
+      'favorite': favorited,
+    }).then((value) {
+      productGetByIdJson = value as ProductGetByIdJson?;
+      print(
+          "update prod by id  after fav   ${productGetByIdJson!.data!.favorite}");
+      print("update prod by id fav${favorited}");
+      print("success ${value} ${favorited}");
+      //Get.to(ProductDetail());
+      //update();
+    }).onError((error, stackTrace) {
+      print("error fav product by id ==== $error");
+    });
+    update();
   }
 }

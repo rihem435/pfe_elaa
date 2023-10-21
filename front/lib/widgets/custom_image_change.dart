@@ -1,7 +1,6 @@
 import 'package:editable_image/editable_image.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
-import 'package:front/config/app_api.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:get/get.dart';
@@ -23,12 +22,12 @@ class CustomImageChange extends StatelessWidget {
               // the change process of the image.
               onChange: controller.directUpdateImage,
 
-              // Define the source of the image.
+              // Define the source of the image.  imageController
               image: controller.profilePicFile != null
                   ? Image.file(controller.profilePicFile!, fit: BoxFit.cover)
                   : Image.network(
                       controller.profilePicFile != null
-                          ? "${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"
+                          ? AccountInfoStorage.readImage().toString()
                           : "https://media.istockphoto.com/id/1300845620/fr/vectoriel/appartement-dic%C3%B4ne-dutilisateur-isol%C3%A9-sur-le-fond-blanc-symbole-utilisateur.jpg?s=612x612&w=0&k=20&c=BVOfS7mmvy2lnfBPghkN__k8OMsg7Nlykpgjn0YOHj0=",
                     ),
 

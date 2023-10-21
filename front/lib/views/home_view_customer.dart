@@ -7,10 +7,13 @@ import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/event_list_view.dart';
 import 'package:front/views/favorite_view.dart';
 import 'package:front/views/login_view.dart';
+import 'package:front/views/product_detail.dart';
 import 'package:front/views/product_selection_by_services.dart';
 import 'package:front/views/profile_view.dart';
 import 'package:front/views/setting_view.dart';
+import 'package:front/views/test/ChatScreen.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
+import 'package:front/widgets/custom_box_detail.dart';
 import 'package:front/widgets/custom_button_text.dart';
 import 'package:front/widgets/custom_chechbox.dart';
 import 'package:front/widgets/custom_favorite_list.dart';
@@ -21,6 +24,7 @@ class HomeView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
+    ProfileColntroller PController = ProfileColntroller();
     /* controller.getCategories();
     controller.getProducts();
     Future<String> getData() {
@@ -33,51 +37,23 @@ class HomeView extends GetView<ProductsController> {
     // controller.getNameCategory();
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(
-                Icons.search,
-                color: AppColor.goldColor,
-                size: 50,
-              ),
-              onPressed: () {
-                //code to execute when this button is pressed
-                Get.to(ProductSelectionByServices());
-              }),
+          leading: Icon(
+            Icons.person_2,
+            size: 50,
+            color: AppColor.goldColor,
+          ),
           backgroundColor: Colors.white, //your color
           surfaceTintColor: Colors.white,
 
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 0,
-                child: CustomText(
-                  fontSize: 16,
-                  text: 'Hello ${AccountInfoStorage.readName().toString()}',
-                ),
-              ),
-              Expanded(
-                flex: 0,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10, top: 10),
-                  child: CustomText(
-                    fontSize: 16,
-                    text: 'Budget' /* custom budget*/,
-                  ),
-                ),
-              ),
-            ],
+          title: Expanded(
+            flex: 0,
+            child: CustomText(
+              fontSize: 18,
+              text: 'Hello ${AccountInfoStorage.readName().toString()}',
+            ),
           ),
-          actions: [
-            Icon(
-              Icons.person_2,
-              size: 50,
-              color: AppColor.goldColor,
-            )
-          ],
         ),
-        endDrawer: Container(
+        drawer: Container(
           width: MediaQuery.of(context).size.width * 0.5, //<-- SEE HERE
           child: Drawer(
             backgroundColor: AppColor.goldColor.withOpacity(0.9),
@@ -94,9 +70,7 @@ class HomeView extends GetView<ProductsController> {
                     currentAccountPicture: CircleAvatar(
                       //get uesr photo from backend
                       backgroundImage: NetworkImage(
-                        "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=",
-                      ),
-                      // backgroundImage: NetworkImage("${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"),
+                          AccountInfoStorage.readImage().toString()),
                       maxRadius: 25,
                     ),
                     decoration: BoxDecoration(color: AppColor.goldColor),
@@ -129,18 +103,19 @@ class HomeView extends GetView<ProductsController> {
                   ),
 
                   ///fav list
-                  ListTile(
-                    leading: Icon(
-                      Icons.favorite,
-                    ),
-                    title: Text('Favorite list'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FavoriteView()));
-                    },
-                  ),
+                  GetBuilder<ProfileColntroller>(builder: (controller) {
+                    return ListTile(
+                      leading: Icon(
+                        Icons.favorite,
+                      ),
+                      title: Text('Favorite list'),
+                      onTap: () {
+                        // print("listDrawer${controller.savedFavProd}");
+                        // print("listDrawer${controller.favProducts}");
+                        Get.to(FavoriteView());
+                      },
+                    );
+                  }),
                   //setting
                   ListTile(
                     leading: Icon(
@@ -180,8 +155,28 @@ class HomeView extends GetView<ProductsController> {
                       title: Text('Log out'),
                       onTap: () {
                         print('********************logout*************');
-                        c.logOut();
-                        Get.to(LoginView());
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Do you want to logout?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    c.logOut();
+                                  },
+                                  child: Text('OK'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     );
                   })
@@ -220,8 +215,10 @@ class HomeView extends GetView<ProductsController> {
                           text: 'View All',
                           icon: Icons.arrow_forward,
                           function: () {
-                           // Get.to(ProductSelectionByServices());
-                             Get.to(EventListView());
+                            //Get.to(ProductSelectionByServices());
+                            //Get.to(EventListView());
+                            //    Get.to(ProductDetail());
+                             Get.to(FavoriteView());
                           },
                         ),
                       )
@@ -411,7 +408,14 @@ class HomeView extends GetView<ProductsController> {
                                         return GestureDetector(
                                           child: CustomFavoriteList(
                                             function: () {},
-                                            icon: Icons.favorite_border,
+                                            /*  FavoriteFunction: (){
+
+                                            },
+                                            icon: controller.isFavorite
+                                                ? Icons.favorite_sharp
+                                                : Icons.favorite_border_sharp,
+ */
+                                            //  Icons.favorite_border,
                                             //products[index].image.toString()
                                             //img: "${controller.productGetJson!.data![index].images}",
                                             img: "assets/images/logo2.png ",
@@ -420,7 +424,7 @@ class HomeView extends GetView<ProductsController> {
                                                     .readCategorieName()
                                                 .toString(),
                                             Descriptiontext:
-                                                "${controller.productGetJson!.data![index].price}",
+                                                "${controller.productGetJson!.data![index].description}",
                                             height: 200,
                                             width: 200,
                                             colorBorder: AppColor.goldColor,
@@ -431,8 +435,12 @@ class HomeView extends GetView<ProductsController> {
                                             print(
                                                 "*-------------------------------------------*get category by id*****************");
 
-                                            controller.getProductById(
-                                                "${controller.productGetJson!.data![index].sId}");
+                                            AccountInfoStorage.saveProductId(
+                                                controller.productGetJson!
+                                                    .data![index].sId);
+
+                                            controller.getProductById();
+
                                             print(
                                                 "*************get category by id*****************");
                                           },

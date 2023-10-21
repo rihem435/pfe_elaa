@@ -1373,3 +1373,5 @@ org/jetbrains/annotations/NotNull.class
 org/jetbrains/annotations/Nullable.class
 org/jetbrains/annotations/PropertyKey.class
 org/jetbrains/annotations/TestOnly.class
+xyz/luan/audioplayers/AudioContextAndroid.class
+xyz/luan/audioplayers/player/FocusManager.class

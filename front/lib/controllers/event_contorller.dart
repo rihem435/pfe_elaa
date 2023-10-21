@@ -65,8 +65,8 @@ class EventController extends GetxController {
   @override
   void onInit() {
     getEvents();
-    print(
-        '************************************create event**********************');
+    // print(
+    //     '************************************create event**********************');
     //createEvent();
     // Initialisations spécifiques à ce contrôleur
     super
@@ -78,13 +78,13 @@ class EventController extends GetxController {
       print("success get Events");
       eventGetJson = value as EventGetJson?;
 
-      print("data events ======================= ${eventGetJson!.status}");
+      // print("data events ======================= ${eventGetJson!.status}");
       if (eventGetJson!.data != null) {
         return eventGetJson;
       }
       return null;
     }).onError((error, stackTrace) {
-      print("error ==== $error");
+      print("error getEvents==== $error");
       return eventGetJson;
     });
   }
@@ -93,17 +93,17 @@ class EventController extends GetxController {
     print("Events by user id ---------------------");
     apiEventGetByUserId.id = AccountInfoStorage.readId().toString();
     return apiEventGetByUserId.getData().then((value) {
-      print('value===========> $value');
+      // print('value===========> $value');
       eventByUserIdJson = value as EventByUserIdJson?;
-      print("Events message =============== ${eventByUserIdJson!.message}");
+      // print("Events message =============== ${eventByUserIdJson!.message}");
       if (eventByUserIdJson!.data != null) {
-        print(
-            'events==========================> ${eventByUserIdJson!.data!.length}');
+        // print(
+        //     'events==========================> ${eventByUserIdJson!.data!.length}');
         return eventByUserIdJson;
       }
       return null;
     }).onError((error, stackTrace) {
-      print('error======> $error');
+      print('error getAllEventByUserId======> $error');
       return null;
     });
   }
@@ -113,8 +113,8 @@ class EventController extends GetxController {
     apiEventGetById.id = id;
     apiEventGetById.getData().then((value) {
       eventByIdJson = value as EventByIdJson?;
-      print(
-          "data event by id=================== ${eventByIdJson!.data!.sId.toString()}");
+      // print(
+      //     "data event by id=================== ${eventByIdJson!.data!.sId.toString()}");
       AccountInfoStorage.saveEventId(eventByIdJson!.data!.sId.toString());
       // AccountInfoStorage.readEventId().toString();
       AccountInfoStorage.saveEventDatedebut(
@@ -131,7 +131,7 @@ class EventController extends GetxController {
       //return "${eventByIdJson!.data!.dateDebut}";
       Get.to(GuestList());
     }).onError((error, stackTrace) {
-      print('error======> $error');
+      print('error get event by id======> $error');
       // return "error";
     });
     //  return null;
@@ -208,7 +208,7 @@ class EventController extends GetxController {
       AccountInfoStorage.saveEventId(eventJson!.data!.sId.toString());
 
       getEvents();
-      print('event created=======> ${eventJson!.data!.sId}');
+      // print('event created=======> ${eventJson!.data!.sId}');
 
       Get.to(EventListView());
       update();
@@ -239,7 +239,7 @@ class EventController extends GetxController {
       print('success+++++++++++++++> $value');
       guestJson = value as GuestJson?;
       getEvents();
-      print('Guest created=======> ${guestJson!.data!.sId}');
+      // print('Guest created=======> ${guestJson!.data!.sId}');
       getGuests();
       update();
     }).onError((error, stackTrace) {
@@ -251,12 +251,12 @@ class EventController extends GetxController {
     print("Guest by Event id ---------------------");
     apiGuestsGetByEventId.id = AccountInfoStorage.readEventId().toString();
     return apiGuestsGetByEventId.getData().then((value) {
-      print('value===========> $value');
+      // print('value===========> $value');
       guestByEventIdJson = value as GuestByEventIdJson?;
-      print("Guest message =============== ${guestByEventIdJson!.message}");
+      // print("Guest message =============== ${guestByEventIdJson!.message}");
       if (guestByEventIdJson!.data!.isNotEmpty) {
-        print(
-            'Guest==========================> ${guestByEventIdJson!.data!.length}');
+        // print(
+        //     'Guest==========================> ${guestByEventIdJson!.data!.length}');
         return guestByEventIdJson;
       }
 
@@ -265,7 +265,7 @@ class EventController extends GetxController {
       }
       return null;
     }).onError((error, stackTrace) {
-      print('error======> $error');
+      print('error get all guest by event id======> $error');
       return null;
     });
   }
@@ -276,13 +276,13 @@ class EventController extends GetxController {
       print("=================================success get Guests");
       guestGetAllJson = value as GuestGetAllJson?;
 
-      print("data Guests ======================= ${guestGetAllJson!.status}");
+      // print("data Guests ======================= ${guestGetAllJson!.status}");
       if (guestGetAllJson!.data != null) {
         return guestGetAllJson;
       }
       return null;
     }).onError((error, stackTrace) {
-      print("error ==== $error");
+      print("error get guest ==== $error");
       return guestGetAllJson;
     });
   }

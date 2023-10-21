@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/bindings.dart';
-import 'package:front/views/event_list_view.dart';
 import 'package:front/views/login_view.dart';
-import 'package:front/views/vendors/home_view_vendor.dart';
-import 'package:front/views/vendors/test_View.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -26,10 +23,10 @@ class MyApp extends StatelessWidget {
         ),
         //  home: ProductDetail());
         //  home: MyImageWidget());
-    //    home: TestView());
+        home: LoginView());
     //https://github.com/ahmeriqbal7aa/flutter_send_sms/blob/master/lib/main.dart
     
-     home: LoginView());
+     //home: ChatScreen());
   }
 }
 

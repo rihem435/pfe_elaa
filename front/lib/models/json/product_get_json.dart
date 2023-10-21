@@ -1,7 +1,8 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
 class ProductGetJson extends AbstractJsonResource {
-  String? message;
+
+   String? message;
   int? status;
   List<Data>? data;
 
@@ -34,6 +35,8 @@ class Data {
   String? nameproduct;
   String? description;
   int? price;
+  String? location;
+  bool? favorite;
   List<String>? images;
   String? category;
   String? user;
@@ -44,6 +47,8 @@ class Data {
       this.nameproduct,
       this.description,
       this.price,
+      this.location,
+      this.favorite,
       this.images,
       this.category,
       this.user,
@@ -54,6 +59,8 @@ class Data {
     nameproduct = json['nameproduct'];
     description = json['description'];
     price = json['price'];
+    location = json['location'];
+    favorite = json['favorite'];
     images = json['images'].cast<String>();
     category = json['category'];
     user = json['user'];
@@ -66,6 +73,8 @@ class Data {
     data['nameproduct'] = this.nameproduct;
     data['description'] = this.description;
     data['price'] = this.price;
+    data['location'] = this.location;
+    data['favorite'] = this.favorite;
     data['images'] = this.images;
     data['category'] = this.category;
     data['user'] = this.user;

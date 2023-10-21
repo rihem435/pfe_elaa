@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
+import 'package:front/controllers/profile_controller.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_box_description_detail.dart';
 import 'package:front/widgets/custom_box_detail.dart';
@@ -10,7 +11,7 @@ import 'package:front/widgets/custom_text.dart';
 import 'package:get/get.dart';
 
 final List<String> imgList = [
-//"${AppApi.getImageUser}${AccountInfoStorage.readImage().toString()}"
+//"${AccountInfoStorage.readProductImage().toString()}"
 
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -25,6 +26,7 @@ class ProductDetail extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
+    ProfileColntroller Pcontroller = ProfileColntroller();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //your color
@@ -77,10 +79,10 @@ class ProductDetail extends GetView<ProductsController> {
                           enlargeCenterPage: true,
                         ),
                       ),
-                
+
                       // text ProductName && price && barre message+buy+fav
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: Center(
                           child: GetBuilder<ProductsController>(
                             //key: index,
@@ -98,7 +100,7 @@ class ProductDetail extends GetView<ProductsController> {
                           ),
                         ),
                       ),
-                      
+
                       Center(
                         child: CustomText(
                           fontSize: 28,
@@ -109,10 +111,64 @@ class ProductDetail extends GetView<ProductsController> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomBoxDetail(),
+                        padding: EdgeInsets.all(8.0),
+                        child: GetBuilder<ProductsController>(
+                            builder: (controller) {
+                          Pcontroller.isFavorite =
+                              controller.productGetByIdJson!.data!.favorite;
+                          return CustomBoxDetail(
+                            issavedfunction: () {
+                              /*    Pcontroller.savedFavProd.add(
+                                  "${controller.productGetByIdJson!.data!.sId}");
+                            */ /* print(
+                                  "fffffffffffffff${Pcontroller.savedFavProd}");
+                              print(
+                                  "object  ${controller.productGetByIdJson!.data!.sId}");
+                              print(
+                                  "product fav ${controller.productGetByIdJson!.data!.favorite}");
+                            */
+                              Pcontroller.isFavorite = !controller
+                                  .productGetByIdJson!.data!.favorite!;
+
+                              controller.updateProductByIdFav(
+                                  Pcontroller.isFavorite!);
+
+                              //print("object${Pcontroller.isFavorite!}");
+
+                              //Pcontroller.favoriteIcon();
+                              //  print(" is fave bool ${Pcontroller.isFavorite!}");
+                              print(
+                                  "fav test ${controller.productGetByIdJson!.data!.favorite}");
+
+                              if (controller
+                                  .productGetByIdJson!.data!.favorite!) {
+                                Pcontroller.savedFavProd.remove(
+                                    controller.productGetByIdJson!.data!.sId);
+                                print(
+                                    "adddd${controller.productGetByIdJson!.data!.sId}");
+                              } else {
+                                Pcontroller.savedFavProd.add(
+                                    controller.productGetByIdJson!.data!.sId);
+                                print(
+                                    "deletee${controller.productGetByIdJson!.data!.sId}");
+                              }
+
+                              Pcontroller.updateFavoriteListProducts();
+                            },
+                            icon: /*  Icon(Icons.favorite) */
+                                Icon(
+                               controller.productGetByIdJson!.data!.favorite!
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: controller.productGetByIdJson!.data!.favorite!
+                                  ? Colors.red
+                                  : AppColor.goldColor,
+                              size: 30,
+                            ),
+                          );
+                        }),
                       ),
-                
+
                       //text for details
                       Padding(
                         padding: const EdgeInsets.all(8.0),

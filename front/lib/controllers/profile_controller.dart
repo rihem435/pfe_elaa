@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
@@ -12,15 +13,17 @@ import 'package:front/models/network/api_loginn.dart';
 import 'package:front/models/network/api_signup.dart';
 import 'package:front/models/network/api_user_all.dart';
 import 'package:front/views/admin/home_view_admin.dart';
+import 'package:front/views/favorite_view.dart';
 import 'package:front/views/home_view_customer.dart';
+import 'package:front/views/login_view.dart';
+import 'package:front/views/product_detail.dart';
 import 'package:front/views/vendors/home_view_vendor.dart';
+import 'package:front/widgets/components/image_cloudinary.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:get/get_connect/http/src/multipart/form_data.dart';
 
 class ProfileColntroller extends GetxController {
   Dio dio1 = Dio();
@@ -47,7 +50,6 @@ class ProfileColntroller extends GetxController {
   bool isVisiblePassword = true;
   bool confirmPassword = true;
 
-  
   void viderControllers() {
     confirmPasswordController.text = '';
   }
@@ -112,6 +114,7 @@ class ProfileColntroller extends GetxController {
     confirmPassword = !confirmPassword;
     update(); // rebuild
   }
+
 //////////////////////////calendar selection /////////////////////
 
   String? date;
@@ -153,42 +156,16 @@ class ProfileColntroller extends GetxController {
     profilePicFile = file;
     print(
         "------------------------------------Image $file------------------------------------");
+    imageCloudinary.uploadToCloudinary(file);
+
     update();
   }
 
-/* 
-  File? profilePicFile;
+  ImageCloudinary imageCloudinary = ImageCloudinary();
 
-  Future<void> directUpdateImage(File? file) async {
-    if (file == null) return;
+  List<Products>? favProducts;
+  List<String?> savedFavProd = [];
 
-    // Extract the filename (basename) from the provided file path
-    try {
-      String fileName = basename(file.path);
-
-      // Construct the image URL using the filename
-
-      await file.copy(File('/${AppApi.getImageUser}/$fileName').path);
-      String imageUrl =
-          "${AppApi.getImageUser}${AccountInfoStorage.saveImage(fileName)}";
-
-
-      // Set the profilePicFile to the provided file
-
-      profilePicFile = file;
-      imageUrl = imageUrl;
-      
-      print('Filename: $fileName');
-      print('Image URL: $imageUrl');
-      
-      // Update your UI or state as needed.
-      update();
-    } catch (error) {
-      print('Error saving image or updating: $error');
-    }
-  }
-
-  */ ////////////function login/////////////////
   signIn() {
     print("----------------signin-----------------");
     apiLoginn.postData({
@@ -196,39 +173,60 @@ class ProfileColntroller extends GetxController {
       "password": passwordController.text,
     }).then((value) {
       print('success signin------------------------');
-
       loginUserJson = value as LoginUserJson?;
       AccountInfoStorage.saveId(loginUserJson!.user!.sId.toString());
       AccountInfoStorage.saveEmail(loginUserJson!.user!.email.toString());
       AccountInfoStorage.saveName(loginUserJson!.user!.username.toString());
+      AccountInfoStorage.saveImage(loginUserJson!.user!.image.toString());
       AccountInfoStorage.saveItems(loginUserJson!.user!.items.toString());
+      AccountInfoStorage.savePassword(passwordController.text);
       //AccountInfoStorage.saveImage(loginUserJson!.user!.image);
       AccountInfoStorage.saveTokenUser(loginUserJson!.tokens!.accessToken);
 
       viderControllers();
-      print('password===========================>${passwordController.text}');
+
+      //   print('password===========================>${passwordController.text}');
       print('success signin');
       if (loginUserJson!.user!.items == "Customer") {
         print('Customer');
+        // print(
+        //     "--------------lenght-------------------------------${loginUserJson!.user!.products!.length}");
+        favProducts = loginUserJson!.user!.products;
+        // // String Fav = jsonEncode(FavoriteProducts);
+        // //print(FavoriteProducts![0].nameproduct);
+
+        if (favProducts!.isNotEmpty) {
+          for (int i = 0; i < loginUserJson!.user!.products!.length; i++) {
+            print(favProducts![i].nameproduct);
+            if (favProducts![i].favorite == true) {
+              savedFavProd.add(favProducts![i].sId.toString());
+              print("list$savedFavProd");
+            }
+          }
+        }
+        print("list to ligon view $savedFavProd");
         Get.to(HomeView());
       } else if (loginUserJson!.user!.items == "Vendor") {
         print('Vendor');
-
         Get.to(HomeViewVendor());
       }
     }).onError((error, stackTrace) {
       ///// modifier ui /////////////
-      Get.snackbar("", " User Name or Password Does not match",
-          backgroundColor: AppColor.goldColor,
-          titleText: Text(
-            "Sothing went wrong",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 24,
-            ),
-          ));
+      Get.snackbar(
+        "",
+        " User Name or Password Does not match",
+        backgroundColor: AppColor.goldColor,
+        titleText: Text(
+          "Sothing went wrong",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+        ),
+      );
       print('erro login=====================> $error');
     });
+    update();
   }
 
   ////////////function signup /////////////////
@@ -248,7 +246,6 @@ class ProfileColntroller extends GetxController {
       print('id user==========> ${userGetByIdJson!.data!.sId}');
       print('role user==========> ${userGetByIdJson!.data!.items}');
       //   AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
-
       //  print('role image==================> ${AccountInfoStorage.readImage()}');
       viderControllers();
 
@@ -286,20 +283,16 @@ class ProfileColntroller extends GetxController {
   userUpdate() {
     apiUserById.id = AccountInfoStorage.readId().toString();
     // AccountInfoStorage.readImage().toString();
-    dio.FormData data = dio.FormData.fromMap({
-      //'items': 'Customer',
+    apiUserById.updateData({
       'username': usernameController.text,
       'email': emailController.text,
-      //'password': passwordController.text,
-      //'city': 'r',
       'adress': adresseController.text,
       'phone': phonenumberController.text,
-      'image': imageController.text,
-      // 'events': '',
-    });
+      'image': AccountInfoStorage.readImage()
+    }).then((value) {
+      AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
+      print("${AccountInfoStorage.readImage()}");
 
-    apiUserById.updateData(data).then((value) {
-      // AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
       print("success");
       // Get.defaultDialog(title: "Alert");
       Get.snackbar("", "Success",
@@ -347,14 +340,68 @@ class ProfileColntroller extends GetxController {
   }
 
   logOut() {
+    print("logout");
     dio1.options.headers['authorization'] =
         'bearer ${AccountInfoStorage.readTokenUser().toString()}';
-    dio1
-        .get("http://localhost:3000/auth/logout")
-        .then((value) => print('logout success'))
-        .onError((error, stackTrace) => print("erro logout ====> $error"));
+    dio1.get(AppApi.Logout).then((value) {
+      Get.to(LoginView());
+      usernameController.clear();
+      passwordController.clear();
+      print('logout success');
+    }).onError((error, stackTrace) {
+      print("erro logout ====> $error");
+    });
   }
 
   //////////////////////////////image upload by cloudinary ///////////////////////////////////////
   /// https://cyuket.medium.com/flutter-how-to-upload-to-cloudinary-cdb7631dfbe1 ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  /// favorite
+  ///
+  ///
+
+  bool? isFavorite;
+
+  void favoriteIcon() {
+    print("favorite");
+    isFavorite = !isFavorite!;
+    update();
+  }
+
+  updateFavoriteListProducts() {
+    apiUserById.id = AccountInfoStorage.readId().toString();
+    apiUserById.updateData({'products': savedFavProd}).then((value) {
+      print("success updateFavoriteListProducts");
+       Get.to(FavoriteView());
+    }).onError((error, stackTrace) {
+      print('error updateFavoriteListProducts ======> $error');
+    });
+    update();
+  }
+
+  /*  
+  loginUserJson!.user!.products!.length
+  getAllProductByUserId() {
+    print("Product by user id ---------------------");
+    apiProductsGetByUserId.id = AccountInfoStorage.readId().toString();
+    return apiProductsGetByUserId.getData().then((value) {
+      print('value===========> $value');
+      //////////the value is null
+      productsByUserIdJson = value as ProductsByUserIdJson?;
+      print(
+          "Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+      if (productsByUserIdJson!.data != null) {
+        return productsByUserIdJson;
+      }
+      return null;
+    }).onError((error, stackTrace) {
+      print('error======> $error');
+      return null;
+    });
+  }
+ */
 }

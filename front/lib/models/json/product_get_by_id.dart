@@ -1,6 +1,6 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class ProductGetByIdJson extends AbstractJsonResource{
+class ProductGetByIdJson extends AbstractJsonResource {
   String? message;
   int? status;
   Data? data;
@@ -30,8 +30,10 @@ class Data {
   int? price;
   List<String>? images;
   String? category;
+  bool? favorite;
   int? iV;
   String? description;
+  String? user;
 
   Data(
       {this.sId,
@@ -39,8 +41,10 @@ class Data {
       this.price,
       this.images,
       this.category,
+      this.favorite,
       this.iV,
-      this.description});
+      this.description,
+      this.user});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -48,8 +52,10 @@ class Data {
     price = json['price'];
     images = json['images'].cast<String>();
     category = json['category'];
+    favorite = json['favorite'];
     iV = json['__v'];
     description = json['description'];
+    user = json['user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,8 +65,10 @@ class Data {
     data['price'] = this.price;
     data['images'] = this.images;
     data['category'] = this.category;
+    data['favorite'] = this.favorite;
     data['__v'] = this.iV;
     data['description'] = this.description;
+    data['user'] = this.user;
     return data;
   }
 }

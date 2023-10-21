@@ -8,7 +8,7 @@ class CustomFavoriteList extends StatelessWidget {
   final String? Descriptiontext, ServiceName;
   final double? height;
   final double? width;
-  final Function? function;
+  final Function? function, FavoriteFunction;
   final double? widthBorder;
   final Color? colorBorder;
   final String? img;
@@ -24,7 +24,8 @@ class CustomFavoriteList extends StatelessWidget {
       this.widthBorder,
       this.colorBorder,
       this.img,
-      this.icon})
+      this.icon,
+      this.FavoriteFunction})
       : super(key: key);
 
   @override
@@ -85,9 +86,11 @@ class CustomFavoriteList extends StatelessWidget {
                             flex: 1,
                             child: IconButton(
                               onPressed: () {
-                                function!(print(
-                                    '******************favorite******************'));
-                                Get.to(FavoriteView());
+                                print(
+                                    '******************favorite******************');
+                                FavoriteFunction!();
+                                // saveProductIdInUserId();
+                                //Get.to(FavoriteView());
                               },
                               icon: Icon(
                                 icon,

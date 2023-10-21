@@ -1,5 +1,9 @@
 api/node_modules
 front/build
+api/.env
+front/.env
+
+
 # Miscellaneous
 *.class
 *.log

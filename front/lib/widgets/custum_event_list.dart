@@ -141,7 +141,7 @@ class CustomEventList extends GetView<EventController> {
                         } else {
                           print     (                'snapshot==============================>$snapshot');
                     
-                          // If we got an error
+                          // If we got an error 
                           if (snapshot.hasError) {
                             return Center(
                               child: Text(

@@ -32,6 +32,7 @@ class Data {
   String? password;
   String? city;
   String? adress;
+  String? image;
   int? phone;
   List<String>? events;
   List<String>? products;
@@ -48,6 +49,7 @@ class Data {
       this.password,
       this.city,
       this.adress,
+      this.image,
       this.phone,
       this.events,
       this.products,
@@ -64,6 +66,7 @@ class Data {
     password = json['password'];
     city = json['city'];
     adress = json['adress'];
+    image = json['image'];
     phone = json['phone'];
     products = json['events'].cast<String>();
     products = json['products'].cast<String>();
@@ -82,6 +85,7 @@ class Data {
     data['password'] = this.password;
     data['city'] = this.city;
     data['adress'] = this.adress;
+    data['image'] = this.image;
     data['phone'] = this.phone;
     data['events'] = this.events;
     data['products'] = this.products;
