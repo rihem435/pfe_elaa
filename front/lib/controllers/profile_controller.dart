@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
 import 'package:front/config/app_colors.dart';
+import 'package:front/controllers/products_controller.dart';
 import 'package:front/models/json/login_user_json.dart';
 import 'package:front/models/json/user_all_json.dart';
 import 'package:front/models/json/user_get_id.dart';
@@ -49,7 +50,7 @@ class ProfileColntroller extends GetxController {
   bool passwordsMatch = true;
   bool isVisiblePassword = true;
   bool confirmPassword = true;
-
+  ProductsController productsControlle = ProductsController();
   void viderControllers() {
     confirmPasswordController.text = '';
   }
@@ -163,8 +164,7 @@ class ProfileColntroller extends GetxController {
 
   ImageCloudinary imageCloudinary = ImageCloudinary();
 
-  List<Products>? favProducts;
-  List<String?> savedFavProd = [];
+  // List<Products>? favProducts;
 
   signIn() {
     print("----------------signin-----------------");
@@ -172,7 +172,7 @@ class ProfileColntroller extends GetxController {
       "username": usernameController.text,
       "password": passwordController.text,
     }).then((value) {
-      print('success signin------------------------');
+      print('success signin------------------------}');
       loginUserJson = value as LoginUserJson?;
       AccountInfoStorage.saveId(loginUserJson!.user!.sId.toString());
       AccountInfoStorage.saveEmail(loginUserJson!.user!.email.toString());
@@ -180,6 +180,10 @@ class ProfileColntroller extends GetxController {
       AccountInfoStorage.saveImage(loginUserJson!.user!.image.toString());
       AccountInfoStorage.saveItems(loginUserJson!.user!.items.toString());
       AccountInfoStorage.savePassword(passwordController.text);
+      // AccountInfoStorage.saveFavoriteId(
+      //     loginUserJson!.user!.favorites!.toString());
+          
+      
       //AccountInfoStorage.saveImage(loginUserJson!.user!.image);
       AccountInfoStorage.saveTokenUser(loginUserJson!.tokens!.accessToken);
 
@@ -189,25 +193,11 @@ class ProfileColntroller extends GetxController {
       print('success signin');
       if (loginUserJson!.user!.items == "Customer") {
         print('Customer');
-        // print(
-        //     "--------------lenght-------------------------------${loginUserJson!.user!.products!.length}");
-        favProducts = loginUserJson!.user!.products;
-        // // String Fav = jsonEncode(FavoriteProducts);
-        // //print(FavoriteProducts![0].nameproduct);
 
-        if (favProducts!.isNotEmpty) {
-          for (int i = 0; i < loginUserJson!.user!.products!.length; i++) {
-            print(favProducts![i].nameproduct);
-            if (favProducts![i].favorite == true) {
-              savedFavProd.add(favProducts![i].sId.toString());
-              print("list$savedFavProd");
-            }
-          }
-        }
-        print("list to ligon view $savedFavProd");
         Get.to(HomeView());
       } else if (loginUserJson!.user!.items == "Vendor") {
         print('Vendor');
+        
         Get.to(HomeViewVendor());
       }
     }).onError((error, stackTrace) {
@@ -307,6 +297,7 @@ class ProfileColntroller extends GetxController {
     }).onError((error, stackTrace) {
       print('error login======> $error');
     });
+    update();
   }
 
   updatepasswordUser() {
@@ -347,6 +338,8 @@ class ProfileColntroller extends GetxController {
       Get.to(LoginView());
       usernameController.clear();
       passwordController.clear();
+      // favProducts!.clear();
+      // productsControlle.savedFavProd.clear();
       print('logout success');
     }).onError((error, stackTrace) {
       print("erro logout ====> $error");
@@ -364,24 +357,14 @@ class ProfileColntroller extends GetxController {
   ///
   ///
 
-  bool? isFavorite;
+  /* bool? isFavorite;
 
   void favoriteIcon() {
     print("favorite");
     isFavorite = !isFavorite!;
     update();
   }
-
-  updateFavoriteListProducts() {
-    apiUserById.id = AccountInfoStorage.readId().toString();
-    apiUserById.updateData({'products': savedFavProd}).then((value) {
-      print("success updateFavoriteListProducts");
-       Get.to(FavoriteView());
-    }).onError((error, stackTrace) {
-      print('error updateFavoriteListProducts ======> $error');
-    });
-    update();
-  }
+ */
 
   /*  
   loginUserJson!.user!.products!.length

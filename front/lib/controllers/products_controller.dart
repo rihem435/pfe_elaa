@@ -5,13 +5,27 @@ import 'package:front/config/app_api.dart';
 import 'package:front/models/json/categorie_get_by_id_json.dart';
 import 'package:front/models/json/categorie_get_by_name_json.dart';
 import 'package:front/models/json/categories_json.dart';
+import 'package:front/models/json/favorite__create_json.dart';
+import 'package:front/models/json/favorite_all_json.dart';
+import 'package:front/models/json/favorite_by_id_json.dart';
+import 'package:front/models/json/favorite_by_state_json.dart';
+import 'package:front/models/json/favorite_by_user_id_json.dart';
+import 'package:front/models/json/login_user_json.dart';
 import 'package:front/models/json/product_add_json.dart';
 import 'package:front/models/json/product_by_user_is_json.dart';
 import 'package:front/models/json/product_get_by_id.dart';
 import 'package:front/models/json/product_get_json.dart';
+import 'package:front/models/json/user_get_id.dart';
 import 'package:front/models/network/api_categorie_get_by_id.dart';
 import 'package:front/models/network/api_categorie_get_by_name.dart';
 import 'package:front/models/network/api_categories_get.dart';
+import 'package:front/models/network/api_favorite_all.dart';
+import 'package:front/models/network/api_favorite_by_id.dart';
+import 'package:front/models/network/api_favorite_by_state.dart';
+import 'package:front/models/network/api_favorite_create.dart';
+import 'package:front/models/network/api_favorite_delete.dart';
+import 'package:front/models/network/api_favorite_get_by_user_id.dart';
+import 'package:front/models/network/api_get_user_by_id.dart';
 import 'package:front/models/network/api_product_add.dart';
 import 'package:front/models/network/api_product_get.dart';
 import 'package:front/models/network/api_product_get_by_id.dart';
@@ -160,7 +174,7 @@ class ProductsController extends GetxController {
       /*   await getCategorieById(productGetJson!.toJson().toString());
       print('************${productGetJson!.data!.toString()}');
  */
-      print("data products================== ${productGetJson!.message}");
+      //print("data products================== ${productGetJson!.message}");
     }).onError((error, stackTrace) {
       print("errorr ====== $error");
       return productGetJson!;
@@ -196,26 +210,27 @@ class ProductsController extends GetxController {
           }
         }
       } */
+
       Get.to(ProductDetail());
     }).onError((error, stackTrace) {
       print("error product by id ==== $error");
     });
     update();
-    return null;
+    //  return null;
   }
 
 ///////to do
   getAllProductByUserId() {
     print("Product by user id ---------------------");
-    print("object${productsByUserIdJson!.data!.length}");
     apiProductsGetByUserId.id = AccountInfoStorage.readId().toString();
+
     return apiProductsGetByUserId.getData().then((value) {
       print('value===========> $value');
       //////////the value is null
       productsByUserIdJson = value as ProductsByUserIdJson?;
-      print(
-          "Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+
       if (productsByUserIdJson!.data != null) {
+        // print("Product by user id =============== ${productsByUserIdJson!.data![0].user}");
         return productsByUserIdJson;
       }
       return null;
@@ -227,31 +242,25 @@ class ProductsController extends GetxController {
 
   createProduct() {
     print('************************create product***********************');
-    dio.FormData formData1 = dio.FormData.fromMap({
+    /*  dio.FormData formData1 = dio.FormData.fromMap({
       "nameproduct": productNameController.text,
       "description": productDescriptionController.text,
       "price": productPriceController.text.toString(),
       //"images": [],
       "category": AccountInfoStorage.readCategorieName().toString(),
       "user": AccountInfoStorage.readId().toString(),
-    });
-    /*   Map<String, dynamic> data = {
-      "nameproduct": "cake1",
-      "description": "gold1",
-      "price": 300,
-      //"images": "1696276665041-Happy Birthday 2023.png",
-      "category": "65003a1663b17957f87ce303",
-      "user": "6516a67346a878d8ee68b360",
-    }; */
-    // print(
-    //     'Data Product ID--------------------->${AccountInfoStorage.readProductId().toString()}');
-    // print(
-    //     'Data Product ID--------------------->${AccountInfoStorage.readCategorieId().toString()}');
-    print('name==================> ${AccountInfoStorage.readProductName()}');
-    print(
-        'userid==================> ${AccountInfoStorage.readId().toString()}');
+    }); */
+    Map<String, dynamic> data = {
+      "nameproduct": productNameController.text,
+      "description": productDescriptionController.text,
+      "price": productPriceController.text,
+      //"images":[],
+      // "favorite": false,
+      "category": AccountInfoStorage.readCategorieName().toString(),
+      "user": AccountInfoStorage.readId().toString(),
+    };
 
-    dio_.post(AppApi.createProductsUrl, data: formData1).then((value) {
+    apiProductAdd.postData(data).then((value) {
       print('success+++++++++++++++> $value');
       getProducts();
       // productAddJson = value as ProductAddJson?;
@@ -261,6 +270,7 @@ class ProductsController extends GetxController {
     }).onError((error, stackTrace) {
       print('error create product ==========> $TypeError');
     });
+    update();
   }
 
   ImageCloudinary imageCloudinary = ImageCloudinary();
@@ -289,7 +299,7 @@ class ProductsController extends GetxController {
     print("Image List Length:" + imageFileList!.length.toString());
   }
 
-  updateProductByIdFav(bool favorited) {
+  /* updateProductByIdFav(bool favorited) {
     print("update prod by id fav   ${favorited}");
     apiProductGetById.id = AccountInfoStorage.readProductId().toString();
     apiProductGetById.updateData({
@@ -301,9 +311,174 @@ class ProductsController extends GetxController {
       print("update prod by id fav${favorited}");
       print("success ${value} ${favorited}");
       //Get.to(ProductDetail());
-      //update();
+      update();
     }).onError((error, stackTrace) {
       print("error fav product by id ==== $error");
+    });
+    // update();
+  }
+
+   */
+
+  ApiUserById apiUserById = ApiUserById();
+  UserGetByIdJson? userGetByIdJson;
+
+  /* updateFavoriteListProducts() {
+    apiUserById.id = AccountInfoStorage.readId().toString();
+    apiUserById.updateData({'products': savedFavProd}).then((value) {
+      print("success updateFavoriteListProducts");
+      update();
+
+      // Get.to(FavoriteView());
+    }).onError((error, stackTrace) {
+      print('error updateFavoriteListProducts ======> $error');
+    });
+  } */
+
+  //////////////////////////////// Favorite  ////////////////////////////////
+  ///
+  ///
+  bool? isFavorite;
+
+  void favoriteIcon() {
+    print("favorite");
+    isFavorite = !isFavorite!;
+    update();
+  }
+
+  List<Products?> savedFavProd = [];
+
+  ApiFavoriteCreate apiFavoriteCreate = ApiFavoriteCreate();
+  ApiFavoriteDeleteById apiFavoriteDeleteById = ApiFavoriteDeleteById();
+  ApiFavoriteGetByUserId apiFavoriteGetByUserId = ApiFavoriteGetByUserId();
+  ApiFAvoriteGetById apiFAvoriteGetById = ApiFAvoriteGetById();
+  ApiFAvoriteGetState apiFAvoriteGetState = ApiFAvoriteGetState();
+  ApiFavoriteAll apiFavoriteAll = ApiFavoriteAll();
+
+  FavoriteByUserIdJson? favoriteByUserIdJson = FavoriteByUserIdJson();
+  FavoriteAllJson? favoriteAllJson = FavoriteAllJson();
+  FavoriteByIdJson? favoriteByIdJson = FavoriteByIdJson();
+  FavoriteCreateJson? favoriteCreateJson = FavoriteCreateJson();
+  FavoriteGeByStatetJson? favoriteGeByStatetJson = FavoriteGeByStatetJson();
+
+  createFavorite() {
+    print(
+        "---------------------- favorite create --------------------------------");
+
+    Map<String, dynamic> data = {
+      "state": true,
+      "products": AccountInfoStorage.readProductId().toString(),
+      "user": AccountInfoStorage.readId().toString(),
+    };
+    apiFavoriteCreate.postData(data).then((value) {
+      print('success+++++++++++++++> $value');
+      // getProducts();
+      favoriteCreateJson = value as FavoriteCreateJson?;
+      print("id favorite =====> ${favoriteCreateJson!.data!.sId}");
+
+      // productAddJson = value as ProductAddJson?;
+      //  print('name==================> ${AccountInfoStorage.readProductName()}');
+
+      // print('event created=======> ${productAddJson!.data!.sId}');
+      getAllProductByUserId();
+      update();
+    }).onError((error, stackTrace) {
+      print('error create favorite ==========> $TypeError');
+    });
+    update();
+  }
+
+  getFavoriteById() {
+    print("--------------------------------favorite by id ");
+    apiFAvoriteGetById.id = AccountInfoStorage.readFavoriteId().toString();
+    apiFAvoriteGetById.getData().then((value) {
+      favoriteByIdJson = value as FavoriteByIdJson?;
+      print(
+          "data favorite by id ============================${favoriteByIdJson!.data}");
+    }).onError((error, stackTrace) {
+      print("error favorite by id ==== $error");
+    });
+    update();
+  }
+
+  getFavoriteByState() {
+    print("-------------------------------------favorite by state ");
+    apiFAvoriteGetState.state =
+        AccountInfoStorage.readFavoriteState().toString();
+    apiFAvoriteGetState.getDataByState().then((value) {
+      favoriteGeByStatetJson = value as FavoriteGeByStatetJson?;
+      print(
+          "data favorite by state ============================${favoriteByIdJson!.data}");
+    }).onError((error, stackTrace) {
+      print("error favorite by id ==== $error");
+    });
+    update();
+  }
+
+  updateFavorite(bool? favoriteState) {
+    apiFAvoriteGetById.id = AccountInfoStorage.readFavoriteId().toString();
+    apiFAvoriteGetById.updateData({"state": favoriteState}).then((value) {
+      AccountInfoStorage.saveFavoriteState("${favoriteByIdJson!.data!.state}");
+      print("Favorite state === > ${favoriteByIdJson!.data!.state}");
+      getAllFavoriteByUserId();
+      update();
+    }).onError((error, stackTrace) {
+      print('error login======> $error');
+    });
+    update();
+  }
+
+  getAllFavoriteByUserId() {
+    print("-------------------------Product by user id ---------------------");
+    apiFavoriteGetByUserId.id = AccountInfoStorage.readId().toString();
+
+    return apiFavoriteGetByUserId.getData().then((value) {
+      print('value fav prod===========> $value');
+      //////////the value is null
+      favoriteByUserIdJson = value as FavoriteByUserIdJson?;
+      print(
+          '----------------------------------------------fav----${favoriteByUserIdJson!.data}');
+
+      if (favoriteByUserIdJson!.data != null) {
+        // print("Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+        print(
+            '++++++++++++++++++++++++++++++++++++++++++++++++++${favoriteByUserIdJson!.data!.length}');
+        return favoriteByUserIdJson;
+      }
+
+      print('----------------------------------------------fav----');
+
+      update();
+    }).onError((error, stackTrace) {
+      print('error======> $error');
+      return null;
+    });
+  }
+
+  getFavorite() {
+    return apiFavoriteAll.getData().then((value) async {
+      print("success get products");
+      favoriteAllJson = value as FavoriteAllJson?;
+      if (favoriteAllJson!.data != null) {
+        return favoriteAllJson!;
+      }
+      return null;
+      /*   await getCategorieById(productGetJson!.toJson().toString());
+      print('************${productGetJson!.data!.toString()}');
+ */
+      //print("data products================== ${productGetJson!.message}");
+    }).onError((error, stackTrace) {
+      print("errorr ====== $error");
+      return favoriteAllJson!;
+    });
+  }
+
+  deleteFavorite(String id) {
+    apiFavoriteDeleteById.id = id;
+    apiFavoriteDeleteById.deleteData().then((value) {
+      print('success Favorite delete');
+    }).onError((error, stackTrace) {
+      print('erorr delete favorite  === > $error');
     });
     update();
   }

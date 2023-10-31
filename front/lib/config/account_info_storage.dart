@@ -33,6 +33,10 @@ class AccountInfoStorage {
   static const keyguestPhonenumber = "guestPhonenumber";
   static const keyguestEvent = "guestEvent";
 
+  static const keyFavoriteId = "favoriteId";
+  static const keyFavoriteState = "favoriteState";
+
+
   static saveTokenUser(String? tokenUser) {
     SecureStorage.writeSecureData(key: keyTokenUser, value: tokenUser!);
   }
@@ -244,5 +248,21 @@ class AccountInfoStorage {
 
   static String? readGuestEvent() {
     return SecureStorage.readSecureData(keyguestEvent);
+  }
+
+  
+static saveFavoriteId(String? favoriteId){
+      SecureStorage.writeSecureData(key: keyFavoriteId, value: favoriteId!);
+
+}
+ static String? readFavoriteId() {
+    return SecureStorage.readSecureData(keyFavoriteId);
+  }
+  static saveFavoriteState(String? favoriteState){
+      SecureStorage.writeSecureData(key: keyFavoriteState, value: favoriteState!);
+
+}
+ static String? readFavoriteState() {
+    return SecureStorage.readSecureData(keyFavoriteId);
   }
 }

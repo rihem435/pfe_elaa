@@ -25,34 +25,34 @@ class EventJson extends AbstractJsonResource {
 }
 
 class Data {
-  String? titleevent;
   String? description;
+  String? titleevent;
   String? dateDebut;
   String? dateFin;
   String? local;
-  int? budget;
   String? user;
   String? sId;
+  int? budget;
   int? iV;
 
   Data(
-      {this.titleevent,
-      this.description,
+      {this.description,
+      this.titleevent,
       this.dateDebut,
       this.dateFin,
-      this.local,
       this.budget,
+      this.local,
       this.user,
       this.sId,
       this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
-    titleevent = json['titleevent'];
     description = json['description'];
+    titleevent = json['titleevent'];
     dateDebut = json['date_debut'];
     dateFin = json['date_fin'];
-    local = json['local'];
     budget = json['budget'];
+    local = json['local'];
     user = json['user'];
     sId = json['_id'];
     iV = json['__v'];
@@ -60,12 +60,12 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['titleevent'] = this.titleevent;
     data['description'] = this.description;
+    data['titleevent'] = this.titleevent;
     data['date_debut'] = this.dateDebut;
     data['date_fin'] = this.dateFin;
-    data['local'] = this.local;
     data['budget'] = this.budget;
+    data['local'] = this.local;
     data['user'] = this.user;
     data['_id'] = this.sId;
     data['__v'] = this.iV;

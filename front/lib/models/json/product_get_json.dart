@@ -36,7 +36,6 @@ class Data {
   String? description;
   int? price;
   String? location;
-  bool? favorite;
   List<String>? images;
   String? category;
   String? user;
@@ -48,7 +47,6 @@ class Data {
       this.description,
       this.price,
       this.location,
-      this.favorite,
       this.images,
       this.category,
       this.user,
@@ -60,7 +58,6 @@ class Data {
     description = json['description'];
     price = json['price'];
     location = json['location'];
-    favorite = json['favorite'];
     images = json['images'].cast<String>();
     category = json['category'];
     user = json['user'];
@@ -74,7 +71,6 @@ class Data {
     data['description'] = this.description;
     data['price'] = this.price;
     data['location'] = this.location;
-    data['favorite'] = this.favorite;
     data['images'] = this.images;
     data['category'] = this.category;
     data['user'] = this.user;

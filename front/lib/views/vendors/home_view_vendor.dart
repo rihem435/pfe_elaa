@@ -37,9 +37,9 @@ class HomeViewVendor extends StatelessWidget {
             ),
           ],
         ),
-        actions: [Icon(Icons.person_2, size: 50, color: AppColor.goldColor)],
+        leading: Icon(Icons.person_2, size: 50, color: AppColor.goldColor),
       ),
-      endDrawer: Container(
+      drawer: Container(
         width: MediaQuery.of(context).size.width * 0.5, //<-- SEE HERE
         child: Drawer(
           backgroundColor: AppColor.goldColor.withOpacity(0.9),
@@ -76,10 +76,7 @@ class HomeViewVendor extends StatelessWidget {
                 ),
                 title: Text('My Products'),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ServiceDetails()));
+                 Get.to(ServiceDetails());
                 },
               ),
               /*  ListTile(
@@ -164,6 +161,7 @@ class HomeViewVendor extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(width: 5),
 
                 TextButton(
                     onPressed: () {

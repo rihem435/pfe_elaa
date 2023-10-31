@@ -4,10 +4,11 @@ import 'package:front/models/json/product_by_user_is_json.dart';
 import 'package:front/models/network/api_manager.dart';
 
 class ApiProductsGetByUserId extends ApiManager {
-    String id = "";
+  String id = "";
 
   @override
   String apiUrl() {
+    print('url=======================>${AppApi.getProductsByUserUrl + id}');
     return AppApi.getProductsByUserUrl + id;
   }
 

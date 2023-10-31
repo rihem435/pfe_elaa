@@ -50,7 +50,6 @@ class User {
   String? email;
   String? password;
   List<String>? events;
-  List<Products>? products;
   List<String>? guests;
   String? createdAt;
   String? updatedAt;
@@ -59,6 +58,8 @@ class User {
   String? adress;
   String? image;
   int? phone;
+  List<Products>? products;
+  List<Favorites>? favorites;
 
   User(
       {this.sId,
@@ -67,7 +68,6 @@ class User {
       this.email,
       this.password,
       this.events,
-      this.products,
       this.guests,
       this.createdAt,
       this.updatedAt,
@@ -75,7 +75,9 @@ class User {
       this.refreshToken,
       this.adress,
       this.image,
-      this.phone});
+      this.phone,
+      this.products,
+      this.favorites});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -84,12 +86,6 @@ class User {
     email = json['email'];
     password = json['password'];
     events = json['events'].cast<String>();
-    if (json['products'] != null) {
-      products = <Products>[];
-      json['products'].forEach((v) {
-        products!.add(new Products.fromJson(v));
-      });
-    }
     guests = json['guests'].cast<String>();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -98,6 +94,18 @@ class User {
     adress = json['adress'];
     image = json['image'];
     phone = json['phone'];
+    if (json['products'] != null) {
+      products = <Products>[];
+      json['products'].forEach((v) {
+        products!.add(new Products.fromJson(v));
+      });
+    }
+    if (json['favorites'] != null) {
+      favorites = <Favorites>[];
+      json['favorites'].forEach((v) {
+        favorites!.add(new Favorites.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -108,9 +116,6 @@ class User {
     data['email'] = this.email;
     data['password'] = this.password;
     data['events'] = this.events;
-    if (this.products != null) {
-      data['products'] = this.products!.map((v) => v.toJson()).toList();
-    }
     data['guests'] = this.guests;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
@@ -119,6 +124,12 @@ class User {
     data['adress'] = this.adress;
     data['image'] = this.image;
     data['phone'] = this.phone;
+    if (this.products != null) {
+      data['products'] = this.products!.map((v) => v.toJson()).toList();
+    }
+    if (this.favorites != null) {
+      data['favorites'] = this.favorites!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -128,7 +139,6 @@ class Products {
   String? nameproduct;
   String? description;
   int? price;
-  String? location;
   bool? favorite;
   List<String>? images;
   String? category;
@@ -140,7 +150,6 @@ class Products {
       this.nameproduct,
       this.description,
       this.price,
-      this.location,
       this.favorite,
       this.images,
       this.category,
@@ -152,9 +161,8 @@ class Products {
     nameproduct = json['nameproduct'];
     description = json['description'];
     price = json['price'];
-    location = json['location'];
     favorite = json['favorite'];
-    images = json['images'].cast<String>();
+    images = json['images'];
     category = json['category'];
     user = json['user'];
     iV = json['__v'];
@@ -166,11 +174,38 @@ class Products {
     data['nameproduct'] = this.nameproduct;
     data['description'] = this.description;
     data['price'] = this.price;
-    data['location'] = this.location;
     data['favorite'] = this.favorite;
     data['images'] = this.images;
     data['category'] = this.category;
     data['user'] = this.user;
+    data['__v'] = this.iV;
+    return data;
+  }
+}
+
+class Favorites {
+  String? sId;
+  bool? state;
+  String? user;
+  String? products;
+  int? iV;
+
+  Favorites({this.sId, this.state, this.user, this.products, this.iV});
+
+  Favorites.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    state = json['state'];
+    user = json['user'];
+    products = json['products'];
+    iV = json['__v'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['state'] = this.state;
+    data['user'] = this.user;
+    data['products'] = this.products;
     data['__v'] = this.iV;
     return data;
   }

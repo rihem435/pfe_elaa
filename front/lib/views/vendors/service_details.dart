@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
-import 'package:front/widgets/components/custom_miltiple_image.dart';
-import 'package:front/widgets/components/image_cloudinary.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_dropdown_services_choices.dart';
 import 'package:front/widgets/custom_input_text.dart';
 import 'package:front/widgets/custom_product_list_V.dart';
 import 'package:front/widgets/custom_text.dart';
 import 'package:get/get.dart';
-import 'dart:io';
+
 
 
 class ServiceDetails extends GetView<ProductsController> {
@@ -19,9 +17,9 @@ class ServiceDetails extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-    ImageCloudinary imageCloudinary = ImageCloudinary();
-    controller.getCategories();
-    controller.getProducts();
+    // ImageCloudinary imageCloudinary = ImageCloudinary();
+    // controller.getCategories();
+    // controller.getProducts();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,6 +47,8 @@ class ServiceDetails extends GetView<ProductsController> {
         ),
       ),
       body: SingleChildScrollView(
+                          controller: scrollController,
+
         child: CustomBackgroungImage(
           fit: BoxFit.cover,
           image: 'assets/images/landpage.jpg',
@@ -85,7 +85,7 @@ class ServiceDetails extends GetView<ProductsController> {
               ),
  */
               FutureBuilder(
-                  future: controller.getProducts(),
+                  future: controller.getAllProductByUserId(),
                   builder: (ctx, snapshot) {
                     // Checking if future is resolved or not
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -113,31 +113,41 @@ class ServiceDetails extends GetView<ProductsController> {
                             '-----------------------snapshotdata=======>$snapshot');
                         return Center(
                           child: Text(
-                            'There is no product for the moment. \n Add Product and make the best sells !!',
+                            'There is no product for the moment. \n addProduct and make the best sells !!',
                             style: TextStyle(color: AppColor.secondary),
                           ),
                         );
                       } else {
                         return Expanded(
                           flex: 1,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            controller: scrollController,
-                            scrollDirection: Axis.vertical,
-                            itemCount:
-                                controller.productsByUserIdJson!.data!.length,
-                            itemBuilder: (BuildContext context, index) {
-                              return CustomProductListV(
-                                colorBorder: AppColor.secondary,
-                                productName:
-                                    "${controller.productsByUserIdJson!.data![index].nameproduct}",
-                                description:
-                                    "${controller.productsByUserIdJson!.data![index].description}",
-                                local: "testesttestt",
-                                price:
-                                    "${controller.productsByUserIdJson!.data![index].price}",
-                                widthBorder: 2,
-                                function: () {},
+                          child: GetBuilder<ProductsController>(
+                            builder: (controller) {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                controller: scrollController,
+                                scrollDirection: Axis.vertical,
+                                itemCount: controller
+                                    .productsByUserIdJson!.data!.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  controller.getCategorieById(
+                                      "${controller.productGetJson!.data![index].category}");
+
+                                  return CustomProductListV(
+                                    colorBorder: AppColor.secondary,
+                                    productName:
+                                        "${controller.productsByUserIdJson!.data![index].nameproduct}",
+                                    description:
+                                        "${controller.productsByUserIdJson!.data![index].description}",
+                                    local: "testesttestt",
+                                    price:
+                                        "${controller.productsByUserIdJson!.data![index].price}",
+                                    categorie:
+                                        AccountInfoStorage.readCategorieName().toString(),
+                                      // "${controller.categorieGetByIdJson!.data!.name}",
+                                    widthBorder: 2,
+                                    function: () {},
+                                  );
+                                },
                               );
                             },
                           ),
@@ -182,10 +192,12 @@ class ServiceDetails extends GetView<ProductsController> {
                         obscureText: false,
                         label: "Price:",
                       ),
-                      //Add images
 
-                     //CustomMiltipleImage(),
-                     
+                      
+                      //addimages
+
+                      //CustomMiltipleImage(),
+
                       /*  ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor:
@@ -220,9 +232,12 @@ class ServiceDetails extends GetView<ProductsController> {
                       print(
                           "========================== product creation ======");
                       controller.createProduct();
+                      controller.productDescriptionController.clear();
+                      controller.productNameController.clear();
+                      controller.productPriceController.clear();
                       Navigator.of(context).pop();
 
-//                      Get.to(ServiceDetails());
+                      //  Get.to(ServiceDetails());
                     },
                   ),
                 ],

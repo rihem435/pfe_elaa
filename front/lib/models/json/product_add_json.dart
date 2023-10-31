@@ -1,6 +1,6 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class ProductAddJson extends AbstractJsonResource{
+class ProductAddJson extends AbstractJsonResource {
   String? message;
   int? status;
   Data? data;

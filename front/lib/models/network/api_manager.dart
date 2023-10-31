@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/dio_singleton.dart';
 import 'package:front/models/json/abstract_json_resource.dart';
@@ -13,7 +15,7 @@ abstract class ApiManager {
   Future<AbstractJsonResource?> postData(dataToPost) async {
     var data;
     print('*****************post data****************');
-    print('+++++++++++++++++++++++$dataToPost++++++++++++++++++++++++++++');
+    //print('+++++++++++++++++++++++$dataToPost++++++++++++++++++++++++++++');
     AbstractJsonResource? json;
 
     return await dioSingleton.dio
@@ -22,10 +24,10 @@ abstract class ApiManager {
       print("post data************ $value");
       data = value.data;
       json = datajson(data);
-      print('json==================> ${json}');
+      print('json==================----------------------');
       return json;
     }).onError((error, stackTrace) {
-      print('error  post=========> $error');
+      print('error  post DATA=========> $error');
     });
   }
 
@@ -37,16 +39,17 @@ abstract class ApiManager {
         .get(apiUrl(), queryParameters: dataToGet)
         .then((value) {
       data = value.data;
+      print('data=====================================>$data');
       json = datajson(data);
       return json;
     }).onError((error, stackTrace) {
-      print('error  get=========> $error');
+      print('error get data=========> $error');
     });
   }
 
   Future<AbstractJsonResource?> getDataByName({dataToGet}) async {
     var data;
-    print('*****************get data****************');
+    print('*****************get data by name****************');
     Map<String, dynamic> data_ = {
       "name": AccountInfoStorage.readCategorieName(),
     };
@@ -58,11 +61,30 @@ abstract class ApiManager {
       json = datajson(data);
       return json;
     }).onError((error, stackTrace) {
-      print('error  get=========> $error');
+      print('error  getDataByName=========> $error');
+    });
+  }
+
+  Future<AbstractJsonResource?> getDataByState({dataToGetByState}) async {
+    var data;
+    print('*****************get data by state****************');
+    Map<String, dynamic> data_ = {
+      "state": AccountInfoStorage.readFavoriteState(),
+    };
+    AbstractJsonResource? json;
+    return await dioSingleton.dio
+        .get(apiUrl(), queryParameters: data_)
+        .then((value) {
+      data = value.data;
+      json = datajson(data);
+      return json;
+    }).onError((error, stackTrace) {
+      print('error getDataByState=========> $error');
     });
   }
 
   Future<AbstractJsonResource?> updateData(dataUpdate) async {
+    print('*****************update data****************');
     var data;
     AbstractJsonResource? json;
     return await dioSingleton.dio
@@ -72,7 +94,22 @@ abstract class ApiManager {
       json = datajson(data);
       return json;
     }).onError((error, stackTrace) {
-      print('error update=========> $error');
+      print('error updatedata=========> $error');
+    });
+  }
+
+  Future<AbstractJsonResource?> deleteData({dataDelete}) async {
+    print('*****************delete data****************');
+    Map<String, dynamic> data_ = {
+      "sId": AccountInfoStorage.readGuestId(),
+    };
+    AbstractJsonResource? json;
+    return await dioSingleton.dio
+        .delete(apiUrl(), queryParameters: data_)
+        .then((value) {
+      return json;
+    }).onError((error, stackTrace) {
+      print('error delete data =========> $error, $dataDelete');
     });
   }
 }

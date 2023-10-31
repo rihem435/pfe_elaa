@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 
 final List<String> imgList = [
 //"${AccountInfoStorage.readProductImage().toString()}"
-
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
   'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
@@ -21,12 +20,11 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
 
-class ProductDetail extends GetView<ProductsController> {
+class ProductDetail extends GetView<ProfileColntroller> {
   const ProductDetail({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ProfileColntroller Pcontroller = ProfileColntroller();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //your color
@@ -86,9 +84,7 @@ class ProductDetail extends GetView<ProductsController> {
                         child: Center(
                           child: GetBuilder<ProductsController>(
                             //key: index,
-                            builder: (
-                              controller,
-                            ) {
+                            builder: (controller) {
                               return CustomText(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w400,
@@ -113,59 +109,68 @@ class ProductDetail extends GetView<ProductsController> {
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: GetBuilder<ProductsController>(
-                            builder: (controller) {
-                          Pcontroller.isFavorite =
-                              controller.productGetByIdJson!.data!.favorite;
+                            builder: (PController) {
                           return CustomBoxDetail(
-                            issavedfunction: () {
-                              /*    Pcontroller.savedFavProd.add(
-                                  "${controller.productGetByIdJson!.data!.sId}");
-                            */ /* print(
-                                  "fffffffffffffff${Pcontroller.savedFavProd}");
-                              print(
-                                  "object  ${controller.productGetByIdJson!.data!.sId}");
-                              print(
-                                  "product fav ${controller.productGetByIdJson!.data!.favorite}");
-                            */
-                              Pcontroller.isFavorite = !controller
-                                  .productGetByIdJson!.data!.favorite!;
-
-                              controller.updateProductByIdFav(
-                                  Pcontroller.isFavorite!);
-
-                              //print("object${Pcontroller.isFavorite!}");
-
-                              //Pcontroller.favoriteIcon();
-                              //  print(" is fave bool ${Pcontroller.isFavorite!}");
-                              print(
-                                  "fav test ${controller.productGetByIdJson!.data!.favorite}");
-
-                              if (controller
-                                  .productGetByIdJson!.data!.favorite!) {
-                                Pcontroller.savedFavProd.remove(
-                                    controller.productGetByIdJson!.data!.sId);
+                              issavedfunction: () {
+                                AccountInfoStorage.saveProductId(PController
+                                    .productGetByIdJson!.data!.sId
+                                    .toString());
                                 print(
-                                    "adddd${controller.productGetByIdJson!.data!.sId}");
-                              } else {
-                                Pcontroller.savedFavProd.add(
-                                    controller.productGetByIdJson!.data!.sId);
-                                print(
-                                    "deletee${controller.productGetByIdJson!.data!.sId}");
-                              }
+                                    "object==================={PController.favoriteByUserIdJson!.data!.length}");
+                                if (PController.favoriteByUserIdJson!.data !=
+                                    null) {
+                                  print("if favorite not empty");
+                                  print(
+                                      "favorite function lenght ${PController.favoriteByUserIdJson!.data!.length}");
+                                  for (int i = 0;
+                                      i <
+                                          PController.favoriteByUserIdJson!
+                                              .data!.length;
+                                      i++) {
+                                    if (PController.favoriteByUserIdJson!
+                                            .data![i].products ==
+                                        PController
+                                            .productGetByIdJson!.data!.sId) {
+                                      print("if favidprod == idprod");
+                                      // if (controller.loginUserJson!.user!
+                                      //         .favorites![i].state ==
+                                      //     false) {
 
-                              Pcontroller.updateFavoriteListProducts();
-                            },
-                            icon: /*  Icon(Icons.favorite) */
-                                Icon(
-                               controller.productGetByIdJson!.data!.favorite!
+                                      AccountInfoStorage.saveFavoriteId(
+                                          PController.favoriteByUserIdJson!
+                                              .data![i].sId
+                                              .toString());
+                                      print(
+                                          "${AccountInfoStorage.readFavoriteId()}");
+                                      PController.updateFavorite(!PController
+                                          .favoriteByUserIdJson!
+                                          .data![i]
+                                          .state!);
+                                      print(
+                                          "state favorite${PController.favoriteByUserIdJson!.data![i].state}");
+                                      // }
+                                    } else {
+                                      print("else ");
+                                      PController.createFavorite();
+                                      break;
+                                    }
+                                  }
+                                } else {
+                                  print("else ");
+                                  PController.createFavorite();
+                                }
+                              },
+                              icon: Icon(Icons.favorite)
+                              /* Icon(
+                              !controller.favoriteByIdJson!.data!.state!
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                              color: controller.productGetByIdJson!.data!.favorite!
+                              color: !controller.favoriteByIdJson!.data!.state!
                                   ? Colors.red
                                   : AppColor.goldColor,
                               size: 30,
-                            ),
-                          );
+                            ),*/
+                              );
                         }),
                       ),
 

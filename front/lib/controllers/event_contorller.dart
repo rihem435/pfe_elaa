@@ -7,14 +7,18 @@ import 'package:front/models/json/event_json.dart';
 import 'package:front/models/json/guest_all_json.dart';
 import 'package:front/models/json/guest_by_event_id_json.dart';
 import 'package:front/models/json/guest_by_user_id_json.dart';
+import 'package:front/models/json/guest_get_by_id.dart';
 import 'package:front/models/json/guest_json.dart';
 import 'package:front/models/network/api_event_create.dart';
+import 'package:front/models/network/api_event_delete_by_id.dart';
 import 'package:front/models/network/api_event_get.dart';
 import 'package:front/models/network/api_event_get_by_id.dart';
 import 'package:front/models/network/api_events_get_by_user_id.dart';
 import 'package:front/models/network/api_guest_add.dart';
+import 'package:front/models/network/api_guest_delete.dart';
 import 'package:front/models/network/api_guest_get.dart';
 import 'package:front/models/network/api_guest_get_by_event_id.dart';
+import 'package:front/models/network/api_guest_get_by_id.dart';
 import 'package:front/models/network/api_guest_get_by_user_id.dart';
 import 'package:front/views/event_list_view.dart';
 import 'package:front/views/guest-list.dart';
@@ -238,13 +242,27 @@ class EventController extends GetxController {
     apiGuestCreate.postData(data).then((value) {
       print('success+++++++++++++++> $value');
       guestJson = value as GuestJson?;
-      getEvents();
+      //getEvents();
       // print('Guest created=======> ${guestJson!.data!.sId}');
-      getGuests();
-      update();
+      // getAllGuestsByEventId();
+      Get.to(GuestList());
     }).onError((error, stackTrace) {
       print('error create event ==========> $error');
     });
+    update();
+  }
+
+  ApiGuestDeleteById apiGuestDeleteById = ApiGuestDeleteById();
+  deleteGuest(String id) {
+    apiGuestDeleteById.id = id;
+    apiGuestDeleteById.deleteData().then((value) {
+      print('success guest delete');
+      //getAllGuestsByEventId();
+      Get.to(GuestList());
+    }).onError((error, stackTrace) {
+      print('erorr delete guest === > $error');
+    });
+    update();
   }
 
   getAllGuestsByEventId() {
@@ -285,5 +303,46 @@ class EventController extends GetxController {
       print("error get guest ==== $error");
       return guestGetAllJson;
     });
+  }
+
+  GuestGetByIdJson guestGetByIdJson = GuestGetByIdJson();
+  ApiGuestGetById apiGuestGetById = ApiGuestGetById();
+
+  updateGuest(String id) {
+    print("update guest informations");
+    apiGuestGetById.id = id;
+    apiGuestGetById.updateData({
+      "name": guestNameConroller.text,
+      "phonenumber": guestPhonenumberConroller.text.toString(),
+      //"invited": true,
+      //"events": AccountInfoStorage.readEventId(),
+    }).then((value) {
+      AccountInfoStorage.saveGuestName(guestGetByIdJson.data!.name);
+      AccountInfoStorage.saveGuestPhonenumber(
+          guestGetByIdJson.data!.phonenumber.toString());
+      print("updated${guestGetByIdJson.data}");
+       Get.snackbar("", "Success",
+          backgroundColor: AppColor.goldColor,
+          titleText: Text(
+            "Notification Update",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+          ));
+    }).onError((error, stackTrace) {
+      print("error update guest by id=== >$error");
+    });
+  }
+
+  ///// delete event ///////
+  ApiEventDeleteById apiEventDeleteById = ApiEventDeleteById();
+  deleteEvent() {
+    apiEventGetById.id = AccountInfoStorage.readEventId().toString();
+    print("-------------------delete event ----------------------");
+    return apiEventDeleteById
+        .deleteData()
+        .then((value) {})
+        .onError((error, stackTrace) {});
   }
 }

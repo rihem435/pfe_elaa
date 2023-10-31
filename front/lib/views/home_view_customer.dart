@@ -218,7 +218,7 @@ class HomeView extends GetView<ProductsController> {
                             //Get.to(ProductSelectionByServices());
                             //Get.to(EventListView());
                             //    Get.to(ProductDetail());
-                             Get.to(FavoriteView());
+                            Get.to(FavoriteView());
                           },
                         ),
                       )
@@ -440,6 +440,7 @@ class HomeView extends GetView<ProductsController> {
                                                     .data![index].sId);
 
                                             controller.getProductById();
+                                            controller.getAllFavoriteByUserId();
 
                                             print(
                                                 "*************get category by id*****************");
