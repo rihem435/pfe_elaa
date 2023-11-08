@@ -1,9 +1,9 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class FavoriteByUserIdJson extends AbstractJsonResource{
+class FavoriteByUserIdJson extends AbstractJsonResource {
   String? message;
   int? status;
-  List<Data>? data;
+  List<DataFav>? data;
 
   FavoriteByUserIdJson({this.message, this.status, this.data});
 
@@ -11,9 +11,9 @@ class FavoriteByUserIdJson extends AbstractJsonResource{
     message = json['message'];
     status = json['status'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataFav>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataFav.fromJson(v));
       });
     }
   }
@@ -29,16 +29,16 @@ class FavoriteByUserIdJson extends AbstractJsonResource{
   }
 }
 
-class Data {
+class DataFav {
   String? sId;
   bool? state;
   String? user;
   String? products;
   int? iV;
 
-  Data({this.sId, this.state, this.user, this.products, this.iV});
+  DataFav({this.sId, this.state, this.user, this.products, this.iV});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataFav.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     state = json['state'];
     user = json['user'];

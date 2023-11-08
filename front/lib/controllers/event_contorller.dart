@@ -265,27 +265,30 @@ class EventController extends GetxController {
     update();
   }
 
-  getAllGuestsByEventId() {
+  getAllGuestsByEventId() async {
     print("Guest by Event id ---------------------");
-    apiGuestsGetByEventId.id = AccountInfoStorage.readEventId().toString();
-    return apiGuestsGetByEventId.getData().then((value) {
-      // print('value===========> $value');
-      guestByEventIdJson = value as GuestByEventIdJson?;
-      // print("Guest message =============== ${guestByEventIdJson!.message}");
-      if (guestByEventIdJson!.data!.isNotEmpty) {
-        // print(
-        //     'Guest==========================> ${guestByEventIdJson!.data!.length}');
-        return guestByEventIdJson;
-      }
+    try {
+      apiGuestsGetByEventId.id = AccountInfoStorage.readEventId().toString();
+      await apiGuestsGetByEventId.getData().then((value) {
+        print('+++++++++++++++++++++++++++++++++++++++++++++++++');
 
-      if (guestByEventIdJson!.data != null) {
-        return guestByEventIdJson;
-      }
-      return null;
-    }).onError((error, stackTrace) {
+        guestByEventIdJson = value as GuestByEventIdJson?;
+        print("Guest message =============== ${guestByEventIdJson!.message}");
+        if (guestByEventIdJson!.data != null) {
+          print('+++++++++++++++++++++++if+++++++++++++++++++++++++');
+          print(
+              'Guest==========================> ${guestByEventIdJson!.data!.length}');
+
+          return guestByEventIdJson!;
+          
+        }
+              update();
+
+        return null;
+      });
+    } catch (error) {
       print('error get all guest by event id======> $error');
-      return null;
-    });
+    }
   }
 
   getGuests() {
@@ -321,7 +324,7 @@ class EventController extends GetxController {
       AccountInfoStorage.saveGuestPhonenumber(
           guestGetByIdJson.data!.phonenumber.toString());
       print("updated${guestGetByIdJson.data}");
-       Get.snackbar("", "Success",
+      Get.snackbar("", "Success",
           backgroundColor: AppColor.goldColor,
           titleText: Text(
             "Notification Update",

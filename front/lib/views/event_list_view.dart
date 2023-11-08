@@ -15,6 +15,7 @@ class EventListView extends GetView<EventController> {
 
   @override
   Widget build(BuildContext context) {
+       
     ScrollController scrollController = ScrollController();
     //controller.getAllEventByUserId();
     //  controller.getEventById(AccountInfoStorage.saveEventId(controller.eventByIdJson!.data!.sId.toString()));
@@ -113,10 +114,11 @@ class EventListView extends GetView<EventController> {
                                 itemCount:
                                     controller.eventByUserIdJson!.data!.length,
                                 itemBuilder: (BuildContext context, index) {
+                                  
                                   AccountInfoStorage.saveEventId(controller
                                       .eventByUserIdJson!.data![index].sId
                                       .toString());
-
+controller.getAllGuestsByEventId();
                                   return GestureDetector(
                                       child: CustomEventList(
                                         eventName:

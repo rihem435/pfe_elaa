@@ -182,22 +182,24 @@ class ProfileColntroller extends GetxController {
       AccountInfoStorage.savePassword(passwordController.text);
       // AccountInfoStorage.saveFavoriteId(
       //     loginUserJson!.user!.favorites!.toString());
-          
-      
+
       //AccountInfoStorage.saveImage(loginUserJson!.user!.image);
       AccountInfoStorage.saveTokenUser(loginUserJson!.tokens!.accessToken);
 
       viderControllers();
+    update();
 
       //   print('password===========================>${passwordController.text}');
       print('success signin');
       if (loginUserJson!.user!.items == "Customer") {
         print('Customer');
+        AccountInfoStorage.readImage();
 
         Get.to(HomeView());
       } else if (loginUserJson!.user!.items == "Vendor") {
         print('Vendor');
-        
+        AccountInfoStorage.readImage();
+
         Get.to(HomeViewVendor());
       }
     }).onError((error, stackTrace) {
@@ -280,8 +282,8 @@ class ProfileColntroller extends GetxController {
       'phone': phonenumberController.text,
       'image': AccountInfoStorage.readImage()
     }).then((value) {
-      AccountInfoStorage.saveImage(userGetByIdJson!.data!.image);
-      print("${AccountInfoStorage.readImage()}");
+      AccountInfoStorage.saveImage(userGetByIdJson!.data!.image.toString());
+      print("testing ${AccountInfoStorage.readImage()}");
 
       print("success");
       // Get.defaultDialog(title: "Alert");

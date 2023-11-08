@@ -8,9 +8,9 @@ class DioSingleton {
       connectTimeout: Duration(seconds: 6000),
       receiveTimeout: Duration(seconds: 6000),
       headers: <String, String>{
-        //'Contentt-Type': 'application/x-www-form-urlencoded',
-          'Content-Type': 'application/json',
-        //'Content-Type': 'multipart/form-data',
+        'Contentt-Type': 'application/x-www-form-urlencoded',
+          // 'Content-Type': 'application/json',
+       // 'Content-Type': 'multipart/form-data',
       }));
 //declaration DioSingleton pour utilise n'importe ou dans le code
   static final DioSingleton _singleton = DioSingleton._internal();

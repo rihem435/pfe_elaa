@@ -23,14 +23,13 @@ class CustomImageChange extends StatelessWidget {
               onChange: controller.directUpdateImage,
 
               // Define the source of the image.  imageController
-              image: controller.profilePicFile != null
+              image:   controller.profilePicFile != null 
                   ? Image.file(controller.profilePicFile!, fit: BoxFit.cover)
                   : Image.network(
-                      controller.profilePicFile != null
-                          
+                    AccountInfoStorage.readImage() != null
+                      && controller.profilePicFile != null 
                           ? "https://media.istockphoto.com/id/1300845620/fr/vectoriel/appartement-dic%C3%B4ne-dutilisateur-isol%C3%A9-sur-le-fond-blanc-symbole-utilisateur.jpg?s=612x612&w=0&k=20&c=BVOfS7mmvy2lnfBPghkN__k8OMsg7Nlykpgjn0YOHj0="
-                          :"${controller.userGetByIdJson!.data!.image}",
-                    
+                          : "${controller.userGetByIdJson!.data!.image}",
                     ),
 
               // Define the size of EditableImage.

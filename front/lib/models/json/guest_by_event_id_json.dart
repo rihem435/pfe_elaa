@@ -1,6 +1,6 @@
 import 'package:front/models/json/abstract_json_resource.dart';
 
-class GuestByEventIdJson extends AbstractJsonResource{
+class GuestByEventIdJson extends AbstractJsonResource {
   String? message;
   int? status;
   List<Data>? data;

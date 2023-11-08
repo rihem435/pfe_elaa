@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
-import 'package:front/config/app_api.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
 import 'package:front/controllers/profile_controller.dart';
 import 'package:front/views/event_list_view.dart';
 import 'package:front/views/favorite_view.dart';
-import 'package:front/views/login_view.dart';
-import 'package:front/views/product_detail.dart';
-import 'package:front/views/product_selection_by_services.dart';
 import 'package:front/views/profile_view.dart';
 import 'package:front/views/setting_view.dart';
-import 'package:front/views/test/ChatScreen.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
-import 'package:front/widgets/custom_box_detail.dart';
 import 'package:front/widgets/custom_button_text.dart';
 import 'package:front/widgets/custom_chechbox.dart';
 import 'package:front/widgets/custom_favorite_list.dart';
@@ -218,7 +212,8 @@ class HomeView extends GetView<ProductsController> {
                             //Get.to(ProductSelectionByServices());
                             //Get.to(EventListView());
                             //    Get.to(ProductDetail());
-                            Get.to(FavoriteView());
+                            // Get.to(FavoriteView());
+                            Get.to(ProfileView());
                           },
                         ),
                       )

@@ -111,66 +111,60 @@ class ProductDetail extends GetView<ProfileColntroller> {
                         child: GetBuilder<ProductsController>(
                             builder: (PController) {
                           return CustomBoxDetail(
-                              issavedfunction: () {
-                                AccountInfoStorage.saveProductId(PController
-                                    .productGetByIdJson!.data!.sId
-                                    .toString());
+                            issavedfunction: () {
+                              AccountInfoStorage.saveProductId(PController
+                                  .productGetByIdJson!.data!.sId
+                                  .toString());
+                              print(
+                                  "object==================={PController.favoriteByUserIdJson!.data!.length}");
+                              if (PController.favoriteByUserIdJson!.data !=
+                                  null) {
                                 print(
-                                    "object==================={PController.favoriteByUserIdJson!.data!.length}");
-                                if (PController.favoriteByUserIdJson!.data !=
-                                    null) {
-                                  print("if favorite not empty");
-                                  print(
-                                      "favorite function lenght ${PController.favoriteByUserIdJson!.data!.length}");
-                                  for (int i = 0;
-                                      i <
-                                          PController.favoriteByUserIdJson!
-                                              .data!.length;
-                                      i++) {
-                                    if (PController.favoriteByUserIdJson!
-                                            .data![i].products ==
-                                        PController
-                                            .productGetByIdJson!.data!.sId) {
-                                      print("if favidprod == idprod");
-                                      // if (controller.loginUserJson!.user!
-                                      //         .favorites![i].state ==
-                                      //     false) {
+                                    "test6666666666${PController.prodExiste(PController.favoriteByUserIdJson!.data!, PController.productGetByIdJson!.data!.sId)}");
+                                if (PController.prodExiste(
+                                    PController.favoriteByUserIdJson!.data!,
+                                    PController
+                                        .productGetByIdJson!.data!.sId)) {
+                                  print('if-----------------------');
 
-                                      AccountInfoStorage.saveFavoriteId(
-                                          PController.favoriteByUserIdJson!
-                                              .data![i].sId
-                                              .toString());
-                                      print(
-                                          "${AccountInfoStorage.readFavoriteId()}");
-                                      PController.updateFavorite(!PController
-                                          .favoriteByUserIdJson!
-                                          .data![i]
-                                          .state!);
-                                      print(
-                                          "state favorite${PController.favoriteByUserIdJson!.data![i].state}");
-                                      // }
-                                    } else {
-                                      print("else ");
-                                      PController.createFavorite();
-                                      break;
-                                    }
-                                  }
+                                  AccountInfoStorage.saveFavoriteId(PController
+                                      .productGetByIdJson!
+                                      .data!
+                                      .favorites!
+                                      .sId);
+                                  print(
+                                      "${AccountInfoStorage.readFavoriteId()}");
+
+                                  print(
+                                      'state from product=========${PController.productGetByIdJson!.data!.favorites!.state!}');
+                                  PController.updateFavorite(!PController
+                                      .productGetByIdJson!
+                                      .data!
+                                      .favorites!
+                                      .state!);
                                 } else {
                                   print("else ");
                                   PController.createFavorite();
                                 }
-                              },
-                              icon: Icon(Icons.favorite)
-                              /* Icon(
-                              !controller.favoriteByIdJson!.data!.state!
+                              } else {
+                                print("else ");
+                                PController.createFavorite();
+                              }
+                            },
+                            icon:
+                                //Icon(Icons.favorite)
+                                Icon(
+                              PController.productGetByIdJson!.data!.favorites!
+                                      .state!
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                              color: !controller.favoriteByIdJson!.data!.state!
+                              color: PController.productGetByIdJson!.data!
+                                      .favorites!.state!
                                   ? Colors.red
                                   : AppColor.goldColor,
                               size: 30,
-                            ),*/
-                              );
+                            ),
+                          );
                         }),
                       ),
 

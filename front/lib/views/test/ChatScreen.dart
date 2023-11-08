@@ -1,6 +1,10 @@
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
 import 'package:front/config/app_api.dart';
+import 'package:front/config/app_colors.dart';
+import 'package:front/controllers/profile_controller.dart';
+import 'package:front/widgets/custom_backgroung_image.dart';
+import 'package:front/widgets/custom_text.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
@@ -9,6 +13,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  ProfileColntroller profileColntroller = ProfileColntroller();
   IO.Socket? socket;
   TextEditingController messageController = TextEditingController();
   List<String> messages = [];
@@ -17,6 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     connectToServer();
+    listenToMessages();
   }
 
   void connectToServer() {
@@ -42,8 +48,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Map<String, dynamic> messages = {
       'message': message,
-      /*  'senderId': userId,
-    'receiverId': receiverId,
+      'senderId': profileColntroller.loginUserJson!.user!.sId,
+      /* 'receiverId': receiverId,
     */
       'time': DateTime.now().millisecondsSinceEpoch,
     };
@@ -51,48 +57,91 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print("mmmmm $messages");
 
-    print("$messages");
+    print("list messages ${messages.length}");
+  }
+
+  void listenToMessages() {
+    socket!.on('chat_message', (data) {
+      final messageText = data['message']; // Extract message content
+      setState(() {
+        messages.add(messageText); // Add the message to the list
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Socket.IO Chat'),
+        backgroundColor: Colors.white, //your color
+        surfaceTintColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: AppColor.goldColor,
+            size: 40,
+          ),
+        ),
+        title: const Column(
+          /*     mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          */
+          children: [
+            CustomText(
+              textAlign: TextAlign.right,
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              text: 'vendor name',
+            ),
+          ],
+        ),
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    return BubbleSpecialThree(
-                      text: "messageController",
-                      color: Color(0xFF1B97F3),
-                      tail: true,
-                      textStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    );
-                  },
-                ),
+      body: CustomBackgroungImage(
+        fit: BoxFit.cover,
+        image: 'assets/images/landpage.jpg',
+        widget: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return BubbleSpecialThree(
+                    text: messages[index],
+                    color: AppColor.secondary,
+                    tail: true,
+                    textStyle: TextStyle(color: Colors.white, fontSize: 16),
+                  );
+                },
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: messageController,
-                      decoration: InputDecoration(
-                        hintText: 'Type your message here...',
-                      ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type your message here...',
+                      // hintStyle: TextStyle(color: AppColor.secondary),
+                      filled: true, // Set to true to enable background color
+                      fillColor: AppColor.goldColor,
+                      enabledBorder: InputBorder.none,
+                      // labelStyle: TextStyle(color: Colors.amber)
                     ),
                   ),
-                  IconButton(icon: Icon(Icons.send), onPressed: sendMessage),
-                ],
-              ),
-            ],
-          ),
-        ],
+                ),
+                IconButton(
+                    icon: Icon(
+                      Icons.send,
+                      color: AppColor.goldColor,
+                    ),
+                    onPressed: sendMessage),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

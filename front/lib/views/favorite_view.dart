@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/products_controller.dart';
-import 'package:front/controllers/profile_controller.dart';
-import 'package:front/views/admin/home_view_admin.dart';
 import 'package:front/views/home_view_customer.dart';
 import 'package:front/views/product_detail.dart';
-import 'package:front/views/test/test.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_favorite_list.dart';
 import 'package:front/widgets/custom_text.dart';
@@ -18,7 +15,8 @@ class FavoriteView extends GetView<ProductsController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getAllProductByUserId();
+    // controller.getAllProductByUserId();
+    print("favstate${AccountInfoStorage.readFavoriteState()}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //your color
@@ -52,84 +50,85 @@ class FavoriteView extends GetView<ProductsController> {
         image: 'assets/images/landpage.jpg',
         widget: Column(
           children: <Widget>[
-            Text(
-              'data',
-              style: TextStyle(color: Colors.black),
-            )
-            // Expanded(
-            //   child: FutureBuilder(
-            //       future: controller.getAllProductByUserId(),
-            //       builder: (context, snapshot) {
-            //         if (snapshot.connectionState == ConnectionState.waiting) {
-            //           print("-----------------snapshot$snapshot");
-            //           return Center(
-            //             child: CircularProgressIndicator(
-            //                 color: AppColor.secondary),
-            //           );
-            //         } else {
-            //           // If we got an error
-            //           if (snapshot.hasError) {
-            //             return Center(
-            //               child: Text(
-            //                 'Something went wrong !!!',
-            //                 style: TextStyle(fontSize: 18),
-            //               ),
-            //             );
+            Text("data"),
+            Expanded(
+              child: FutureBuilder(
+                  future: controller.getAllfavoriteByUserIdAndState(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print("-----------------snapshot$snapshot");
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: AppColor.secondary),
+                      );
+                    } else {
+                      // If we got an error
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(
+                            'Something went wrong !!!',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        );
 
-            //             // if we got our data
-            //           }
+                        // if we got our data
+                      }
 
-            //           if (snapshot.data == null) {
-            //             // Extracting data from snapshot object
-            //             print(
-            //                 '-----------------------snapshotdata=======>$snapshot');
-            //             return Center(
-            //               child: Text(
-            //                 'There is no service for the moment',
-            //                 style: TextStyle(color: AppColor.secondary),
-            //               ),
-            //             );
-            //           } else {
-            //             return Center(
-            //               child: Expanded(
-            //                 flex: 6,
-            //                 child: GetBuilder<ProductsController>(
-            //                   builder: (controller) {
-            //                     return GridView.builder(
-            //                       gridDelegate:
-            //                           SliverGridDelegateWithMaxCrossAxisExtent(
-            //                               maxCrossAxisExtent: 200,
-            //                               childAspectRatio: 2 / 2,
-            //                               crossAxisSpacing: 20,
-            //                               mainAxisSpacing: 20),
-            //                       itemCount:2,// controller.productsByUserIdJson!.data!.length,
-            //                       itemBuilder: (BuildContext ctx, index) {
-            //                         return GestureDetector(
-            //                           child: CustomFavoriteList(
-            //                             FavoriteFunction: () {},
-            //                             function: () {},
-            //                             img: 'assets/images/logo2.png',
-            //                             icon: Icons.favorite_sharp,
-            //                             Descriptiontext:
-            //                                 "test",//"${controller.productsByUserIdJson!.data![index].description}",
-            //                             ServiceName:"test",// AccountInfoStorage .readCategorieName().toString(),
-            //                             height: 200,
-            //                             width: 200,
-            //                             colorBorder: AppColor.goldColor,
-            //                             widthBorder: 1,
-            //                           ),
-            //                           onTap: () {},
-            //                         );
-            //                       },
-            //                     );
-            //                   },
-            //                 ),
-            //               ),
-            //             );
-            //           }
-            //         }
-            //       }),
-            // ),
+                      if (snapshot.data == null) {
+                        // Extracting data from snapshot object
+                        print(
+                            '-----------------------snapshotdata=======>$snapshot');
+                        return Center(
+                          child: Text(
+                            'There is no service for the moment',
+                            style: TextStyle(color: AppColor.secondary),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Expanded(
+                            flex: 6,
+                            child: GetBuilder<ProductsController>(
+                              builder: (controller) {
+                                return GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 200,
+                                          childAspectRatio: 2 / 2,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount:
+                                      2, //controller.favoriteByUserIdJson!.data!.length,
+                                  itemBuilder: (BuildContext ctx, index) {
+                                    return GestureDetector(
+                                      child: CustomFavoriteList(
+                                        FavoriteFunction: () {},
+                                        function: () {},
+                                        img: 'assets/images/logo2.png',
+                                        icon: Icons.favorite_sharp,
+                                        Descriptiontext:
+                                            "test", // "${controller.productsByUserIdJson!.data![index].description}",
+                                        ServiceName:
+                                            "test", //AccountInfoStorage.readCategorieName().toString(),
+                                        height: 200,
+                                        width: 200,
+                                        colorBorder: AppColor.goldColor,
+                                        widthBorder: 1,
+                                      ),
+                                      onTap: () {
+                                        Get.to(ProductDetail());
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  }),
+            ),
           ],
         ),
       ),

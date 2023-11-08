@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/dio_singleton.dart';
 import 'package:front/models/json/abstract_json_resource.dart';
@@ -35,16 +33,19 @@ abstract class ApiManager {
     var data;
     print('*****************get data****************');
     AbstractJsonResource? json;
-    return await dioSingleton.dio
-        .get(apiUrl(), queryParameters: dataToGet)
-        .then((value) {
-      data = value.data;
-      print('data=====================================>$data');
-      json = datajson(data);
-      return json;
-    }).onError((error, stackTrace) {
+    try {
+      return await dioSingleton.dio
+          .get(apiUrl(), queryParameters: dataToGet)
+          .then((value) {
+        data = value.data;
+        print('data=====================================>$data');
+        json = datajson(data);
+        return json;
+      });
+    } catch (error) {
       print('error get data=========> $error');
-    });
+    }
+    
   }
 
   Future<AbstractJsonResource?> getDataByName({dataToGet}) async {
@@ -80,6 +81,26 @@ abstract class ApiManager {
       return json;
     }).onError((error, stackTrace) {
       print('error getDataByState=========> $error');
+    });
+  }
+
+  Future<AbstractJsonResource?> getDataByUserIdAndState(
+      {dataToGetByUserIdAndState}) async {
+    var data;
+    print('*****************get Data By User Id And State****************');
+    Map<String, dynamic> data_ = {
+      "state": AccountInfoStorage.readFavoriteState(),
+      "user": AccountInfoStorage.readId(),
+    };
+    AbstractJsonResource? json;
+    return await dioSingleton.dio
+        .get(apiUrl(), queryParameters: data_)
+        .then((value) {
+      data = value.data;
+      json = datajson(data);
+      return json;
+    }).onError((error, stackTrace) {
+      print('error getDataByUserIdAndState=========> $error');
     });
   }
 

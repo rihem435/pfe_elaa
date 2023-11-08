@@ -35,7 +35,7 @@ class AccountInfoStorage {
 
   static const keyFavoriteId = "favoriteId";
   static const keyFavoriteState = "favoriteState";
-
+  static const keyFavoriteUser = "keyFavoriteUser";
 
   static saveTokenUser(String? tokenUser) {
     SecureStorage.writeSecureData(key: keyTokenUser, value: tokenUser!);
@@ -250,19 +250,27 @@ class AccountInfoStorage {
     return SecureStorage.readSecureData(keyguestEvent);
   }
 
-  
-static saveFavoriteId(String? favoriteId){
-      SecureStorage.writeSecureData(key: keyFavoriteId, value: favoriteId!);
+  static saveFavoriteId(String? favoriteId) {
+    SecureStorage.writeSecureData(key: keyFavoriteId, value: favoriteId!);
+  }
 
-}
- static String? readFavoriteId() {
+  static String? readFavoriteId() {
     return SecureStorage.readSecureData(keyFavoriteId);
   }
-  static saveFavoriteState(String? favoriteState){
-      SecureStorage.writeSecureData(key: keyFavoriteState, value: favoriteState!);
 
-}
- static String? readFavoriteState() {
+  static saveFavoriteState(String? favoriteState) {
+    SecureStorage.writeSecureData(key: keyFavoriteState, value: favoriteState!);
+  }
+
+  static String? readFavoriteState() {
     return SecureStorage.readSecureData(keyFavoriteId);
+  }
+
+  static saveFavoriteUser(String? favoriteUser) {
+    SecureStorage.writeSecureData(key: keyFavoriteUser, value: favoriteUser!);
+  }
+
+  static String? readFavoriteUser() {
+    return SecureStorage.readSecureData(keyFavoriteUser);
   }
 }

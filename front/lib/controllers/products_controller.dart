@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' as dio;
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_api.dart';
@@ -9,6 +10,7 @@ import 'package:front/models/json/favorite__create_json.dart';
 import 'package:front/models/json/favorite_all_json.dart';
 import 'package:front/models/json/favorite_by_id_json.dart';
 import 'package:front/models/json/favorite_by_state_json.dart';
+import 'package:front/models/json/favorite_by_user_id_and_state_json.dart';
 import 'package:front/models/json/favorite_by_user_id_json.dart';
 import 'package:front/models/json/login_user_json.dart';
 import 'package:front/models/json/product_add_json.dart';
@@ -25,6 +27,7 @@ import 'package:front/models/network/api_favorite_by_state.dart';
 import 'package:front/models/network/api_favorite_create.dart';
 import 'package:front/models/network/api_favorite_delete.dart';
 import 'package:front/models/network/api_favorite_get_by_user_id.dart';
+import 'package:front/models/network/api_favorite_get_by_user_id_and_state.dart';
 import 'package:front/models/network/api_get_user_by_id.dart';
 import 'package:front/models/network/api_product_add.dart';
 import 'package:front/models/network/api_product_get.dart';
@@ -72,6 +75,8 @@ class ProductsController extends GetxController {
           'Content-Type': 'multipart/form-data',
         }),
   );
+
+
 
   @override
   void onInit() {
@@ -179,29 +184,30 @@ class ProductsController extends GetxController {
       print("errorr ====== $error");
       return productGetJson!;
     });
-    update();
   }
 
-  getProductById() {
+  getProductById() async {
     print("product by id ");
     apiProductGetById.id = AccountInfoStorage.readProductId().toString();
-    apiProductGetById.getData().then((value) {
-      productGetByIdJson = value as ProductGetByIdJson?;
-      print(
-          "data product by id ============================${productGetByIdJson!.data}");
-      AccountInfoStorage.saveProductName(
-          productGetByIdJson!.data!.nameproduct.toString());
-      AccountInfoStorage.saveProductPrice(
-          productGetByIdJson!.data!.price.toString());
-      AccountInfoStorage.saveProductDescription(
-          productGetByIdJson!.data!.description.toString());
-      AccountInfoStorage.saveProductImage(
-          productGetByIdJson!.data!.images.toString());
 
-      print(
-          "lenght image list=====${productGetByIdJson!.data!.images!.length}");
+    try {
+      await apiProductGetById.getData().then((value) {
+        productGetByIdJson = value as ProductGetByIdJson?;
+        print(
+            "data product by id ============================${productGetByIdJson!.data}");
+        AccountInfoStorage.saveProductName(
+            productGetByIdJson!.data!.nameproduct.toString());
+        AccountInfoStorage.saveProductPrice(
+            productGetByIdJson!.data!.price.toString());
+        AccountInfoStorage.saveProductDescription(
+            productGetByIdJson!.data!.description.toString());
+        AccountInfoStorage.saveProductImage(
+            productGetByIdJson!.data!.images.toString());
 
-      /* if (imgList!.isNotEmpty) {
+        print(
+            "lenght image list=====${productGetByIdJson!.data!.images!.length}");
+
+        /* if (imgList!.isNotEmpty) {
         for (int i = 0; i < productGetJson!.data![i].images!.length; i++) {
           print(imgList![i].nameproduct);
           if (FavoriteProducts![i].favorite == true) {
@@ -211,20 +217,20 @@ class ProductsController extends GetxController {
         }
       } */
 
-      Get.to(ProductDetail());
-    }).onError((error, stackTrace) {
+        Get.to(ProductDetail());
+      });
+      update();
+    } catch (error) {
       print("error product by id ==== $error");
-    });
-    update();
-    //  return null;
+    }
   }
 
 ///////to do
-  getAllProductByUserId() {
+  getAllProductByUserId() async {
     print("Product by user id ---------------------");
     apiProductsGetByUserId.id = AccountInfoStorage.readId().toString();
 
-    return apiProductsGetByUserId.getData().then((value) {
+    return await apiProductsGetByUserId.getData().then((value) {
       print('value===========> $value');
       //////////the value is null
       productsByUserIdJson = value as ProductsByUserIdJson?;
@@ -274,30 +280,61 @@ class ProductsController extends GetxController {
   }
 
   ImageCloudinary imageCloudinary = ImageCloudinary();
-  File? profilePicFile;
-  Future<void> directUpdateImage(File? file) async {
-    if (file == null) return;
-
-    profilePicFile = file;
-    print(
-        "------------------------------------Image $file------------------------------------");
-    imageCloudinary.uploadToCloudinary(file);
-
-    update();
+List<File> profilePicFiles = [];
+  Future<void> directUpdateMultiImage(List<XFile> files) async {
+    if (files == null) return;
+profilePicFiles = files.map((xfile) => File(xfile.path)).toList();
+  print("Uploaded Images: ${profilePicFiles.map((file) => file.path).toList()}");
+  
+  // Call your upload function here for each image in profilePicFiles
+  for (var file in profilePicFiles) {
+    await imageCloudinary.uploadMultiImagesToCloudinary(profilePicFiles);
   }
 
-  final ImagePicker imagePicker = ImagePicker();
-  List<XFile>? imageFileList = [];
+  update();
+  }
+
+
+
+/* 
+   Future<void> loadAssets() async {
+    List<Asset> resultList = <Asset>[];
+    String error = 'No Error Detected';
+
+    try {
+      resultList = await MultipleImagesPicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+
+   
+      images = resultList;
+      _error = error;
+  
+  }
+
+ */
+  // final ImagePicker imagePicker = ImagePicker();
+  // List<XFile>? imageFileList = [];
   // List<File> selectedImages = []; // List of selected image
 
-  Future<void> selectImages() async {
-    final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages!.isNotEmpty) {
-      imageFileList!.addAll(selectedImages);
-    }
-    // imageCloudinary.uploadToCloudinary(imageFileList as File?);
-    print("Image List Length:" + imageFileList!.length.toString());
-  }
+ 
 
   /* updateProductByIdFav(bool favorited) {
     print("update prod by id fav   ${favorited}");
@@ -354,14 +391,18 @@ class ProductsController extends GetxController {
   ApiFAvoriteGetById apiFAvoriteGetById = ApiFAvoriteGetById();
   ApiFAvoriteGetState apiFAvoriteGetState = ApiFAvoriteGetState();
   ApiFavoriteAll apiFavoriteAll = ApiFavoriteAll();
+  ApiFavoriteByUserIdAndState apiFavoriteByUserIdAndState =
+      ApiFavoriteByUserIdAndState();
 
   FavoriteByUserIdJson? favoriteByUserIdJson = FavoriteByUserIdJson();
   FavoriteAllJson? favoriteAllJson = FavoriteAllJson();
   FavoriteByIdJson? favoriteByIdJson = FavoriteByIdJson();
   FavoriteCreateJson? favoriteCreateJson = FavoriteCreateJson();
   FavoriteGeByStatetJson? favoriteGeByStatetJson = FavoriteGeByStatetJson();
+  FavoriteByUserIdAndStateJson? favoriteByUserIdAndStateJson =
+      FavoriteByUserIdAndStateJson();
 
-  createFavorite() {
+  createFavorite() async {
     print(
         "---------------------- favorite create --------------------------------");
 
@@ -370,22 +411,25 @@ class ProductsController extends GetxController {
       "products": AccountInfoStorage.readProductId().toString(),
       "user": AccountInfoStorage.readId().toString(),
     };
-    apiFavoriteCreate.postData(data).then((value) {
-      print('success+++++++++++++++> $value');
-      // getProducts();
-      favoriteCreateJson = value as FavoriteCreateJson?;
-      print("id favorite =====> ${favoriteCreateJson!.data!.sId}");
+    try {
+      await apiFavoriteCreate.postData(data).then((value) {
+        print('success+++++++++++++++> $value');
+        // getProducts();
+        favoriteCreateJson = value as FavoriteCreateJson?;
+        print("id favorite =====> ${favoriteCreateJson!.data!.sId}");
 
-      // productAddJson = value as ProductAddJson?;
-      //  print('name==================> ${AccountInfoStorage.readProductName()}');
+        // productAddJson = value as ProductAddJson?;
+        //  print('name==================> ${AccountInfoStorage.readProductName()}');
 
-      // print('event created=======> ${productAddJson!.data!.sId}');
-      getAllProductByUserId();
+        // print('event created=======> ${productAddJson!.data!.sId}');
+      });
+      getAllFavoriteByUserId();
+      AccountInfoStorage.saveProductId(favoriteCreateJson!.data!.products);
+      getProductById();
       update();
-    }).onError((error, stackTrace) {
+    } catch (error) {
       print('error create favorite ==========> $TypeError');
-    });
-    update();
+    }
   }
 
   getFavoriteById() {
@@ -415,44 +459,85 @@ class ProductsController extends GetxController {
     update();
   }
 
-  updateFavorite(bool? favoriteState) {
+  updateFavorite(bool? favoriteState) async {
     apiFAvoriteGetById.id = AccountInfoStorage.readFavoriteId().toString();
-    apiFAvoriteGetById.updateData({"state": favoriteState}).then((value) {
-      AccountInfoStorage.saveFavoriteState("${favoriteByIdJson!.data!.state}");
-      print("Favorite state === > ${favoriteByIdJson!.data!.state}");
+    try {
+      await apiFAvoriteGetById
+          .updateData({"state": favoriteState}).then((value) {
+        print('update success----------------------');
+
+        favoriteByIdJson = value as FavoriteByIdJson?;
+        AccountInfoStorage.saveFavoriteState(
+            "${favoriteByIdJson!.data!.state}");
+      });
       getAllFavoriteByUserId();
+      AccountInfoStorage.saveProductId(favoriteByIdJson!.data!.products);
+      getProductById();
       update();
-    }).onError((error, stackTrace) {
-      print('error login======> $error');
-    });
-    update();
+    } catch (error) {
+      print('error update FAvorite======> $error');
+    }
   }
 
-  getAllFavoriteByUserId() {
+  getAllFavoriteByUserId() async {
     print("-------------------------Product by user id ---------------------");
     apiFavoriteGetByUserId.id = AccountInfoStorage.readId().toString();
 
-    return apiFavoriteGetByUserId.getData().then((value) {
-      print('value fav prod===========> $value');
-      //////////the value is null
-      favoriteByUserIdJson = value as FavoriteByUserIdJson?;
-      print(
-          '----------------------------------------------fav----${favoriteByUserIdJson!.data}');
-
-      if (favoriteByUserIdJson!.data != null) {
-        // print("Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+    try {
+      return await apiFavoriteGetByUserId.getData().then((value) {
+        print('value fav prod===========> $value');
+        //////////the value is null
+        favoriteByUserIdJson = value as FavoriteByUserIdJson?;
         print(
-            '++++++++++++++++++++++++++++++++++++++++++++++++++${favoriteByUserIdJson!.data!.length}');
-        return favoriteByUserIdJson;
-      }
+            '----------------------------------------------fav----${favoriteByUserIdJson!.data}');
 
-      print('----------------------------------------------fav----');
+        if (favoriteByUserIdJson!.data != null) {
+          // print("Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+          print(
+              '++++++++++++++++++++++++++++++++++++++++++++++++++${favoriteByUserIdJson!.data!.length}');
+          return favoriteByUserIdJson;
+        }
 
-      update();
-    }).onError((error, stackTrace) {
+        print('----------------------------------------------fav----');
+
+        update();
+      });
+    } catch (error) {
       print('error======> $error');
-      return null;
-    });
+    }
+  }
+
+  getAllfavoriteByUserIdAndState() async {
+    print(
+        "-------------------------favoriteByUserIdAndState---------------------");
+    apiFavoriteByUserIdAndState.id = AccountInfoStorage.readId().toString();
+    apiFavoriteByUserIdAndState.state = AccountInfoStorage.readFavoriteState().toString();
+
+    try {
+      return await apiFavoriteByUserIdAndState
+          .getDataByUserIdAndState()
+          .then((value) {
+        print('value favoriteByUserIdAndState===========> $value');
+        //////////the value is null
+        favoriteByUserIdAndStateJson = value as FavoriteByUserIdAndStateJson?;
+        print(
+            '----------------------------------------------fav----${favoriteByUserIdAndStateJson!.data}');
+
+        if (favoriteByUserIdAndStateJson!.data != null) {
+          // print("Product by user id =============== ${productsByUserIdJson!.data![0].user}");
+          print(
+              '++++++++++++++++++++++++++++++++++++++++++++++++++${favoriteByUserIdAndStateJson!.data!.length}');
+          return favoriteByUserIdAndStateJson;
+        }
+
+        print(
+            '----------------------------------------------favoriteByUserIdAndState----');
+
+        update();
+      });
+    } catch (error) {
+      print('error favoriteByUserIdAndState======> $error');
+    }
   }
 
   getFavorite() {
@@ -482,4 +567,30 @@ class ProductsController extends GetxController {
     });
     update();
   }
+
+  //List<Map<String, dynamic>>? listeDeMaps;
+  bool prodExiste(
+    List<DataFav> listMap,
+    dynamic value,
+  ) {
+    for (final map in listMap) {
+      if (map.products == value) {
+        print("+++++++++++++++++++true-------------------");
+        return true;
+      }
+    }
+    print('------------------------false--------------------');
+    return false;
+  }
+
+
+
+/////////////////multi images
+///
+///
+
+
+
+
+
 }

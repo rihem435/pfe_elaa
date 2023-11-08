@@ -8,12 +8,12 @@ class ApiGuestsGetByEventId extends ApiManager {
 
   @override
   String apiUrl() {
+    print('url list guest===> ${AppApi.getGuestsByEventIdUrl + id}');
     return AppApi.getGuestsByEventIdUrl + id;
   }
 
   @override
   AbstractJsonResource datajson(data) {
-    print('data ApiGuestsGetByEventId====================> $data');
     return GuestByEventIdJson.fromJson(data);
   }
 }

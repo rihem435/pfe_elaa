@@ -113,7 +113,8 @@ class CustomEventList extends GetView<EventController> {
                               itemRadius: 40,
                               itemCount: 1,
                               itemBorderWidth: 1,
-                              extraCountTextStyle: TextStyle(color: Colors.white),
+                              extraCountTextStyle:
+                                  TextStyle(color: Colors.white),
                               itemBorderColor: AppColor.secondary,
                               backgroundColor: AppColor.secondary,
                             ),
@@ -123,62 +124,19 @@ class CustomEventList extends GetView<EventController> {
                       ),
                     ),
 
-                  
-                                ////////////////////////////////////////////////////////////
+                    ////////////////////////////////////////////////////////////
                     ///problem that it only get one event by id
-                    Expanded(
-                      child: FutureBuilder(
-                        future: controller.getAllGuestsByEventId(),
-                        builder: (ctx, snapshot) {
-                          print(
-                              'snapshot==============================>$snapshot');
-                          // Checking if future is resolved or not
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            print("-----------------snapshot$snapshot");
-                            return Center(
-                              child: CircularProgressIndicator(
-                                  color: AppColor.secondary),
-                            );
-                          } else {
-                            print     (                'snapshot==============================>$snapshot');
-                      
-                            // If we got an error 
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text(
-                                  '${snapshot.error} occurred',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              );
-                      
-                              // if we got our data
-                            }
-                      
-                            if (snapshot.data == null) {
-                              // Extracting data from snapshot object
-                              print(
-                                  '-----------------------snapshotdata=======>$snapshot');
-                              return Center(
-                                child: Text(
-                                  'No Guests for the moment!',
-                                  style: TextStyle(color: AppColor.secondary),
-                                ),
-                              );
-                            } else {
-                              return Column(
-                                children: [
-                                  CustomText(text: "Guest List:"),
-                                  GetBuilder<EventController>(
-                                      builder: (controller) {
-                                    return ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: 1,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return TextButton(
+                    Column(
+                      children: [
+                        CustomText(text: "Guest List:"),
+                        Text(
+                          controller.guestByEventIdJson!.data != null
+                              ? controller.guestByEventIdJson!.data!.length
+                                  .toString()
+                              : "0",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        /*  TextButton(
                                               onPressed: () {
                                                 controller
                                                     .getAllGuestsByEventId()
@@ -190,17 +148,89 @@ class CustomEventList extends GetView<EventController> {
                                                     .data!.length
                                                     .toString(),
                                                     style: TextStyle(color: Colors.white),
-                                          ));
-                                        });
-                                  }),
-                                  SizedBox(height: 10),
-                                ],
-                              );
-                            }
-                          }
-                        },
-                      ),
-                    ), ////////////Column to guest lists
+                                          )); */
+
+                        SizedBox(height: 10),
+                      ],
+                    )
+
+                    // Expanded(
+                    //   child: FutureBuilder(
+                    //     future: controller.getAllGuestsByEventId(),
+                    //     builder: (ctx, snapshot) {
+                    //       print(
+                    //           'snapshot==============================>$snapshot');
+                    //       // Checking if future is resolved or not
+                    //       if (snapshot.connectionState ==
+                    //           ConnectionState.waiting) {
+                    //         print("-----------------snapshot$snapshot");
+                    //         return Center(
+                    //           child: CircularProgressIndicator(
+                    //               color: AppColor.secondary),
+                    //         );
+                    //       } else {
+                    //         print(
+                    //             'snapshot==============================>$snapshot');
+
+                    //         // If we got an error
+                    //         if (snapshot.hasError) {
+                    //           return Center(
+                    //             child: Text(
+                    //               '${snapshot.error} occurred',
+                    //               style: TextStyle(fontSize: 18),
+                    //             ),
+                    //           );
+
+                    //           // if we got our data
+                    //         }
+
+                    //         if (snapshot.data == null) {
+                    //           // Extracting data from snapshot object
+                    //           print(
+                    //               '-----------------------snapshotdata=======>$snapshot');
+                    //           return Center(
+                    //             child: Text(
+                    //               'No Guests for the moment!',
+                    //               style: TextStyle(color: AppColor.secondary),
+                    //             ),
+                    //           );
+                    //         } else {
+                    //           return Column(
+                    //             children: [
+                    //               CustomText(text: "Guest List:"),
+                    //               GetBuilder<EventController>(
+                    //                   builder: (controller) {
+                    //                 return ListView.builder(
+                    //                     padding: EdgeInsets.zero,
+                    //                     shrinkWrap: true,
+                    //                     physics: NeverScrollableScrollPhysics(),
+                    //                     itemCount: 1,
+                    //                     itemBuilder:
+                    //                         (BuildContext context, int index) {
+                    //                       return Text("data");
+                    //                       /*  TextButton(
+                    //                           onPressed: () {
+                    //                             controller
+                    //                                 .getAllGuestsByEventId()
+                    //                                 .toString();
+                    //                             Get.to(GuestList());
+                    //                           },
+                    //                           child: Text(
+                    //                             controller.guestByEventIdJson!
+                    //                                 .data!.length
+                    //                                 .toString(),
+                    //                                 style: TextStyle(color: Colors.white),
+                    //                       )); */
+                    //                     });
+                    //               }),
+                    //               SizedBox(height: 10),
+                    //             ],
+                    //           );
+                    //         }
+                    //       }
+                    //     },
+                    //   ),
+                    // ), ////////////Column to guest lists
                   ],
                 ),
                 /////// guest list

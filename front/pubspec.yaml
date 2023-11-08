@@ -58,6 +58,7 @@ dependencies:
   audioplayers: ^5.2.0
   web_socket_channel: ^2.4.0
   socket_io_client: ^2.0.3+1
+  multiple_images_picker: ^1.0.1
   
 
 dev_dependencies:

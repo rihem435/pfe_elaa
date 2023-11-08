@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front/config/account_info_storage.dart';
 import 'package:front/config/app_colors.dart';
 import 'package:front/controllers/profile_controller.dart';
+import 'package:front/views/box_messages.dart';
 import 'package:front/widgets/custom_backgroung_image.dart';
 import 'package:front/widgets/custom_button.dart';
 import 'package:front/widgets/custom_image_change.dart';
@@ -83,7 +84,7 @@ class ProfileView extends GetView<ProfileColntroller> {
                                       color: Colors.white,
                                     ),
                                     onPressed: () {
-                                     // Get.to()
+                                      Get.to(BoxMessages());
                                     },
                                   ),
                                 ),
