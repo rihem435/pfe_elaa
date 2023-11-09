@@ -38,6 +38,7 @@ class Data {
   String? local;
   int? budget;
   String? user;
+  List<String>? guests;
   int? iV;
 
   Data(
@@ -49,6 +50,7 @@ class Data {
       this.local,
       this.budget,
       this.user,
+      this.guests,
       this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -60,6 +62,7 @@ class Data {
     local = json['local'];
     budget = json['budget'];
     user = json['user'];
+    guests = json['guests'].cast<String>();
     iV = json['__v'];
   }
 
@@ -73,6 +76,7 @@ class Data {
     data['local'] = this.local;
     data['budget'] = this.budget;
     data['user'] = this.user;
+    data['guests'] = this.guests;
     data['__v'] = this.iV;
     return data;
   }

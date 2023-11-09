@@ -14,8 +14,8 @@ class CustomEventList extends GetView<EventController> {
   final double? widthBorder;
   final Color? colorBorder;
   final Widget? getlistguest;
-
-  CustomEventList({
+  final String? text;
+  CustomEventList( {
     Key? key,
     this.eventName,
     this.function,
@@ -26,7 +26,7 @@ class CustomEventList extends GetView<EventController> {
     this.description,
     this.local,
     this.budget,
-    this.getlistguest,
+    this.getlistguest,this.text,
   }) : super(key: key);
 
   @override
@@ -130,11 +130,8 @@ class CustomEventList extends GetView<EventController> {
                       children: [
                         CustomText(text: "Guest List:"),
                         Text(
-                          controller.guestByEventIdJson!.data != null
-                              ? controller.guestByEventIdJson!.data!.length
-                                  .toString()
-                              : "0",
-                          style: TextStyle(color: Colors.white),
+                          text!,
+                          style: TextStyle(color: Colors.black),
                         ),
                         /*  TextButton(
                                               onPressed: () {

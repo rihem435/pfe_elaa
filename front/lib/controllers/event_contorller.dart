@@ -69,6 +69,7 @@ class EventController extends GetxController {
   @override
   void onInit() {
     getEvents();
+
     // print(
     //     '************************************create event**********************');
     //createEvent();
@@ -97,7 +98,7 @@ class EventController extends GetxController {
     print("Events by user id ---------------------");
     apiEventGetByUserId.id = AccountInfoStorage.readId().toString();
     return apiEventGetByUserId.getData().then((value) {
-      // print('value===========> $value');
+      print('value===========> $value');
       eventByUserIdJson = value as EventByUserIdJson?;
       // print("Events message =============== ${eventByUserIdJson!.message}");
       if (eventByUserIdJson!.data != null) {
@@ -280,9 +281,7 @@ class EventController extends GetxController {
               'Guest==========================> ${guestByEventIdJson!.data!.length}');
 
           return guestByEventIdJson!;
-          
         }
-              update();
 
         return null;
       });
